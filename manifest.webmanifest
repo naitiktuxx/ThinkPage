@@ -1,0 +1,18 @@
+{
+  "name": "New Tab Dashboard",
+  "short_name": "New Tab",
+  "description": "A personalized new tab dashboard that works offline after the first load.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#202124",
+  "theme_color": "#202124",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
