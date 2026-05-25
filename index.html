@@ -1914,6 +1914,189 @@
             gap: 12px;
         }
 
+        .experimental-tag {
+            margin-left: auto;
+            padding: 2px 7px;
+            border-radius: 999px;
+            border: 1px solid var(--panel-border);
+            background: var(--surface-3);
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 1.4;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .config-action-btn {
+            width: 100%;
+            min-height: 38px;
+            border: 1px solid var(--panel-border);
+            background: var(--surface-3);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background .15s, border-color .15s;
+        }
+
+        .config-action-btn:hover {
+            background: var(--btn-hover);
+            border-color: var(--accent);
+        }
+
+        .keyboard-shortcuts-modal {
+            max-width: 620px;
+            width: 95%;
+        }
+
+        .keyboard-shortcuts-scroll {
+            max-height: 58vh;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .shortcut-list-section {
+            margin-bottom: 18px;
+        }
+
+        .shortcut-list-title {
+            margin: 0 0 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .shortcut-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .shortcut-kb-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface-3);
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .shortcut-kb-main {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .shortcut-kb-name {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .shortcut-kb-desc {
+            color: var(--text-muted);
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .shortcut-kb-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .shortcut-keycap {
+            min-width: 58px;
+            min-height: 28px;
+            padding: 5px 9px;
+            border-radius: 7px;
+            border: 1px solid var(--panel-border);
+            background: var(--btn-bg);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .shortcut-keycap.empty {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .shortcut-bind-btn,
+        .shortcut-clear-btn {
+            min-height: 30px;
+            padding: 0 10px;
+            border-radius: 7px;
+            border: 1px solid var(--panel-border);
+            background: var(--btn-bg);
+            color: var(--text-secondary);
+            font: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .shortcut-bind-btn:disabled,
+        .shortcut-clear-btn:disabled {
+            cursor: not-allowed;
+            opacity: .55;
+        }
+
+        .shortcut-bind-btn:hover,
+        .shortcut-clear-btn:hover {
+            background: var(--btn-hover);
+        }
+
+        .shortcut-bind-btn.capturing {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .keyboard-shortcuts-empty {
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 12px;
+            background: var(--surface-3);
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+        }
+
+        .shortcut-kb-row.disabled {
+            opacity: .68;
+        }
+
+        @media (max-width: 520px) {
+            .shortcut-kb-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .shortcut-kb-actions {
+                justify-content: space-between;
+            }
+        }
+
         .sc-remove-btn-inline {
             position: absolute;
             top: 2px;
@@ -4139,6 +4322,29 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="keyboard-shortcuts-overlay" role="dialog" aria-modal="true" aria-labelledby="keyboard-shortcuts-title">
+        <div class="modal keyboard-shortcuts-modal">
+            <div class="history-modal-header modal-header-actions">
+                <h3 id="keyboard-shortcuts-title" style="margin: 0;">Keyboard shortcuts</h3>
+                <button class="cp-close" id="keyboard-shortcuts-close" title="Close" aria-label="Close keyboard shortcuts" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="keyboard-shortcuts-scroll">
+                <div class="shortcut-list-section">
+                    <h4 class="shortcut-list-title">Default shortcuts</h4>
+                    <div class="shortcut-list" id="default-shortcuts-list"></div>
+                </div>
+                <div class="shortcut-list-section">
+                    <h4 class="shortcut-list-title">Homescreen shortcuts</h4>
+                    <div class="shortcut-list" id="custom-shortcuts-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <button class="customize-btn" id="customize-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Customize
@@ -4232,9 +4438,17 @@
                         <label class="bg-radio">
                             <input type="radio" name="shortcuts_type" value="most_visited">
                             <span>Most-visited sites</span>
+                            <span class="experimental-tag">Experimental</span>
                         </label>
                     </div>
                 </div>
+                <div class="config-divider"></div>
+                <button class="config-action-btn" id="keyboard-shortcuts-btn" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h.01M11 9h.01M15 9h.01M19 9h.01M7 13h10M9 17h6"/>
+                    </svg>
+                    <span>See and customize shortcuts</span>
+                </button>
             </div>
         </div>
         <div class="cp-section">
@@ -4871,6 +5085,9 @@
         const profileImageBtn = document.getElementById('profile-image-btn');
         const profileResetBtn = document.getElementById('profile-reset-btn');
         const profileStatus = document.getElementById('profile-status');
+        const keyboardShortcutsBtn = document.getElementById('keyboard-shortcuts-btn');
+        const keyboardShortcutsOverlay = document.getElementById('keyboard-shortcuts-overlay');
+        const keyboardShortcutsClose = document.getElementById('keyboard-shortcuts-close');
         
         cpBtn.onclick = () => {
             if (typeof syncCustomizationPanel === 'function') {
@@ -4879,6 +5096,20 @@
             cpPanel.classList.add('open');
         };
         cpClose.onclick = () => cpPanel.classList.remove('open');
+        keyboardShortcutsBtn?.addEventListener('click', e => {
+            e.stopPropagation();
+            openKeyboardShortcutsModal();
+        });
+        keyboardShortcutsClose?.addEventListener('click', () => {
+            keyboardShortcutCaptureIndex = null;
+            keyboardShortcutsOverlay?.classList.remove('open');
+        });
+        keyboardShortcutsOverlay?.addEventListener('click', e => {
+            if (e.target === e.currentTarget) {
+                keyboardShortcutCaptureIndex = null;
+                keyboardShortcutsOverlay.classList.remove('open');
+            }
+        });
         document.addEventListener('click', e => {
             if (!cpPanel.contains(e.target) && !cpBtn.contains(e.target)) {
                 cpPanel.classList.remove('open');
@@ -4892,6 +5123,7 @@
                 document.getElementById('profile-modal-overlay'),
                 document.getElementById('manage-profiles-modal-overlay'),
                 document.getElementById('history-modal-overlay'),
+                document.getElementById('keyboard-shortcuts-overlay'),
                 document.getElementById('customize-panel'),
                 document.getElementById('lens-fallback-overlay'),
                 document.getElementById('permission-modal-overlay')
@@ -5049,6 +5281,8 @@
         function handlePageKeyboard(e) {
             if (shouldDeferToBrowserKeyboard(e)) return;
 
+            if (handleCustomShortcutKey(e)) return;
+
             const openPicker = getOpenPickerMenu();
             if (openPicker && e.key === 'Escape') {
                 e.preventDefault();
@@ -5179,9 +5413,13 @@
                 if (openModal) {
                     const focusInModal = openModal.contains(document.activeElement);
 
+                    if (openModal.id === 'keyboard-shortcuts-overlay' && handleKeyboardShortcutCapture(e)) {
+                        return;
+                    }
+
                     if (e.key === 'Escape' && focusInModal) {
                         e.preventDefault();
-                        const closeBtn = openModal.querySelector('.cp-close, .modal-close, button[id*="close"], button[id*="cancel"], .pd-modal-close, #modal-cancel, #p-modal-cancel, #mp-close-btn, #history-close-btn, #lens-fallback-cancel, #lens-fallback-close');
+                        const closeBtn = openModal.querySelector('.cp-close, .modal-close, button[id*="close"], button[id*="cancel"], .pd-modal-close, #modal-cancel, #p-modal-cancel, #mp-close-btn, #history-close-btn, #keyboard-shortcuts-close, #lens-fallback-cancel, #lens-fallback-close');
                         if (closeBtn) {
                             closeBtn.click();
                         } else {
@@ -5946,8 +6184,9 @@
             return p.url;
         }
 
-        function openAiAssistant() {
-            const query = (document.getElementById('search-input')?.value || '').trim();
+        function openAiAssistant(queryOverride) {
+            const inputValue = document.getElementById('search-input')?.value || '';
+            const query = (typeof queryOverride === 'string' ? queryOverride : inputValue).trim();
             const providerId = getStoredAi();
             const provider = getAiProvider(providerId);
             const url = buildAiSearchUrl(providerId, query);
@@ -6828,6 +7067,9 @@
                     ProfileManager.setItem('show_shortcuts', showToggle.checked ? '1' : '0');
                     syncShortcutsControls();
                     renderShortcuts();
+                    if (document.getElementById('keyboard-shortcuts-overlay')?.classList.contains('open')) {
+                        renderKeyboardShortcutsModal();
+                    }
                 });
             }
 
@@ -6836,6 +7078,10 @@
                     if (!r.checked) return;
                     ProfileManager.setItem('shortcuts_type', r.value);
                     renderShortcuts();
+                    if (document.getElementById('keyboard-shortcuts-overlay')?.classList.contains('open')) {
+                        keyboardShortcutCaptureIndex = null;
+                        renderKeyboardShortcutsModal();
+                    }
                 });
             });
 
@@ -6954,6 +7200,241 @@
         ];
         const loadSC = () => { try { return JSON.parse(ProfileManager.getItem('sc') || 'null') || JSON.parse(JSON.stringify(DEFAULT_SC)); } catch { return JSON.parse(JSON.stringify(DEFAULT_SC)); } };
         const saveSC = s => { try { ProfileManager.setItem('sc', JSON.stringify(s)); } catch { } };
+        const DEFAULT_KEYBOARD_SHORTCUTS = [
+            { keys: '/', action: 'Focus search' },
+            { keys: 'Enter', action: 'Search or open selected suggestion' },
+            { keys: "' + Enter", action: 'Search with selected AI provider' },
+            { keys: 'Arrow Down / Arrow Up', action: 'Move through suggestions, apps, or shortcuts' },
+            { keys: 'Tab / Arrow Right', action: 'Accept inline search suggestion' },
+            { keys: 'Escape', action: 'Close menus, panels, or clear search' },
+            { keys: 'Enter / Space', action: 'Open focused homescreen shortcut' },
+            { keys: 'Context Menu / Shift+F10', action: 'Open focused shortcut options' },
+        ];
+        let keyboardShortcutCaptureIndex = null;
+
+        function isModifierOnlyKey(e) {
+            return ['Shift', 'Control', 'Alt', 'Meta', 'CapsLock'].includes(e?.key);
+        }
+
+        function getShortcutKeyLabel(binding) {
+            if (!binding) return '';
+            const parts = [];
+            if (binding.shift) parts.push('Shift');
+            const key = binding.keyLabel || binding.key || binding.code || '';
+            parts.push(key);
+            return parts.filter(Boolean).join('+');
+        }
+
+        function normalizeShortcutKeyEvent(e) {
+            if (!e || e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return null;
+            if (isModifierOnlyKey(e) || ['Tab', 'Escape', 'Enter', ' '].includes(e.key)) return null;
+            if (e.key === '/' && !e.shiftKey) return null;
+            if (!e.key || e.key.length !== 1) return null;
+            const keyLabel = e.code?.startsWith('Digit') ? e.code.replace('Digit', '') : (e.key || '').toUpperCase();
+            if (!keyLabel || keyLabel.length > 12) return null;
+            return {
+                code: e.code || '',
+                key: e.key || '',
+                keyLabel,
+                shift: Boolean(e.shiftKey)
+            };
+        }
+
+        function shortcutBindingMatchesEvent(binding, e) {
+            if (!binding || e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return false;
+            return Boolean(binding.shift) === Boolean(e.shiftKey)
+                && ((binding.code && binding.code === e.code) || (!binding.code && binding.key === e.key));
+        }
+
+        function shortcutBindingsMatch(a, b) {
+            if (!a || !b) return false;
+            return Boolean(a.shift) === Boolean(b.shift)
+                && ((a.code && b.code && a.code === b.code) || (!a.code && !b.code && a.key === b.key));
+        }
+
+        function openShortcutFromKeybind(sc) {
+            if (!sc?.url) return;
+            logVisitedSite(sc.url, sc.name);
+            const target = getSearchTarget();
+            if (target === '_self') {
+                window.location.href = sc.url;
+            } else {
+                window.open(sc.url, target, 'noopener,noreferrer');
+            }
+        }
+
+        function handleCustomShortcutKey(e) {
+            if (ProfileManager.getItem('show_shortcuts') === '0') return false;
+            if ((ProfileManager.getItem('shortcuts_type') || 'my_shortcuts') === 'most_visited') return false;
+            if (getOpenPickerMenu()
+                || document.getElementById('apps-dropdown')?.classList.contains('open')
+                || document.getElementById('profile-dropdown')?.classList.contains('open')) return false;
+            const shortcuts = loadSC();
+            const sc = shortcuts.find(item => shortcutBindingMatchesEvent(item?.keybind, e));
+            if (!sc) return false;
+            e.preventDefault();
+            openShortcutFromKeybind(sc);
+            return true;
+        }
+
+        function renderShortcutKeyRow(container, title, description, keyText, options = {}) {
+            const row = document.createElement('div');
+            row.className = 'shortcut-kb-row';
+
+            const main = document.createElement('div');
+            main.className = 'shortcut-kb-main';
+            const name = document.createElement('div');
+            name.className = 'shortcut-kb-name';
+            name.textContent = title;
+            const desc = document.createElement('div');
+            desc.className = 'shortcut-kb-desc';
+            desc.textContent = description || '';
+            main.append(name, desc);
+
+            const actions = document.createElement('div');
+            actions.className = 'shortcut-kb-actions';
+            const keycap = document.createElement('span');
+            keycap.className = 'shortcut-keycap' + (keyText ? '' : ' empty');
+            keycap.textContent = keyText || 'Not set';
+            actions.appendChild(keycap);
+
+            if (options.editable) {
+                const setBtn = document.createElement('button');
+                setBtn.type = 'button';
+                setBtn.className = 'shortcut-bind-btn';
+                setBtn.textContent = keyboardShortcutCaptureIndex === options.index ? 'Press keys' : 'Set';
+                setBtn.dataset.index = String(options.index);
+                setBtn.disabled = Boolean(options.disabled);
+                if (keyboardShortcutCaptureIndex === options.index) setBtn.classList.add('capturing');
+                setBtn.addEventListener('click', () => {
+                    if (options.disabled) return;
+                    keyboardShortcutCaptureIndex = options.index;
+                    renderKeyboardShortcutsModal();
+                    document.querySelector(`.shortcut-bind-btn[data-index="${options.index}"]`)?.focus();
+                });
+                actions.appendChild(setBtn);
+
+                const clearBtn = document.createElement('button');
+                clearBtn.type = 'button';
+                clearBtn.className = 'shortcut-clear-btn';
+                clearBtn.textContent = 'Clear';
+                clearBtn.disabled = !keyText || Boolean(options.disabled);
+                clearBtn.addEventListener('click', () => {
+                    if (options.disabled) return;
+                    const shortcuts = loadSC();
+                    if (shortcuts[options.index]) {
+                        delete shortcuts[options.index].keybind;
+                        saveSC(shortcuts);
+                        keyboardShortcutCaptureIndex = null;
+                        renderKeyboardShortcutsModal();
+                        renderShortcuts();
+                        showToast('Shortcut keybind cleared');
+                    }
+                });
+                actions.appendChild(clearBtn);
+            }
+
+            row.append(main, actions);
+            if (options.disabled) row.classList.add('disabled');
+            container.appendChild(row);
+        }
+
+        function renderKeyboardShortcutsModal() {
+            const defaultList = document.getElementById('default-shortcuts-list');
+            const customList = document.getElementById('custom-shortcuts-list');
+            if (!defaultList || !customList) return;
+            defaultList.innerHTML = '';
+            customList.innerHTML = '';
+
+            DEFAULT_KEYBOARD_SHORTCUTS.forEach(item => {
+                renderShortcutKeyRow(defaultList, item.action, 'Built in', item.keys);
+            });
+
+            const shortcutsType = ProfileManager.getItem('shortcuts_type') || 'my_shortcuts';
+            const customKeybindsDisabled = shortcutsType === 'most_visited';
+            const shortcuts = loadSC();
+            if (!shortcuts.length) {
+                const empty = document.createElement('div');
+                empty.className = 'keyboard-shortcuts-empty';
+                empty.textContent = 'Add a homescreen shortcut first, then bind a key here.';
+                customList.appendChild(empty);
+                return;
+            }
+
+            if (customKeybindsDisabled) {
+                const note = document.createElement('div');
+                note.className = 'keyboard-shortcuts-empty';
+                note.textContent = 'Custom keybinds are available for My shortcuts only.';
+                customList.appendChild(note);
+            }
+
+            shortcuts.forEach((sc, index) => {
+                renderShortcutKeyRow(customList, sc.name || getSiteName(sc.url, 'Shortcut'), sc.url || '', getShortcutKeyLabel(sc.keybind), {
+                    editable: true,
+                    index,
+                    disabled: customKeybindsDisabled
+                });
+            });
+        }
+
+        function openKeyboardShortcutsModal() {
+            keyboardShortcutCaptureIndex = null;
+            renderKeyboardShortcutsModal();
+            const overlay = document.getElementById('keyboard-shortcuts-overlay');
+            overlay.classList.add('open');
+            runOpenAnimation(overlay, 360);
+            setTimeout(() => document.getElementById('keyboard-shortcuts-close')?.focus(), 50);
+        }
+
+        function handleKeyboardShortcutCapture(e) {
+            if (keyboardShortcutCaptureIndex === null || keyboardShortcutCaptureIndex === undefined) return false;
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.key === 'Escape') {
+                keyboardShortcutCaptureIndex = null;
+                renderKeyboardShortcutsModal();
+                return true;
+            }
+            if (e.key === 'Backspace' || e.key === 'Delete') {
+                const shortcuts = loadSC();
+                if (shortcuts[keyboardShortcutCaptureIndex]) {
+                    delete shortcuts[keyboardShortcutCaptureIndex].keybind;
+                    saveSC(shortcuts);
+                }
+                keyboardShortcutCaptureIndex = null;
+                renderKeyboardShortcutsModal();
+                renderShortcuts();
+                showToast('Shortcut keybind cleared');
+                return true;
+            }
+            if (isModifierOnlyKey(e)) {
+                return true;
+            }
+            const binding = normalizeShortcutKeyEvent(e);
+            if (!binding) {
+                showToast('Use a letter, number, or symbol key');
+                return true;
+            }
+            const shortcuts = loadSC();
+            if (!shortcuts[keyboardShortcutCaptureIndex]) {
+                keyboardShortcutCaptureIndex = null;
+                renderKeyboardShortcutsModal();
+                return true;
+            }
+            shortcuts.forEach((item, index) => {
+                if (index !== keyboardShortcutCaptureIndex && shortcutBindingsMatch(item?.keybind, binding)) {
+                    delete item.keybind;
+                }
+            });
+            shortcuts[keyboardShortcutCaptureIndex].keybind = binding;
+            saveSC(shortcuts);
+            const label = getShortcutKeyLabel(binding);
+            keyboardShortcutCaptureIndex = null;
+            renderKeyboardShortcutsModal();
+            renderShortcuts();
+            showToast(`Shortcut keybind set to ${label}`);
+            return true;
+        }
 
         let toastTimeout;
         function showToast(msg, duration = 4000) {
@@ -7763,13 +8244,17 @@
             }
             const s = loadSC();
             if (window.editingScIndex !== null && window.editingScIndex !== undefined) {
-                s[window.editingScIndex] = { name: nm || host.replace('www.', ''), url: u };
+                const existingShortcut = s[window.editingScIndex] || {};
+                s[window.editingScIndex] = { ...existingShortcut, name: nm || host.replace('www.', ''), url: u };
                 if (typeof showToast === 'function') showToast('Shortcut edited');
             } else {
                 s.push({ name: nm || host.replace('www.', ''), url: u });
                 if (typeof showToast === 'function') showToast('Shortcut added');
             }
             saveSC(s); renderShortcuts();
+            if (document.getElementById('keyboard-shortcuts-overlay')?.classList.contains('open')) {
+                renderKeyboardShortcutsModal();
+            }
             document.getElementById('modal-overlay').classList.remove('open');
         };
 
@@ -7938,6 +8423,23 @@
             if (!q) return false;
             closeSugDropdown();
             doSearch(q);
+            return true;
+        }
+
+        function getAiShortcutQuery(value) {
+            const raw = String(value || '').trimStart();
+            if (raw.startsWith("'")) return raw.slice(1).trim();
+            const trimmed = raw.trimEnd();
+            if (trimmed.endsWith("'")) return trimmed.slice(0, -1).trim();
+            return null;
+        }
+
+        function runAiSearchShortcut() {
+            const query = getAiShortcutQuery(inp.value);
+            if (query === null) return false;
+            closeSugDropdown();
+            openAiAssistant(query);
+            resetSearchBarToHome();
             return true;
         }
 
@@ -8146,6 +8648,7 @@
                 return;
             }
             if (e.key === 'Enter') { 
+                if (runAiSearchShortcut()) return;
                 if (chooseActiveSuggestion()) return;
                 closeSugDropdown();
                 doSearch(inp.value);
