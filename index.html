@@ -4361,29 +4361,26 @@
         </div>
         
         <div class="cp-section">
-            <h4>Theme</h4>
-            <div class="bg-options" id="theme-options">
-                <label class="bg-radio">
-                    <input type="radio" name="theme_type" value="dark" checked>
-                    <span>Dark</span>
+            <h4>Search</h4>
+            <p class="cp-hint">Where web searches open</p>
+            <div class="picker-grid" id="search-engine-options"></div>
+            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Open search results in</p>
+            <div class="segment-control" id="search-target-segment">
+                <label class="segment-opt">
+                    <input type="radio" name="search_target" value="current" checked>
+                    <span>Current Tab</span>
                 </label>
-                <label class="bg-radio">
-                    <input type="radio" name="theme_type" value="light">
-                    <span>Light</span>
-                </label>
-                <label class="bg-radio">
-                    <input type="radio" name="theme_type" value="catppuccin">
-                    <span class="theme-label-cat">Catppuccin</span>
-                </label>
-                <label class="bg-radio">
-                    <input type="radio" name="theme_type" value="auto">
-                    <span>Auto</span>
+                <label class="segment-opt">
+                    <input type="radio" name="search_target" value="new">
+                    <span>New Tab</span>
                 </label>
             </div>
         </div>
         <div class="cp-section">
-            <h4>AI assistant</h4>
-            <p class="cp-hint">Opens when you click the AI button on the search bar</p>
+            <h4>AI & tools</h4>
+            <p class="cp-hint">Assistant used by the AI button and shortcut</p>
+            <div class="picker-grid" id="ai-customize-options"></div>
+            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">AI button</p>
             <div class="segment-control ai-visibility-control" id="ai-visibility-segment">
                 <label class="segment-opt">
                     <input type="radio" name="ai_button_visible" value="0">
@@ -4394,27 +4391,27 @@
                     <span>Show</span>
                 </label>
             </div>
-            <div class="picker-grid" id="ai-customize-options"></div>
-        </div>
-        <div class="cp-section">
-            <h4>Search engine</h4>
-            <p class="cp-hint">Where web searches open</p>
-            <div class="picker-grid" id="search-engine-options"></div>
-        </div>
-        <div class="cp-section">
-            <h4>Profile button</h4>
-            <p class="cp-hint">Use an emoji or upload your own image</p>
-            <div class="profile-customizer">
-                <div class="profile-preview-row">
-                    <div class="profile-preview" id="profile-preview">N</div>
-                    <input class="profile-emoji-input" id="profile-emoji-input" type="text" maxlength="4" placeholder="Emoji or letter">
-                </div>
-                <div class="profile-actions">
-                    <input type="file" id="profile-image-upload" accept="image/*" style="display:none;">
-                    <button class="upload-btn" id="profile-image-btn" type="button">Choose Image</button>
-                    <button class="upload-btn secondary" id="profile-reset-btn" type="button">Reset</button>
-                </div>
-                <div class="upload-status" id="profile-status"></div>
+            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Image search button</p>
+            <div class="segment-control" id="lens-visibility-segment">
+                <label class="segment-opt">
+                    <input type="radio" name="lens_button_visible" value="0">
+                    <span>Hide</span>
+                </label>
+                <label class="segment-opt">
+                    <input type="radio" name="lens_button_visible" value="1" checked>
+                    <span>Show</span>
+                </label>
+            </div>
+            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">AI search history</p>
+            <div class="segment-control" id="ai-history-segment">
+                <label class="segment-opt">
+                    <input type="radio" name="save_ai_history" value="0">
+                    <span>Off</span>
+                </label>
+                <label class="segment-opt">
+                    <input type="radio" name="save_ai_history" value="1" checked>
+                    <span>On</span>
+                </label>
             </div>
         </div>
         <div class="cp-section">
@@ -4453,7 +4450,26 @@
         </div>
         <div class="cp-section">
             <h4>Appearance</h4>
-            <p class="cp-hint">Liquid glass effect</p>
+            <p class="cp-hint">Theme</p>
+            <div class="bg-options" id="theme-options">
+                <label class="bg-radio">
+                    <input type="radio" name="theme_type" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label class="bg-radio">
+                    <input type="radio" name="theme_type" value="light">
+                    <span>Light</span>
+                </label>
+                <label class="bg-radio">
+                    <input type="radio" name="theme_type" value="catppuccin">
+                    <span class="theme-label-cat">Catppuccin</span>
+                </label>
+                <label class="bg-radio">
+                    <input type="radio" name="theme_type" value="auto" checked>
+                    <span>Auto</span>
+                </label>
+            </div>
+            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Liquid glass effect</p>
             <div class="segment-control" id="glass-segment">
                 <label class="segment-opt">
                     <input type="radio" name="glass_mode" value="0">
@@ -4461,6 +4477,17 @@
                 </label>
                 <label class="segment-opt">
                     <input type="radio" name="glass_mode" value="1" checked>
+                    <span>On</span>
+                </label>
+            </div>
+            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Animations</p>
+            <div class="segment-control" id="animations-segment">
+                <label class="segment-opt">
+                    <input type="radio" name="animations_enabled" value="0">
+                    <span>Off</span>
+                </label>
+                <label class="segment-opt">
+                    <input type="radio" name="animations_enabled" value="1" checked>
                     <span>On</span>
                 </label>
             </div>
@@ -4473,34 +4500,6 @@
                 <label class="segment-opt">
                     <input type="radio" name="close_button_position" value="right" checked>
                     <span>Right</span>
-                </label>
-            </div>
-        </div>
-        <div class="cp-section">
-            <h4>Animations</h4>
-            <p class="cp-hint">Enable smooth animations when suggestions appear</p>
-            <div class="segment-control" id="animations-segment">
-                <label class="segment-opt">
-                    <input type="radio" name="animations_enabled" value="0">
-                    <span>Off</span>
-                </label>
-                <label class="segment-opt">
-                    <input type="radio" name="animations_enabled" value="1" checked>
-                    <span>On</span>
-                </label>
-            </div>
-        </div>
-        <div class="cp-section">
-            <h4>Search Results</h4>
-            <p class="cp-hint">Open search results in current or new tab</p>
-            <div class="segment-control" id="search-target-segment">
-                <label class="segment-opt">
-                    <input type="radio" name="search_target" value="current">
-                    <span>Current Tab</span>
-                </label>
-                <label class="segment-opt">
-                    <input type="radio" name="search_target" value="new" checked>
-                    <span>New Tab</span>
                 </label>
             </div>
         </div>
@@ -4535,7 +4534,7 @@
                         <option value="architecture,cityscape">Modern Architecture</option>
                         <option value="dark,moody">Sleek & Moody Dark</option>
                         <option value="cyberpunk,neon">Cyberpunk & Neon</option>
-                        <option value="random,picsum">Pure Random (Surprise me)</option>
+                        <option value="random,picsum" selected>Pure Random (Surprise me)</option>
                     </select>
                     <button class="upload-btn" id="refresh-random-bg-btn" type="button" style="width:38px; height:38px; padding:0; display:flex; align-items:center; justify-content:center; flex-shrink:0;" title="Get fresh wallpaper">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -4559,6 +4558,22 @@
             </div>
         </div>
         <div class="cp-section">
+            <h4>Profile</h4>
+            <p class="cp-hint">Use an emoji or upload your own image</p>
+            <div class="profile-customizer">
+                <div class="profile-preview-row">
+                    <div class="profile-preview" id="profile-preview">N</div>
+                    <input class="profile-emoji-input" id="profile-emoji-input" type="text" maxlength="4" placeholder="Emoji or letter">
+                </div>
+                <div class="profile-actions">
+                    <input type="file" id="profile-image-upload" accept="image/*" style="display:none;">
+                    <button class="upload-btn" id="profile-image-btn" type="button">Choose Image</button>
+                    <button class="upload-btn secondary" id="profile-reset-btn" type="button">Reset</button>
+                </div>
+                <div class="upload-status" id="profile-status"></div>
+            </div>
+        </div>
+        <div class="cp-section">
             <h4>Offline</h4>
             <p class="cp-hint">Save this dashboard in the browser so it opens even without internet</p>
             <button class="upload-btn secondary" id="offline-install-btn" type="button" style="width: 100%;">
@@ -4566,6 +4581,10 @@
             </button>
             <button class="upload-btn" id="offline-update-btn" type="button" style="width: 100%; margin-top: 8px;">
                 Update offline copy
+            </button>
+            <div class="upload-status" id="offline-update-status" style="white-space: pre-line; margin-top: 8px;"></div>
+            <button class="upload-btn secondary" id="offline-reload-btn" type="button" style="width: 100%; margin-top: 8px; display: none;">
+                Reload page
             </button>
             <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Auto update after opening from cache</p>
             <div class="segment-control" id="offline-auto-update-segment">
@@ -4578,7 +4597,6 @@
                     <span>On</span>
                 </label>
             </div>
-            <div class="upload-status" id="offline-update-status" style="white-space: pre-line;"></div>
         </div>
         <div class="cp-section" style="border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 20px;">
             <h4 style="color: var(--text-error);">System & Data</h4>
@@ -5559,7 +5577,7 @@
 
         function shouldUseWallpaperAccent() {
             if (isCatppuccinActive()) return false;
-            const theme = ProfileManager.getItem('theme') || 'dark';
+            const theme = ProfileManager.getItem('theme') || 'auto';
             if (theme === 'catppuccin') return false;
             const bg = ProfileManager.getItem('bg_type') || 'default';
             return bg === 'random' || bg === 'custom';
@@ -5589,8 +5607,13 @@
             updateBrowserChrome();
         }
 
+        function getSystemThemeMode() {
+            if (!window.matchMedia) return 'dark';
+            return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+
         function applyTheme() {
-            const theme = ProfileManager.getItem('theme') || 'dark';
+            const theme = ProfileManager.getItem('theme') || 'auto';
             themeRadios.forEach(r => { if (r.value === theme) r.checked = true; });
             document.body.classList.remove('light-mode', 'catppuccin-mode');
             if (theme === 'light') {
@@ -5598,7 +5621,7 @@
             } else if (theme === 'catppuccin') {
                 document.body.classList.add('catppuccin-mode');
             } else if (theme === 'auto') {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                if (getSystemThemeMode() === 'light') {
                     document.body.classList.add('light-mode');
                 }
             }
@@ -5610,9 +5633,21 @@
                 applyTheme();
             });
         });
-        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
-            if (ProfileManager.getItem('theme') === 'auto') applyTheme();
-        });
+
+        function initSystemThemeSync() {
+            if (!window.matchMedia) return;
+            const systemThemeQuery = window.matchMedia('(prefers-color-scheme: light)');
+            const syncIfAuto = () => {
+                if (ProfileManager.getItem('theme') === 'auto') applyTheme();
+            };
+            if (typeof systemThemeQuery.addEventListener === 'function') {
+                systemThemeQuery.addEventListener('change', syncIfAuto);
+            } else if (typeof systemThemeQuery.addListener === 'function') {
+                systemThemeQuery.addListener(syncIfAuto);
+            }
+        }
+
+        initSystemThemeSync();
         applyTheme();
 
         function getAverageColor(imgEl) {
@@ -6028,7 +6063,7 @@
             if (type === 'random' || type === 'custom') {
                 let imgSrc;
                 if (type === 'random') {
-                    const category = ProfileManager.getItem('bg_category') || 'abstract,minimalist';
+                    const category = ProfileManager.getItem('bg_category') || 'random,picsum';
                     const refreshMode = ProfileManager.getItem('bg_refresh_mode') || 'reload';
                     const activeSessionId = getWallpaperBrowserSessionId();
                     const cachedSessionId = ProfileManager.getItem('bg_random_session_id');
@@ -6196,7 +6231,7 @@
             } else {
                 window.open(url, target);
             }
-            if (query) {
+            if (query && shouldSaveAiHistory()) {
                 try { addRecent(query); } catch (e) {}
             }
         }
@@ -6204,8 +6239,8 @@
         function getStoredAi() {
             try {
                 const v = ProfileManager.getItem('ai_provider');
-                return AI_PROVIDERS.some(p => p.id === v) ? v : 'claude';
-            } catch { return 'claude'; }
+                return AI_PROVIDERS.some(p => p.id === v) ? v : 'google-ai';
+            } catch { return 'google-ai'; }
         }
 
         const SEARCH_ENGINES = [
@@ -6811,12 +6846,13 @@
         function applyAiButtonVisibility() {
             const visible = isAiButtonVisible();
             const btn = document.getElementById('ai-btn');
-            const divider = document.getElementById('ai-divider');
             if (btn) btn.style.display = visible ? 'flex' : 'none';
-            if (divider) divider.style.display = visible ? 'block' : 'none';
             document.querySelectorAll('input[name="ai_button_visible"]').forEach(r => {
                 r.checked = r.value === (visible ? '1' : '0');
             });
+            if (typeof syncSearchActionsVisibility === 'function') {
+                syncSearchActionsVisibility();
+            }
         }
 
         function initAiButtonVisibilityControl() {
@@ -6828,6 +6864,45 @@
                 });
             });
             applyAiButtonVisibility();
+        }
+
+        function isLensButtonVisible() {
+            try { return ProfileManager.getItem('lens_button_visible') !== '0'; } catch { return true; }
+        }
+
+        function applyLensButtonVisibility() {
+            const visible = isLensButtonVisible();
+            document.querySelectorAll('input[name="lens_button_visible"]').forEach(r => {
+                r.checked = r.value === (visible ? '1' : '0');
+            });
+            if (typeof syncClearSearchButton === 'function') {
+                syncClearSearchButton();
+            }
+        }
+
+        function initLensButtonVisibilityControl() {
+            document.querySelectorAll('input[name="lens_button_visible"]').forEach(r => {
+                r.addEventListener('change', () => {
+                    if (!r.checked) return;
+                    try { ProfileManager.setItem('lens_button_visible', r.value); } catch { }
+                    applyLensButtonVisibility();
+                });
+            });
+            applyLensButtonVisibility();
+        }
+
+        function shouldSaveAiHistory() {
+            try { return ProfileManager.getItem('save_ai_history') !== '0'; } catch { return true; }
+        }
+
+        function initAiHistoryControl() {
+            document.querySelectorAll('input[name="save_ai_history"]').forEach(r => {
+                r.checked = r.value === (shouldSaveAiHistory() ? '1' : '0');
+                r.addEventListener('change', () => {
+                    if (!r.checked) return;
+                    try { ProfileManager.setItem('save_ai_history', r.value); } catch { }
+                });
+            });
         }
 
         function buildAiCustomize() {
@@ -6849,6 +6924,8 @@
             updateAiButton();
             syncAiCustomize();
             initAiButtonVisibilityControl();
+            initLensButtonVisibilityControl();
+            initAiHistoryControl();
             updateSearchPlaceholder();
             updateCenterLogo();
             updateEngineLinks();
@@ -6878,6 +6955,7 @@
                 return;
             }
             micBtn.classList.add('supported');
+            if (typeof syncSearchActionsVisibility === 'function') syncSearchActionsVisibility();
             recognition.lang = navigator.language || 'en-US';
             recognition.interimResults = true;
             recognition.continuous = false;
@@ -7025,11 +7103,11 @@
         }
 
         function getSearchTarget() {
-            try { return ProfileManager.getItem('search_target') === 'current' ? '_self' : '_blank'; } catch { return '_blank'; }
+            try { return ProfileManager.getItem('search_target', 'current') === 'new' ? '_blank' : '_self'; } catch { return '_self'; }
         }
 
         function initSearchTargetControl() {
-            const isCurrent = ProfileManager.getItem('search_target') === 'current';
+            const isCurrent = ProfileManager.getItem('search_target', 'current') !== 'new';
             document.querySelectorAll('input[name="search_target"]').forEach(r => {
                 r.checked = r.value === (isCurrent ? 'current' : 'new');
                 r.addEventListener('change', () => {
@@ -7139,7 +7217,7 @@
             const refreshBtn = document.getElementById('refresh-random-bg-btn');
             
             if (select) {
-                const activeCategory = ProfileManager.getItem('bg_category') || 'abstract,minimalist';
+                const activeCategory = ProfileManager.getItem('bg_category') || 'random,picsum';
                 select.value = activeCategory;
                 
                 select.addEventListener('change', e => {
@@ -7462,6 +7540,7 @@
             const installBtn = document.getElementById('offline-install-btn');
             const updateBtn = document.getElementById('offline-update-btn');
             const updateStatus = document.getElementById('offline-update-status');
+            const reloadBtn = document.getElementById('offline-reload-btn');
             const autoUpdateRadios = document.querySelectorAll('input[name="offline_auto_update"]');
             const updateInstallButton = () => {
                 if (!installBtn) return;
@@ -7477,6 +7556,10 @@
                     return;
                 }
                 updateStatus.textContent = `${updateStatus.textContent}\n${message}`;
+            };
+
+            const setReloadButtonVisible = visible => {
+                if (reloadBtn) reloadBtn.style.display = visible ? 'block' : 'none';
             };
 
             const isAutoUpdateEnabled = () => ProfileManager.getItem('offline_auto_update') !== '0';
@@ -7582,12 +7665,14 @@
             updateBtn?.addEventListener('click', async () => {
                 updateBtn.disabled = true;
                 updateBtn.textContent = 'Checking for update...';
+                setReloadButtonVisible(false);
                 setUpdateStatus('Starting update check...');
 
                 try {
                     await updateOfflineCopy({
                         onStatus: message => setUpdateStatus(message, { append: true })
                     });
+                    setReloadButtonVisible(true);
                 } catch (err) {
                     console.warn('Offline copy update failed.', err);
                     setUpdateStatus('Could not update right now. Try again when internet is stable.', { append: true });
@@ -7596,6 +7681,10 @@
                     updateBtn.disabled = false;
                     updateBtn.textContent = 'Update offline copy';
                 }
+            });
+
+            reloadBtn?.addEventListener('click', () => {
+                window.location.reload();
             });
 
             window.addEventListener('load', () => {
@@ -8443,10 +8532,20 @@
             return true;
         }
 
-        function syncClearSearchButton() {
+        function syncSearchActionsVisibility() {
             const hasText = !!inp.value.trim();
             clearSearchBtn.classList.toggle('visible', hasText);
-            lensBtn.classList.toggle('hidden', hasText);
+            if (lensBtn) lensBtn.classList.toggle('hidden', hasText || !isLensButtonVisible());
+
+            const micVisible = !hasText && document.getElementById('mic-btn')?.classList.contains('supported');
+            const lensVisible = !hasText && isLensButtonVisible();
+            const aiVisible = isAiButtonVisible();
+            const divider = document.getElementById('ai-divider');
+            if (divider) divider.style.display = (aiVisible && (micVisible || lensVisible)) ? 'block' : 'none';
+        }
+
+        function syncClearSearchButton() {
+            syncSearchActionsVisibility();
         }
 
         function closeSugDropdown() {
@@ -9139,7 +9238,7 @@
 
         function syncCustomizationPanel() {
             // Theme radios
-            const theme = ProfileManager.getItem('theme') || 'dark';
+            const theme = ProfileManager.getItem('theme') || 'auto';
             themeRadios.forEach(r => { r.checked = r.value === theme; });
             // Background radios
             const bg = ProfileManager.getItem('bg_type') || 'default';
@@ -9161,7 +9260,7 @@
             if (randomCategoryArea) randomCategoryArea.style.display = bg === 'random' ? 'block' : 'none';
             const randomBgCategory = document.getElementById('random-bg-category');
             if (randomBgCategory) {
-                randomBgCategory.value = ProfileManager.getItem('bg_category') || 'abstract,minimalist';
+                randomBgCategory.value = ProfileManager.getItem('bg_category') || 'random,picsum';
             }
             // Glass Mode radios
             const glassOn = ProfileManager.getItem('glass') !== '0';
@@ -9180,7 +9279,7 @@
             // AI button visibility radios
             applyAiButtonVisibility();
             // Search Target radios
-            const isCurrent = ProfileManager.getItem('search_target') === 'current';
+            const isCurrent = ProfileManager.getItem('search_target', 'current') !== 'new';
             document.querySelectorAll('input[name="search_target"]').forEach(r => {
                 r.checked = r.value === (isCurrent ? 'current' : 'new');
             });
