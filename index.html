@@ -1353,12 +1353,16 @@
             }
         }
 
-        .app-item[draggable="true"] {
+        .app-item.edit-mode[draggable="true"] {
             cursor: grab;
         }
 
-        .app-item[draggable="true"]:active {
+        .app-item.edit-mode[draggable="true"]:active {
             cursor: grabbing;
+        }
+
+        .app-item.edit-mode .app-menu-btn {
+            cursor: pointer;
         }
 
         .app-item.dragging {
@@ -4686,9 +4690,6 @@
                 if (el.classList.contains('edit-mode')) {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (index !== null) {
-                        openAppModal(app, index);
-                    }
                 } else if (getSearchTarget() === '_self') {
                     e.preventDefault();
                     window.location.href = app.url;
@@ -4698,6 +4699,10 @@
                 if (!isTouchPrimary()) {
                     el.draggable = true;
                     el.addEventListener('dragstart', (e) => {
+                        if (!el.classList.contains('edit-mode')) {
+                            e.preventDefault();
+                            return;
+                        }
                         el.classList.add('dragging');
                         e.dataTransfer.effectAllowed = 'move';
                         e.dataTransfer.setData('text/html', el.innerHTML);
@@ -4707,9 +4712,11 @@
                     el.addEventListener('dragend', () => {
                         el.classList.remove('dragging');
                         document.querySelectorAll('.app-item').forEach(a => a.classList.remove('drag-over'));
+                        window.draggedAppIndex = undefined;
                     });
                     
                     el.addEventListener('dragover', (e) => {
+                        if (window.draggedAppIndex === undefined) return;
                         e.preventDefault();
                         e.dataTransfer.dropEffect = 'move';
                         el.classList.add('drag-over');
