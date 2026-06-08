@@ -1802,14 +1802,17 @@
         }
 
         .sug-item .remove-sug {
-            margin-left: auto;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
             background: transparent;
             border: none;
             color: var(--text-muted);
             font-size: 16px;
             cursor: pointer;
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1829,6 +1832,26 @@
             text-decoration: none;
             background: var(--btn-hover);
             color: var(--text-secondary);
+        }
+
+        /* History-only mode (no query typed): restore the original roomier look —
+           extra right padding so text doesn't run under the remove button, and
+           the remove button is always softly visible (not just on hover) */
+        .suggestions[data-mode="history"] .sug-item.has-remove {
+            padding-top: 11px;
+            padding-bottom: 11px;
+            min-height: 46px;
+            padding-right: 52px;
+        }
+
+        .suggestions[data-mode="history"] .sug-item.has-remove .remove-sug {
+            opacity: 0.45;
+            pointer-events: auto;
+        }
+
+        .suggestions[data-mode="history"] .sug-item.has-remove:hover .remove-sug,
+        .suggestions[data-mode="history"] .sug-item.has-remove.active .remove-sug {
+            opacity: 1;
         }
 
         /* SHORTCUTS CUSTOMIZATION */
@@ -8556,6 +8579,7 @@
             } else {
                 sugEl.classList.remove('open', 'closing', 'animate');
             }
+            delete sugEl.dataset.mode;
             resetSugSelection();
         }
 
@@ -8723,9 +8747,11 @@
         function showSug(q) {
             clearTimeout(sgt);
             if (!q.trim()) {
+                sugEl.dataset.mode = 'history';
                 renderSug(getRecent(), 'recent');
                 return;
             }
+            delete sugEl.dataset.mode;
 
             const MAX_TOTAL = 8;
             const MAX_HISTORY = 3; // up to 3 history hits at the top
