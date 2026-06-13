@@ -1802,17 +1802,14 @@
         }
 
         .sug-item .remove-sug {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
+            margin-left: auto;
             background: transparent;
             border: none;
             color: var(--text-muted);
             font-size: 16px;
             cursor: pointer;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1832,26 +1829,6 @@
             text-decoration: none;
             background: var(--btn-hover);
             color: var(--text-secondary);
-        }
-
-        /* History-only mode (no query typed): restore the original roomier look —
-           extra right padding so text doesn't run under the remove button, and
-           the remove button is always softly visible (not just on hover) */
-        .suggestions[data-mode="history"] .sug-item.has-remove {
-            padding-top: 11px;
-            padding-bottom: 11px;
-            min-height: 46px;
-            padding-right: 52px;
-        }
-
-        .suggestions[data-mode="history"] .sug-item.has-remove .remove-sug {
-            opacity: 0.45;
-            pointer-events: auto;
-        }
-
-        .suggestions[data-mode="history"] .sug-item.has-remove:hover .remove-sug,
-        .suggestions[data-mode="history"] .sug-item.has-remove.active .remove-sug {
-            opacity: 1;
         }
 
         /* SHORTCUTS CUSTOMIZATION */
@@ -8579,7 +8556,6 @@
             } else {
                 sugEl.classList.remove('open', 'closing', 'animate');
             }
-            delete sugEl.dataset.mode;
             resetSugSelection();
         }
 
@@ -8668,60 +8644,13 @@
             );
         }
 
-        function buildSugItem(s, type) {
-            const d = document.createElement('div');
-            d.className = 'sug-item';
-            if (type === 'recent') d.classList.add('has-remove');
-            d.dataset.query = s;
-
-            // Inject the secure, predefined static SVG icon via innerHTML
-            d.innerHTML = type === 'recent'
-                ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="si"><path d="M12 8v4l2 2m6-2a8 8 0 11-16 0 8 8 0 0116 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`
-                : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="si"><path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1 0 6.15 6.15a7.5 7.5 0 0 0 10.5 10.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
-
-            // Safeguard against HTML injection by assigning to textContent
-            const span = document.createElement('span');
-            span.textContent = s;
-            d.appendChild(span);
-
-            if (type === 'recent') {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'remove-sug';
-                btn.title = 'Remove from history';
-                btn.setAttribute('aria-label', 'Remove from history');
-                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-                d.appendChild(btn);
-            }
-
-            d.addEventListener('mouseenter', () => {
-                const sugItems = [...sugEl.querySelectorAll('.sug-item')];
-                setActiveSuggestion(sugItems.indexOf(d));
-            });
-
-            d.onclick = (e) => {
-                if (e.target.classList.contains('remove-sug') || e.target.closest('.remove-sug')) {
-                    e.stopPropagation();
-                    removeRecent(s);
-                    showSug(inp.value);
-                } else {
-                    inp.value = s;
-                    sugEl.classList.remove('open', 'animate');
-                    // DRY Fix: Only doSearch is needed since it automatically calls addRecent internally
-                    doSearch(s);
-                }
-            };
-            return d;
-        }
-
-        // Render a mixed list of [{text, type}] entries — like Chrome's omnibox
-        function renderMixedSug(entries) {
+        function renderSug(items, type) {
             const wasOpen = sugEl.classList.contains('open');
             sugEl.innerHTML = '';
             resetSugSelection();
-            if (!entries.length) {
+            if (!items.length) { 
                 closeSugDropdown();
-                return;
+                return; 
             }
             const animEnabled = isAnimEnabled();
             if (animEnabled && !wasOpen) {
@@ -8729,60 +8658,61 @@
             } else if (!animEnabled || wasOpen) {
                 sugEl.classList.remove('animate');
             }
-            entries.forEach(({ text, type }) => {
-                sugEl.appendChild(buildSugItem(text, type));
+            items.forEach(s => {
+                const d = document.createElement('div'); d.className = 'sug-item';
+                if (type === 'recent') d.classList.add('has-remove');
+                d.dataset.query = s;
+                
+                // Inject the secure, predefined static SVG icon via innerHTML
+                d.innerHTML = type === 'recent'
+                    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="si"><path d="M12 8v4l2 2m6-2a8 8 0 11-16 0 8 8 0 0116 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`
+                    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="si"><path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1 0 6.15 6.15a7.5 7.5 0 0 0 10.5 10.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+                
+                // Safeguard against HTML injection by assigning to textContent
+                const span = document.createElement('span');
+                span.textContent = s;
+                d.appendChild(span);
+
+                if (type === 'recent') {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'remove-sug';
+                    btn.title = 'Remove from history';
+                    btn.setAttribute('aria-label', 'Remove from history');
+                    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+                    d.appendChild(btn);
+                }
+                
+                d.addEventListener('mouseenter', () => {
+                    const sugItems = [...sugEl.querySelectorAll('.sug-item')];
+                    setActiveSuggestion(sugItems.indexOf(d));
+                });
+                
+                d.onclick = (e) => { 
+                    if (e.target.classList.contains('remove-sug') || e.target.closest('.remove-sug')) {
+                        e.stopPropagation();
+                        removeRecent(s);
+                        showSug(inp.value);
+                    } else {
+                        inp.value = s; 
+                        sugEl.classList.remove('open', 'animate'); 
+                        // DRY Fix: Only doSearch is needed since it automatically calls addRecent internally
+                        doSearch(s); 
+                    }
+                };
+                sugEl.appendChild(d);
             });
             sugEl.classList.add('open');
         }
 
-        // Legacy renderSug kept for empty-query (history-only) case
-        function renderSug(items, type) {
-            renderMixedSug(items.map(text => ({ text, type })));
-        }
-
-        // Mix history matches and online suggestions like Chrome's address bar:
-        // - History matches appear first (with clock icon + remove button)
-        // - Online suggestions fill remaining slots (deduped against history)
-        // - Total capped at 8 items
         function showSug(q) {
             clearTimeout(sgt);
-            if (!q.trim()) {
-                sugEl.dataset.mode = 'history';
-                renderSug(getRecent(), 'recent');
-                return;
-            }
-            delete sugEl.dataset.mode;
-
-            const MAX_TOTAL = 8;
-            const MAX_HISTORY = 3; // up to 3 history hits at the top
-
-            const histMatches = getRecent()
-                .filter(r => r.toLowerCase().includes(q.toLowerCase()))
-                .slice(0, MAX_HISTORY);
-
-            // Show history matches immediately (instant, no flicker)
-            if (histMatches.length) {
-                renderMixedSug(histMatches.map(text => ({ text, type: 'recent' })));
-            }
-
-            // Fetch online suggestions and merge them in
-            sgt = setTimeout(() => fetchSug(q, res => {
-                const histSet = new Set(histMatches.map(h => h.toLowerCase()));
-                // Deduplicate: skip online suggestions already in history
-                const onlineSugs = res
-                    .filter(s => !histSet.has(s.toLowerCase()))
-                    .slice(0, MAX_TOTAL - histMatches.length);
-
-                const merged = [
-                    ...histMatches.map(text => ({ text, type: 'recent' })),
-                    ...onlineSugs.map(text => ({ text, type: 'suggest' }))
-                ];
-
-                if (merged.length) {
-                    renderMixedSug(merged);
-                } else if (!histMatches.length) {
-                    closeSugDropdown();
-                }
+            if (!q.trim()) { renderSug(getRecent(), 'recent'); return; }
+            const rec = getRecent().filter(r => r.toLowerCase().includes(q.toLowerCase()));
+            if (rec.length) renderSug(rec, 'recent');
+            sgt = setTimeout(() => fetchSug(q, res => { 
+                if (res.length) renderSug(res, 'suggest'); 
+                else if (!rec.length) closeSugDropdown(); 
             }), 180);
         }
 
