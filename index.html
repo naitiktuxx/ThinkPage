@@ -434,8 +434,10 @@
         /* CUSTOMIZE PANEL */
         .customize-btn {
             position: fixed;
-            bottom: 16px;
-            right: 16px;
+            bottom: var(--cust-btn-bottom, 16px);
+            top: var(--cust-btn-top, auto);
+            left: var(--cust-btn-left, auto);
+            right: var(--cust-btn-right, 16px);
             background: var(--btn-bg);
             border: 1px solid var(--border-lighter);
             color: var(--text-secondary);
@@ -447,7 +449,7 @@
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            transition: background .2s;
+            transition: background .2s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s;
             z-index: 100;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -833,6 +835,7 @@
             justify-content: flex-start;
             min-height: 100vh;
             padding: calc(15.4vh + 22px) 16px 48px;
+            box-sizing: border-box;
         }
 
         .logo {
@@ -845,10 +848,21 @@
 
         /* SEARCH */
         .search-wrap {
-            width: 680px;
+            width: var(--search-wrap-width, 680px);
             max-width: 95vw;
-            position: relative;
+            position: var(--search-pos-type, relative);
+            align-self: var(--search-align-self, center);
+            order: var(--search-order, unset);
+            margin-top: var(--search-margin-top, 0);
+            margin-bottom: var(--search-margin-bottom, 0);
+            top: var(--search-top, auto);
+            bottom: var(--search-bottom, auto);
+            left: var(--search-left, auto);
+            right: var(--search-right, auto);
+            transform: var(--search-transform, none);
+            z-index: var(--search-z-index, auto);
             overflow: visible;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .search-bar {
@@ -1168,6 +1182,17 @@
             }
         }
 
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(6px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         @keyframes fadeOut {
             from {
                 opacity: 1;
@@ -1176,6 +1201,17 @@
             to {
                 opacity: 0;
                 transform: translateY(-6px) scale(0.95);
+            }
+        }
+
+        @keyframes fadeOutDown {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(6px) scale(0.95);
             }
         }
 
@@ -1194,8 +1230,16 @@
             animation: slideDownFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        .suggestions.open.animate.sug-up {
+            animation: slideUpFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
         .suggestions.closing.animate {
             animation: fadeOut 0.12s cubic-bezier(0.7, 0, 1, 0.84) forwards;
+        }
+
+        .suggestions.closing.animate.sug-up {
+            animation: fadeOutDown 0.12s cubic-bezier(0.7, 0, 1, 0.84) forwards;
         }
 
         .suggestions.open.animate .sug-item {
@@ -1350,6 +1394,40 @@
         body.animations-on .customize-btn {
             transition: bottom 0.3s ease, right 0.3s ease;
         }
+
+        /* Sliding selector pill animation for segment controls */
+        body.animations-on .segment-control::after {
+            transition: left 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Tactile and stretching animations for toggle switches */
+        body.animations-on .switch-toggle {
+            transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.animations-on .switch-toggle:active {
+            transform: scale(0.92);
+        }
+
+        body.animations-on .switch-slider {
+            transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.animations-on .switch-slider:before {
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+                        width 0.22s cubic-bezier(0.4, 0, 0.2, 1), 
+                        background-color 0.28s;
+        }
+
+        body.animations-on .switch-toggle:active .switch-slider:before {
+            width: 18px;
+            border-radius: 7px;
+        }
+
+        body.animations-on .switch-toggle:active input:checked + .switch-slider:before {
+            transform: translateX(16px);
+        }
+
 
         body.animations-off .animate {
             animation: none !important;
@@ -1725,16 +1803,42 @@
         }
 
         body.logo-hidden .logo {
-            display: none !important;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .segment-control {
+            position: relative;
             display: flex;
             padding: 3px;
             background: var(--btn-bg);
             border: 1px solid var(--panel-border);
             border-radius: 10px;
             gap: 2px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .segment-control::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            left: 3px;
+            width: calc(50% - 4px);
+            background: var(--surface-1);
+            border-radius: 7px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        body.light-mode .segment-control::after {
+            box-shadow: 0 1px 4px rgba(60, 64, 67, 0.15);
+        }
+
+        .segment-control:has(.segment-opt:last-child input:checked)::after {
+            left: calc(50% + 1px);
         }
 
         .ai-visibility-control {
@@ -1762,26 +1866,98 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--text-muted);
-            transition: background .15s, color .15s;
+            transition: color .15s;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .segment-opt:has(input:checked) span {
-            background: var(--surface-1);
+            background: transparent !important;
+            box-shadow: none !important;
             color: var(--text-secondary);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
         }
 
         body.light-mode .segment-opt:has(input:checked) span {
-            box-shadow: 0 1px 4px rgba(60, 64, 67, 0.15);
+            box-shadow: none !important;
+        }
+
+        /* Collapsible Accordion sections in Customize Panel */
+        .cp-details {
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            margin-top: 16px;
+            margin-bottom: 12px;
+            background: var(--surface-2);
+            overflow: hidden;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        body.glass-mode .cp-details {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: inset 0 1px 0 var(--glass-inset);
+        }
+
+        .cp-details summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        .cp-details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .cp-details summary:hover {
+            background: var(--btn-hover);
+        }
+
+        body.glass-mode .cp-details summary:hover {
+            background: var(--glass-bg-hover);
+        }
+
+        .cp-details summary .chevron {
+            width: 14px;
+            height: 14px;
+            color: var(--text-muted);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.glass-mode .cp-details summary .chevron {
+            color: var(--glass-text-muted);
+        }
+
+        .cp-details[open] summary .chevron {
+            transform: rotate(180deg);
+        }
+
+        .cp-details-content {
+            padding: 0 16px 16px 16px;
+            display: flex;
+            flex-direction: column;
         }
 
 
         .suggestions {
             position: absolute;
-            top: calc(100% + 6px);
+            top: var(--sug-top, calc(100% + 6px));
+            bottom: var(--sug-bottom, auto);
             left: 0;
             right: 0;
             background: var(--surface-1);
@@ -1796,6 +1972,8 @@
             overflow-y: auto;
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none; /* IE and Edge */
+            flex-direction: var(--sug-flex-direction, column);
+            height: fit-content;
         }
 
         .suggestions::-webkit-scrollbar {
@@ -1803,15 +1981,15 @@
         }
 
         .suggestions.open {
-            display: block;
+            display: var(--sug-display, block);
         }
 
         .sug-item {
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 10px 20px;
-            min-height: 42px;
+            padding: var(--sug-item-padding-v, 10px) 20px;
+            min-height: var(--sug-item-min-height, 42px);
             cursor: pointer;
             font-size: 14px;
             color: var(--text-secondary);
@@ -1820,6 +1998,7 @@
             overflow: hidden;
             margin: 2px 8px 2px 0;
             border-radius: 0 100px 100px 0;
+            flex-shrink: 0;
         }
 
         .sug-item span {
@@ -1909,7 +2088,6 @@
             top: 0; left: 0; right: 0; bottom: 0;
             background-color: var(--btn-bg);
             border: 1px solid var(--panel-border);
-            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 20px;
         }
 
@@ -1921,7 +2099,6 @@
             left: 2px;
             bottom: 2px;
             background-color: var(--text-muted);
-            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 50%;
         }
 
@@ -2195,12 +2372,160 @@
         /* SHORTCUTS */
         .shortcuts-area {
             margin-top: 40px;
+            position: relative; /* Stacking context for absolute button placement */
+            max-width: 700px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .shortcuts-box {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .shortcuts-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
             justify-content: center;
-            max-width: 700px;
+            width: 100%;
+            max-height: var(--sc-expanded-height, 500px);
+            overflow: hidden;
         }
+
+        body.animations-on .shortcuts-grid {
+            transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .shortcuts-grid.collapsed {
+            max-height: var(--sc-collapsed-height, 96px);
+        }
+
+        .shortcuts-area.docked .shortcuts-grid {
+            --sc-collapsed-height: 84px;
+        }
+
+        /* Shortcuts Dock Style */
+        .shortcuts-area.docked {
+            position: fixed;
+            margin-top: 0;
+            z-index: 95;
+            top: var(--dock-top, auto);
+            bottom: var(--dock-bottom, auto);
+            left: var(--dock-left, auto);
+            right: var(--dock-right, auto);
+            transform: var(--dock-transform, none);
+            max-width: min(90vw, var(--search-wrap-width, 680px));
+            width: max-content;
+        }
+
+        .shortcuts-area.docked .shortcuts-box {
+            border-radius: 20px;
+            padding: 0;
+            width: max-content;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            border: 1px solid transparent;
+            box-shadow: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            transition: background-color 0.25s, border-color 0.25s, box-shadow 0.25s, backdrop-filter 0.25s, padding 0.25s;
+        }
+
+        .shortcuts-area.docked .shortcuts-box.has-bg {
+            background: var(--glass-bg, rgba(32, 33, 36, 0.55));
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-top: 1px solid var(--glass-border-top, rgba(255, 255, 255, 0.18));
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: inset 0 1px 0 var(--glass-inset), 0 8px 32px rgba(0, 0, 0, 0.3);
+            padding: 8px 16px;
+        }
+
+        .shortcuts-area.docked .shortcut {
+            width: 72px;
+            padding: 6px 4px;
+        }
+
+        .shortcuts-area.docked .shortcut:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+        }
+
+        .shortcuts-area.no-transitions,
+        .shortcuts-area.no-transitions * {
+            transition: none !important;
+            animation: none !important;
+        }
+
+        body.animations-on .shortcuts-area {
+            transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        left 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        right 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        margin-top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Shortcuts Expand Button (Separate Glass Circle) */
+        .shortcuts-expand-btn {
+            position: absolute;
+            z-index: 96;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--glass-bg, rgba(32, 33, 36, 0.55));
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-top: 1px solid var(--glass-border-top, rgba(255, 255, 255, 0.18));
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: inset 0 1px 0 var(--glass-inset), 0 4px 12px rgba(0, 0, 0, 0.25);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            outline: none;
+            left: calc(100% + 12px);
+            right: auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .shortcuts-expand-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            transform: translateY(-50%) scale(1.08);
+        }
+
+        .shortcuts-expand-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        body.animations-on .shortcuts-expand-btn {
+            transition: background 0.2s, color 0.2s, transform 0.2s, left 0.3s, right 0.3s;
+        }
+
+        .shortcuts-expand-btn svg {
+            width: 16px;
+            height: 16px;
+            transform: rotate(0deg);
+        }
+
+        body.animations-on .shortcuts-expand-btn svg {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .shortcuts-expand-btn.expanded svg {
+            transform: rotate(180deg);
+        }
+
 
         .shortcut {
             display: flex;
@@ -3094,6 +3419,22 @@
                 padding: calc(74px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(96px, calc(60px + env(safe-area-inset-bottom))) max(16px, env(safe-area-inset-left));
             }
 
+            .search-wrap {
+                position: relative !important;
+                align-self: center !important;
+                order: unset !important;
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+                top: auto !important;
+                bottom: auto !important;
+                left: auto !important;
+                right: auto !important;
+                transform: none !important;
+                z-index: auto !important;
+                --sug-top: calc(100% + 6px) !important;
+                --sug-bottom: auto !important;
+            }
+
             .logo {
                 height: auto;
                 min-height: 64px;
@@ -3162,14 +3503,18 @@
                 -webkit-user-select: none;
                 user-select: none;
                 touch-action: pan-y;
+                flex-direction: column !important;
+                display: block !important;
+                height: fit-content !important;
             }
 
             .sug-item {
-                padding: 12px 14px;
-                min-height: 48px;
+                padding: 12px 14px !important;
+                min-height: 48px !important;
                 margin-right: 6px;
                 -webkit-user-select: none;
                 user-select: none;
+                flex-shrink: 0 !important;
             }
 
             .sug-item .remove-sug {
@@ -3178,14 +3523,46 @@
             }
 
             .shortcuts-area {
+                position: relative !important;
+                margin-top: clamp(32px, 5.5dvh, 48px) !important;
+                bottom: auto !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                transform: none !important;
                 width: 100%;
                 max-width: 100%;
-                margin-top: clamp(32px, 5.5dvh, 48px);
-                gap: 8px 4px;
                 padding: 0 2px;
-                max-height: min(30dvh, 220px);
-                overflow: hidden;
             }
+
+            .shortcuts-grid {
+                max-height: none !important;
+                overflow: visible !important;
+                gap: 8px 4px;
+            }
+
+            .shortcuts-expand-btn {
+                display: none !important;
+            }
+
+            .shortcuts-area.docked {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                padding: 0 !important;
+            }
+
+            .shortcuts-area.docked .shortcuts-box {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                padding: 0 2px !important;
+            }
+
 
             .shortcut {
                 width: 80px;
@@ -3238,8 +3615,11 @@
             }
 
             .customize-btn {
-                bottom: max(14px, env(safe-area-inset-bottom));
-                right: max(14px, env(safe-area-inset-right));
+                position: fixed !important;
+                bottom: max(14px, env(safe-area-inset-bottom)) !important;
+                top: auto !important;
+                left: auto !important;
+                right: max(14px, env(safe-area-inset-right)) !important;
                 min-height: 44px;
                 padding: 10px 16px;
             }
@@ -3340,9 +3720,11 @@
             }
 
             .wallpaper-attribution {
-                left: max(12px, env(safe-area-inset-left));
-                right: auto;
-                bottom: max(16px, env(safe-area-inset-bottom));
+                position: fixed !important;
+                left: max(12px, env(safe-area-inset-left)) !important;
+                right: auto !important;
+                bottom: max(16px, env(safe-area-inset-bottom)) !important;
+                top: auto !important;
                 max-width: min(44vw, calc(100vw - 190px - env(safe-area-inset-left) - env(safe-area-inset-right)));
                 overflow: hidden;
                 white-space: nowrap;
@@ -3984,8 +4366,10 @@
 
         .wallpaper-attribution {
             position: fixed;
-            bottom: 12px;
-            left: 12px;
+            bottom: var(--wp-attr-bottom, 12px);
+            top: var(--wp-attr-top, auto);
+            left: var(--wp-attr-left, 12px);
+            right: var(--wp-attr-right, auto);
             font-size: 11px;
             color: rgba(255, 255, 255, 0.7);
             background: rgba(0, 0, 0, 0.45);
@@ -3995,7 +4379,7 @@
             text-decoration: none;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
-            transition: background 0.15s, color 0.15s;
+            transition: background 0.15s, color 0.15s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s;
             font-weight: 500;
         }
 
@@ -4262,7 +4646,7 @@
             <input type="file" id="lens-file-input" name="encoded_image" accept="image/*" tabindex="-1" aria-hidden="true" multiple />
         </form>
 
-        <div class="shortcuts-area" id="shortcuts-area"></div>
+        <div class="shortcuts-area no-transitions" id="shortcuts-area"></div>
     </div>
 
     <div class="modal-overlay" id="lens-fallback-overlay" role="dialog" aria-modal="true" aria-labelledby="lens-fallback-title">
@@ -4409,6 +4793,69 @@
         </div>
     </div>
 
+    <!-- IMPORT SELECTION MODAL -->
+    <div class="modal-overlay" id="import-selection-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="import-sel-modal-title">
+        <div class="modal" style="max-width: 450px;">
+            <div class="history-modal-header modal-header-actions">
+                <h3 id="import-sel-modal-title" style="margin: 0; font-weight: 700;">Import Options</h3>
+                <button class="cp-close" id="import-sel-close-btn" title="Close" aria-label="Close import options" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div style="margin: 16px 0; display: flex; flex-direction: column; gap: 12px;">
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Choose the data components you want to import from your backup file:</p>
+                
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--panel-border); transition: background 0.2s;">
+                    <input type="checkbox" id="import-sel-profiles" checked style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;" />
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13.5px; color: var(--text-main);">Profiles</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Profile configurations, custom names, and avatars</div>
+                    </div>
+                </label>
+
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--panel-border); transition: background 0.2s;">
+                    <input type="checkbox" id="import-sel-settings" checked style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;" />
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13.5px; color: var(--text-main);">General Settings</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Theme mode, search preferences, layout toggles, and provider options</div>
+                    </div>
+                </label>
+
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--panel-border); transition: background 0.2s;">
+                    <input type="checkbox" id="import-sel-wallpaper" checked style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;" />
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13.5px; color: var(--text-main);">Wallpaper & Backgrounds</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Custom uploads, category choices, and auto-refresh intervals</div>
+                    </div>
+                </label>
+
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--panel-border); transition: background 0.2s;">
+                    <input type="checkbox" id="import-sel-history" checked style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;" />
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13.5px; color: var(--text-main);">Search History</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Past queries log used for search suggestions</div>
+                    </div>
+                </label>
+
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--panel-border); transition: background 0.2s;">
+                    <input type="checkbox" id="import-sel-shortcuts" checked style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;" />
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13.5px; color: var(--text-main);">Shortcuts & Web Apps</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Dashboard speed-dial shortcuts and user-defined Web Apps</div>
+                    </div>
+                </label>
+            </div>
+            
+            <div class="modal-actions" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
+                <button class="btn-cancel" id="import-sel-cancel">Cancel</button>
+                <button class="btn-done" id="import-sel-confirm" style="background: var(--accent); color: var(--accent-contrast);">Import Selected</button>
+            </div>
+        </div>
+    </div>
+
     <!-- SEARCH HISTORY MODAL -->
     <div class="modal-overlay" id="history-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
         <div class="modal" style="max-width: 550px; width: 95%;">
@@ -4539,16 +4986,59 @@
                     <span>New Tab</span>
                 </label>
             </div>
-            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">History preview limit</p>
-            <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px;">
-                <input type="range" id="history-preview-length-range" min="1" max="20" value="8" class="cp-range-input" style="flex: 1; outline: none;" />
-                <span id="history-preview-length-val" style="font-size: 14px; font-weight: 500; min-width: 20px; text-align: right; color: var(--text-secondary);">8</span>
-            </div>
-            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Suggestions box height</p>
-            <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px;">
-                <input type="range" id="suggestions-box-height-range" min="150" max="800" step="10" value="420" class="cp-range-input" style="flex: 1; outline: none;" />
-                <span id="suggestions-box-height-val" style="font-size: 14px; font-weight: 500; min-width: 45px; text-align: right; color: var(--text-secondary);">420px</span>
-            </div>
+            <!-- Search Bar Layout Collapsible -->
+            <details class="cp-details">
+                <summary>
+                    <span>Search bar layout</span>
+                    <span class="chevron">
+                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 1l4 4 4-4" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="cp-details-content">
+                    <p class="cp-hint" style="margin-top:6px; margin-bottom:6px;">Search bar width</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" id="search-width-range" min="1" max="4" value="2" class="cp-range-input" style="flex: 1; outline: none;" />
+                        <span id="search-width-val" style="font-size: 14px; font-weight: 500; min-width: 55px; text-align: right; color: var(--text-secondary);">Default</span>
+                    </div>
+                    <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Search bar position</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" id="search-position-range" min="1" max="5" value="3" class="cp-range-input" style="flex: 1; outline: none;" />
+                        <span id="search-position-val" style="font-size: 14px; font-weight: 500; min-width: 90px; text-align: right; color: var(--text-secondary);">Middle</span>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Suggestions & History Collapsible -->
+            <details class="cp-details">
+                <summary>
+                    <span>Suggestions & history</span>
+                    <span class="chevron">
+                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 1l4 4 4-4" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="cp-details-content">
+                    <p class="cp-hint" style="margin-top:6px; margin-bottom:6px;">History preview limit</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" id="history-preview-length-range" min="1" max="20" value="8" class="cp-range-input" style="flex: 1; outline: none;" />
+                        <span id="history-preview-length-val" style="font-size: 14px; font-weight: 500; min-width: 20px; text-align: right; color: var(--text-secondary);">8</span>
+                    </div>
+                    <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Suggestions box height</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" id="suggestions-box-height-range" min="150" max="800" step="10" value="420" class="cp-range-input" style="flex: 1; outline: none;" />
+                        <span id="suggestions-box-height-val" style="font-size: 14px; font-weight: 500; min-width: 45px; text-align: right; color: var(--text-secondary);">420px</span>
+                    </div>
+                    <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Suggestions item spacing</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" id="suggestions-spacing-range" min="1" max="4" value="2" class="cp-range-input" style="flex: 1; outline: none;" />
+                        <span id="suggestions-spacing-val" style="font-size: 14px; font-weight: 500; min-width: 65px; text-align: right; color: var(--text-secondary);">Default</span>
+                    </div>
+                </div>
+            </details>
+
             <div class="config-divider" style="margin: 16px 0 12px 0;"></div>
             <div class="config-row">
                 <span class="config-label">Show search engine logo</span>
@@ -4626,6 +5116,40 @@
                             <span>Most-visited sites</span>
                             <span class="experimental-tag">Experimental</span>
                         </label>
+                    </div>
+                </div>
+                
+                <div id="shortcuts-position-config-container" style="transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); max-height: 340px; opacity: 1; overflow: hidden;">
+                    <div class="config-divider"></div>
+                    <div class="config-row" id="shortcuts-dock-row">
+                        <span class="config-label">Dock next to search bar</span>
+                        <label class="switch-toggle">
+                            <input type="checkbox" id="shortcuts-dock-toggle" checked />
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-row" id="shortcuts-dock-bg-row" style="margin-top: 12px; transition: opacity 0.3s ease;">
+                        <span class="config-label">Dock background & blur</span>
+                        <label class="switch-toggle">
+                            <input type="checkbox" id="shortcuts-dock-bg-toggle" checked />
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-row" style="margin-top: 12px;">
+                        <span class="config-label">Collapse extra shortcuts</span>
+                        <label class="switch-toggle">
+                            <input type="checkbox" id="shortcuts-collapse-toggle" />
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-row" id="shortcuts-position-slider-row" style="margin-top: 12px; display: flex; flex-direction: column; align-items: stretch; gap: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="config-label">Shortcuts position</span>
+                            <span id="shortcuts-position-val" style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">40px</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <input type="range" id="shortcuts-position-range" min="10" max="300" step="5" value="40" class="cp-range-input" style="flex: 1; outline: none;" />
+                        </div>
                     </div>
                 </div>
                 <div class="config-divider"></div>
@@ -7541,6 +8065,456 @@
             });
         }
 
+        const SUGGESTION_SPACINGS = {
+            '1': { label: 'Compact', paddingV: '6px', minHeight: '34px' },
+            '2': { label: 'Default', paddingV: '10px', minHeight: '42px' },
+            '3': { label: 'Cozy', paddingV: '14px', minHeight: '50px' },
+            '4': { label: 'Spacious', paddingV: '18px', minHeight: '58px' }
+        };
+
+        function updateSuggestionsSpacing() {
+            const val = ProfileManager.getItem('suggestions_spacing_step') || '2';
+            const config = SUGGESTION_SPACINGS[val] || SUGGESTION_SPACINGS['2'];
+            const suggestions = document.querySelector('.suggestions');
+            if (suggestions) {
+                suggestions.style.setProperty('--sug-item-padding-v', config.paddingV);
+                suggestions.style.setProperty('--sug-item-min-height', config.minHeight);
+            }
+        }
+
+        function initSuggestionsSpacingControl() {
+            const rangeInput = document.getElementById('suggestions-spacing-range');
+            const valSpan = document.getElementById('suggestions-spacing-val');
+            if (!rangeInput || !valSpan) return;
+
+            const savedVal = ProfileManager.getItem('suggestions_spacing_step') || '2';
+            rangeInput.value = savedVal;
+            valSpan.textContent = (SUGGESTION_SPACINGS[savedVal] || SUGGESTION_SPACINGS['2']).label;
+            updateSuggestionsSpacing();
+
+            rangeInput.addEventListener('input', () => {
+                const stepVal = rangeInput.value;
+                valSpan.textContent = (SUGGESTION_SPACINGS[stepVal] || SUGGESTION_SPACINGS['2']).label;
+                ProfileManager.setItem('suggestions_spacing_step', stepVal);
+                updateSuggestionsSpacing();
+            });
+        }
+
+        const LENS_WIDTHS = {
+            '1': { label: 'Small', width: '480px' },
+            '2': { label: 'Default', width: '680px' },
+            '3': { label: 'Big', width: '780px' },
+            '4': { label: 'Large', width: '880px' }
+        };
+
+        function updateSearchWidth() {
+            const val = ProfileManager.getItem('search_width_step') || '2';
+            const config = LENS_WIDTHS[val] || LENS_WIDTHS['2'];
+            const searchWrap = document.querySelector('.search-wrap');
+            if (searchWrap) {
+                searchWrap.style.setProperty('--search-wrap-width', config.width);
+            }
+        }
+
+        function initSearchWidthControl() {
+            const rangeInput = document.getElementById('search-width-range');
+            const valSpan = document.getElementById('search-width-val');
+            if (!rangeInput || !valSpan) return;
+
+            const savedVal = ProfileManager.getItem('search_width_step') || '2';
+            rangeInput.value = savedVal;
+            valSpan.textContent = (LENS_WIDTHS[savedVal] || LENS_WIDTHS['2']).label;
+            updateSearchWidth();
+
+            rangeInput.addEventListener('input', () => {
+                const stepVal = rangeInput.value;
+                valSpan.textContent = (LENS_WIDTHS[stepVal] || LENS_WIDTHS['2']).label;
+                ProfileManager.setItem('search_width_step', stepVal);
+                updateSearchWidth();
+            });
+        }
+
+                const LENS_POSITIONS = {
+            '1': { 
+                label: 'Left Corner', 
+                type: 'fixed', 
+                alignSelf: 'flex-start', 
+                order: 'unset', 
+                marginTop: '0', 
+                marginBottom: '0', 
+                top: 'auto', 
+                bottom: '24px', 
+                left: '24px', 
+                right: 'auto', 
+                zIndex: '99',
+                sugTop: 'auto',
+                sugBottom: 'calc(100% + 6px)',
+                sugFlexDirection: 'column-reverse',
+                sugDisplay: 'flex',
+                transform: 'none'
+            },
+            '2': { 
+                label: 'Top', 
+                type: 'fixed', 
+                alignSelf: 'center', 
+                order: 'unset', 
+                marginTop: '0', 
+                marginBottom: '0', 
+                top: '24px', 
+                bottom: 'auto', 
+                left: '50%', 
+                right: 'auto', 
+                zIndex: '99',
+                sugTop: 'calc(100% + 6px)',
+                sugBottom: 'auto',
+                sugFlexDirection: 'column',
+                sugDisplay: 'block',
+                transform: 'translateX(-50%)'
+            },
+            '3': { 
+                label: 'Middle', 
+                type: 'relative', 
+                alignSelf: 'center', 
+                order: 'unset', 
+                marginTop: '0', 
+                marginBottom: '0', 
+                top: 'auto', 
+                bottom: 'auto', 
+                left: 'auto', 
+                right: 'auto', 
+                zIndex: 'auto',
+                sugTop: 'calc(100% + 6px)',
+                sugBottom: 'auto',
+                sugFlexDirection: 'column',
+                sugDisplay: 'block',
+                transform: 'none'
+            },
+            '4': { 
+                label: 'Bottom', 
+                type: 'fixed', 
+                alignSelf: 'center', 
+                order: 'unset', 
+                marginTop: '0', 
+                marginBottom: '0', 
+                top: 'auto', 
+                bottom: '24px', 
+                left: '50%', 
+                right: 'auto', 
+                zIndex: '99',
+                sugTop: 'auto',
+                sugBottom: 'calc(100% + 6px)',
+                sugFlexDirection: 'column-reverse',
+                sugDisplay: 'flex',
+                transform: 'translateX(-50%)'
+            },
+            '5': { 
+                label: 'Right Corner', 
+                type: 'fixed', 
+                alignSelf: 'flex-end', 
+                order: 'unset', 
+                marginTop: '0', 
+                marginBottom: '0', 
+                top: 'auto', 
+                bottom: '24px', 
+                left: 'auto', 
+                right: '24px', 
+                zIndex: '99',
+                sugTop: 'auto',
+                sugBottom: 'calc(100% + 6px)',
+                sugFlexDirection: 'column-reverse',
+                sugDisplay: 'flex',
+                transform: 'none'
+            }
+        };
+
+        function updateSearchPosition() {
+            const val = ProfileManager.getItem('search_position_step') || '3';
+            const config = LENS_POSITIONS[val] || LENS_POSITIONS['3'];
+            const searchWrap = document.querySelector('.search-wrap');
+            if (searchWrap) {
+                searchWrap.style.setProperty('--search-pos-type', config.type);
+                searchWrap.style.setProperty('--search-align-self', config.alignSelf);
+                searchWrap.style.setProperty('--search-order', config.order);
+                searchWrap.style.setProperty('--search-margin-top', config.marginTop);
+                searchWrap.style.setProperty('--search-margin-bottom', config.marginBottom);
+                searchWrap.style.setProperty('--search-top', config.top);
+                searchWrap.style.setProperty('--search-bottom', config.bottom);
+                searchWrap.style.setProperty('--search-left', config.left);
+                searchWrap.style.setProperty('--search-right', config.right);
+                searchWrap.style.setProperty('--search-transform', config.transform);
+                searchWrap.style.setProperty('--search-z-index', config.zIndex);
+                searchWrap.style.setProperty('--sug-top', config.sugTop);
+                searchWrap.style.setProperty('--sug-bottom', config.sugBottom);
+                searchWrap.style.setProperty('--sug-flex-direction', config.sugFlexDirection);
+                searchWrap.style.setProperty('--sug-display', config.sugDisplay);
+            }
+
+            const wpAttr = document.getElementById('wallpaper-attribution');
+            const custBtn = document.getElementById('customize-btn');
+            
+            const isNarrow = window.innerWidth < 1050;
+
+            if (isNarrow && (val === '1' || val === '4' || val === '5')) {
+                // Stack both on the top-left on narrow screens to prevent overlapping the bottom search bar
+                if (custBtn) {
+                    custBtn.style.setProperty('--cust-btn-bottom', 'auto');
+                    custBtn.style.setProperty('--cust-btn-top', '12px');
+                    custBtn.style.setProperty('--cust-btn-left', '16px');
+                    custBtn.style.setProperty('--cust-btn-right', 'auto');
+                }
+                if (wpAttr) {
+                    wpAttr.style.setProperty('--wp-attr-bottom', 'auto');
+                    wpAttr.style.setProperty('--wp-attr-top', '52px'); // Stacked below customize button
+                    wpAttr.style.setProperty('--wp-attr-left', '16px');
+                    wpAttr.style.setProperty('--wp-attr-right', 'auto');
+                }
+            } else {
+                // Default behavior (wide screen or search bar is not at bottom)
+                if (wpAttr) {
+                    wpAttr.style.setProperty('--wp-attr-bottom', val === '1' ? 'auto' : '12px');
+                    wpAttr.style.setProperty('--wp-attr-top', val === '1' ? '12px' : 'auto');
+                    wpAttr.style.setProperty('--wp-attr-left', val === '1' ? '12px' : '12px');
+                    wpAttr.style.setProperty('--wp-attr-right', val === '1' ? 'auto' : 'auto');
+                }
+                if (custBtn) {
+                    custBtn.style.setProperty('--cust-btn-bottom', val === '5' ? 'auto' : '16px');
+                    custBtn.style.setProperty('--cust-btn-top', val === '5' ? '12px' : 'auto');
+                    custBtn.style.setProperty('--cust-btn-left', val === '5' ? '16px' : 'auto');
+                    custBtn.style.setProperty('--cust-btn-right', val === '5' ? 'auto' : '16px');
+                }
+            }
+
+            const suggestions = document.getElementById('suggestions');
+            if (suggestions) {
+                if (val === '1' || val === '4' || val === '5') {
+                    suggestions.classList.add('sug-up');
+                } else {
+                    suggestions.classList.remove('sug-up');
+                }
+            }
+            window.syncShortcutsDockControlState?.();
+            updateShortcutsDock();
+        }
+
+        function updateShortcutsDock() {
+            const area = document.getElementById('shortcuts-area');
+            if (!area) return;
+
+            const showShortcuts = ProfileManager.getItem('show_shortcuts') !== '0';
+            if (!showShortcuts) {
+                area.style.display = 'none';
+                return;
+            } else {
+                area.style.display = '';
+            }
+
+            const dockEnabled = ProfileManager.getItem('shortcuts_dock_enabled') !== '0';
+            const val = ProfileManager.getItem('search_position_step') || '3';
+            const dockAvailable = val !== '3';
+
+            if (dockEnabled && dockAvailable) {
+                area.classList.add('docked');
+                area.style.position = ''; // fallback to CSS position: fixed
+                area.style.marginTop = ''; // clear margin-top
+
+                // Set coordinates based on position step
+                if (val === '1') { // Left Corner
+                    area.style.setProperty('--dock-top', 'auto');
+                    area.style.setProperty('--dock-bottom', '88px');
+                    area.style.setProperty('--dock-left', '24px');
+                    area.style.setProperty('--dock-right', 'auto');
+                    area.style.setProperty('--dock-transform', 'none');
+                } else if (val === '2') { // Top
+                    area.style.setProperty('--dock-top', '88px');
+                    area.style.setProperty('--dock-bottom', 'auto');
+                    area.style.setProperty('--dock-left', '50%');
+                    area.style.setProperty('--dock-right', 'auto');
+                    area.style.setProperty('--dock-transform', 'translateX(-50%)');
+                } else if (val === '4') { // Bottom
+                    area.style.setProperty('--dock-top', 'auto');
+                    area.style.setProperty('--dock-bottom', '88px');
+                    area.style.setProperty('--dock-left', '50%');
+                    area.style.setProperty('--dock-right', 'auto');
+                    area.style.setProperty('--dock-transform', 'translateX(-50%)');
+                } else if (val === '5') { // Right Corner
+                    area.style.setProperty('--dock-top', 'auto');
+                    area.style.setProperty('--dock-bottom', '88px');
+                    area.style.setProperty('--dock-left', 'auto');
+                    area.style.setProperty('--dock-right', '24px');
+                    area.style.setProperty('--dock-transform', 'none');
+                }
+            } else {
+                area.classList.remove('docked');
+                area.style.position = 'relative';
+                
+                // Clear css variables
+                area.style.removeProperty('--dock-top');
+                area.style.removeProperty('--dock-bottom');
+                area.style.removeProperty('--dock-left');
+                area.style.removeProperty('--dock-right');
+                area.style.removeProperty('--dock-transform');
+
+                const margin = ProfileManager.getItem('shortcuts_position_margin') || '40';
+                area.style.marginTop = `${margin}px`;
+            }
+        }
+
+        function initShortcutsPositionControl() {
+            const dockToggle = document.getElementById('shortcuts-dock-toggle');
+            const rangeInput = document.getElementById('shortcuts-position-range');
+            const valSpan = document.getElementById('shortcuts-position-val');
+            const sliderRow = document.getElementById('shortcuts-position-slider-row');
+            const collapseToggle = document.getElementById('shortcuts-collapse-toggle');
+            const dockBgToggle = document.getElementById('shortcuts-dock-bg-toggle');
+            const dockRow = document.getElementById('shortcuts-dock-row');
+            const dockBgRow = document.getElementById('shortcuts-dock-bg-row');
+
+            if (!dockToggle || !rangeInput || !valSpan) return;
+
+            // Load saved values
+            const dockEnabled = ProfileManager.getItem('shortcuts_dock_enabled') !== '0';
+            const positionMargin = ProfileManager.getItem('shortcuts_position_margin') || '40';
+            const collapseEnabled = ProfileManager.getItem('shortcuts_collapse_enabled') === '1';
+            const dockBgEnabled = ProfileManager.getItem('shortcuts_dock_bg_enabled') !== '0';
+
+            dockToggle.checked = dockEnabled;
+            rangeInput.value = positionMargin;
+            valSpan.textContent = `${positionMargin}px`;
+            if (collapseToggle) {
+                collapseToggle.checked = collapseEnabled;
+            }
+            if (dockBgToggle) {
+                dockBgToggle.checked = dockBgEnabled;
+            }
+
+            function updateSliderState() {
+                const dockAvailable = (ProfileManager.getItem('search_position_step') || '3') !== '3';
+                const isDocked = dockToggle.checked && dockAvailable;
+                dockToggle.disabled = !dockAvailable;
+                if (dockRow) {
+                    dockRow.style.opacity = dockAvailable ? '1' : '0.5';
+                    dockRow.style.pointerEvents = dockAvailable ? 'auto' : 'none';
+                }
+                rangeInput.disabled = isDocked;
+                if (sliderRow) {
+                    sliderRow.style.opacity = isDocked ? '0.5' : '1';
+                    sliderRow.style.pointerEvents = isDocked ? 'none' : 'auto';
+                }
+                if (dockBgToggle) {
+                    dockBgToggle.disabled = !isDocked || !dockAvailable;
+                }
+                if (dockBgRow) {
+                    dockBgRow.style.opacity = isDocked ? '1' : '0.5';
+                    dockBgRow.style.pointerEvents = isDocked ? 'auto' : 'none';
+                }
+            }
+
+            window.syncShortcutsDockControlState = updateSliderState;
+
+            updateSliderState();
+            updateShortcutsDock();
+
+            dockToggle.addEventListener('change', () => {
+                ProfileManager.setItem('shortcuts_dock_enabled', dockToggle.checked ? '1' : '0');
+                updateSliderState();
+                updateShortcutsDock();
+            });
+
+            rangeInput.addEventListener('input', () => {
+                const marginVal = rangeInput.value;
+                valSpan.textContent = `${marginVal}px`;
+                ProfileManager.setItem('shortcuts_position_margin', marginVal);
+                updateShortcutsDock();
+            });
+
+            if (collapseToggle) {
+                collapseToggle.addEventListener('change', () => {
+                    ProfileManager.setItem('shortcuts_collapse_enabled', collapseToggle.checked ? '1' : '0');
+                    updateShortcutsCollapseState();
+                });
+            }
+
+            if (dockBgToggle) {
+                dockBgToggle.addEventListener('change', () => {
+                    ProfileManager.setItem('shortcuts_dock_bg_enabled', dockBgToggle.checked ? '1' : '0');
+                    renderShortcuts();
+                });
+            }
+        }
+
+        function initSearchPositionControl() {
+            const rangeInput = document.getElementById('search-position-range');
+            const valSpan = document.getElementById('search-position-val');
+            if (!rangeInput || !valSpan) return;
+
+            const savedVal = ProfileManager.getItem('search_position_step') || '3';
+            rangeInput.value = savedVal;
+            valSpan.textContent = (LENS_POSITIONS[savedVal] || LENS_POSITIONS['3']).label;
+            updateSearchPosition();
+
+            rangeInput.addEventListener('input', () => {
+                const stepVal = rangeInput.value;
+                valSpan.textContent = (LENS_POSITIONS[stepVal] || LENS_POSITIONS['3']).label;
+                ProfileManager.setItem('search_position_step', stepVal);
+                updateSearchPosition();
+            });
+
+            window.addEventListener('resize', updateSearchPosition);
+        }
+
+        function initCustomizeAccordionAnimation() {
+            document.querySelectorAll('.cp-details').forEach(el => {
+                const summary = el.querySelector('summary');
+                summary.addEventListener('click', (e) => {
+                    // Check if animations are enabled
+                    const animationsOn = document.body.classList.contains('animations-on');
+                    if (!animationsOn) {
+                        return;
+                    }
+                    
+                    e.preventDefault();
+                    if (el.dataset.animating === 'true') return;
+                    
+                    el.dataset.animating = 'true';
+                    if (el.hasAttribute('open')) {
+                        el.style.overflow = 'hidden';
+                        const startHeight = `${el.offsetHeight}px`;
+                        const endHeight = `${summary.offsetHeight}px`;
+                        el.animate([
+                            { height: startHeight },
+                            { height: endHeight }
+                        ], {
+                            duration: 200,
+                            easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                        }).onfinish = () => {
+                            el.removeAttribute('open');
+                            el.style.height = '';
+                            el.style.overflow = '';
+                            el.dataset.animating = 'false';
+                        };
+                    } else {
+                        el.setAttribute('open', '');
+                        el.style.overflow = 'hidden';
+                        const startHeight = `${summary.offsetHeight}px`;
+                        const endHeight = `${el.offsetHeight}px`;
+                        el.animate([
+                            { height: startHeight },
+                            { height: endHeight }
+                        ], {
+                            duration: 200,
+                            easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                        }).onfinish = () => {
+                            el.style.height = '';
+                            el.style.overflow = '';
+                            el.dataset.animating = 'false';
+                        };
+                    }
+                });
+            });
+        }
+
+
+
         function applyLogoVisibility(visible = ProfileManager.getItem('show_logo') !== '0') {
             document.body.classList.toggle('logo-hidden', !visible);
             const toggle = document.getElementById('show-logo-toggle');
@@ -7678,6 +8652,11 @@
                 if (typeContainer) {
                     typeContainer.style.maxHeight = showShortcuts ? '100px' : '0';
                     typeContainer.style.opacity = showShortcuts ? '1' : '0';
+                }
+                const posContainer = document.getElementById('shortcuts-position-config-container');
+                if (posContainer) {
+                    posContainer.style.maxHeight = showShortcuts ? '340px' : '0';
+                    posContainer.style.opacity = showShortcuts ? '1' : '0';
                 }
                 typeRadios.forEach(r => {
                     r.checked = r.value === shortcutsType;
@@ -8538,12 +9517,53 @@
             window.scReorderDidDrag = false;
             const area = document.getElementById('shortcuts-area');
             if (ProfileManager.getItem('show_shortcuts') === '0') {
+                document.getElementById('shortcuts-expand-btn')?.remove();
                 area.style.display = 'none';
                 area.innerHTML = '';
                 return;
             }
             area.style.display = '';
-            area.innerHTML = '';
+
+            // Ensure box, grid and expandBtn exist
+            let box = document.getElementById('shortcuts-box');
+            if (!box) {
+                box = document.createElement('div');
+                box.id = 'shortcuts-box';
+                box.className = 'shortcuts-box';
+                area.appendChild(box);
+            }
+            const dockBgEnabled = ProfileManager.getItem('shortcuts_dock_bg_enabled') !== '0';
+            box.classList.toggle('has-bg', dockBgEnabled);
+
+            let grid = document.getElementById('shortcuts-grid');
+            if (!grid) {
+                grid = document.createElement('div');
+                grid.className = 'shortcuts-grid';
+                grid.id = 'shortcuts-grid';
+                box.appendChild(grid);
+            }
+            grid.innerHTML = '';
+
+            let expandBtn = document.getElementById('shortcuts-expand-btn');
+            if (!expandBtn) {
+                expandBtn = document.createElement('button');
+                expandBtn.type = 'button';
+                expandBtn.id = 'shortcuts-expand-btn';
+                expandBtn.className = 'shortcuts-expand-btn';
+                expandBtn.setAttribute('aria-label', 'Expand shortcuts');
+                expandBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                `;
+                expandBtn.addEventListener('click', () => {
+                    window.shortcutsExpanded = !window.shortcutsExpanded;
+                    updateShortcutsCollapseState();
+                });
+            }
+            const searchWrap = document.querySelector('.search-wrap');
+            (searchWrap || area).appendChild(expandBtn);
+
             const currentType = ProfileManager.getItem('shortcuts_type') || 'my_shortcuts';
             const isMostVisited = currentType === 'most_visited';
             const shortcuts = isMostVisited ? loadMostVisited() : loadSC();
@@ -8703,23 +9723,61 @@
                     }
                 });
 
-                area.appendChild(tile);
+                grid.appendChild(tile);
             });
+
             if (!isMostVisited) {
                 const add = document.createElement('button');
                 add.className = 'add-sc';
                 add.innerHTML = `<div class="add-sc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span class="add-sc-label">Add shortcut</span>`;
                 add.onclick = () => openModal();
-                area.appendChild(add);
+                grid.appendChild(add);
             }
-            
+
             area.querySelectorAll('.sc-menu-btn').forEach(btn => {
                 btn.addEventListener('click', e => {
                     e.preventDefault(); e.stopPropagation();
                     openShortcutMenu(parseInt(btn.dataset.i), isMostVisited, btn.closest('.shortcut'), btn);
                 });
             });
+            updateShortcutsCollapseState();
             setupShortcutsKeyboard();
+        }
+
+        function updateShortcutsCollapseState() {
+            const grid = document.getElementById('shortcuts-grid');
+            const expandBtn = document.getElementById('shortcuts-expand-btn');
+            const area = document.getElementById('shortcuts-area');
+            if (!grid || !expandBtn || !area) return;
+
+            const collapseEnabled = ProfileManager.getItem('shortcuts_collapse_enabled') === '1';
+            const isDocked = area.classList.contains('docked');
+            const threshold = isDocked ? 90 : 100;
+            const expandedHeight = grid.scrollHeight;
+            const hasMultipleRows = expandedHeight > threshold;
+            grid.style.setProperty('--sc-expanded-height', `${expandedHeight}px`);
+
+            if (collapseEnabled && hasMultipleRows) {
+                expandBtn.style.display = '';
+                if (window.shortcutsExpanded) {
+                    grid.classList.remove('collapsed');
+                    expandBtn.classList.add('expanded');
+                    expandBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    grid.classList.add('collapsed');
+                    expandBtn.classList.remove('expanded');
+                    expandBtn.setAttribute('aria-expanded', 'false');
+                }
+            } else {
+                expandBtn.style.display = 'none';
+                grid.classList.remove('collapsed');
+                expandBtn.classList.remove('expanded');
+                expandBtn.setAttribute('aria-expanded', 'false');
+            }
+
+            if (area.classList.contains('docked')) {
+                requestAnimationFrame(updateShortcutsDock);
+            }
         }
 
         document.getElementById('sc-remove-btn').onclick = () => {
@@ -9028,7 +10086,9 @@
                 showSug(inp.value);
                 return;
             }
-            let nextIndex = activeSugIndex + direction;
+            const isReverse = getComputedStyle(sugEl).flexDirection === 'column-reverse';
+            const adjustedDirection = isReverse ? -direction : direction;
+            let nextIndex = activeSugIndex + adjustedDirection;
             if (nextIndex < -1) {
                 nextIndex = items.length - 1;
             } else if (nextIndex >= items.length) {
@@ -9561,6 +10621,90 @@
 
             importBtn.addEventListener('click', () => importFile.click());
 
+            let tempImportData = null;
+            const importSelModal = document.getElementById('import-selection-modal-overlay');
+            const importSelCloseBtn = document.getElementById('import-sel-close-btn');
+            const importSelCancel = document.getElementById('import-sel-cancel');
+            const importSelConfirm = document.getElementById('import-sel-confirm');
+
+            function closeImportSelModal() {
+                if (importSelModal) {
+                    importSelModal.classList.remove('open');
+                }
+                tempImportData = null;
+            }
+
+            importSelCloseBtn?.addEventListener('click', closeImportSelModal);
+            importSelCancel?.addEventListener('click', closeImportSelModal);
+            importSelModal?.addEventListener('click', e => {
+                if (e.target === importSelModal) closeImportSelModal();
+            });
+
+            function getSettingCategory(scopedKey) {
+                const parts = scopedKey.split('_');
+                if (parts.length < 3) return 'settings';
+                const key = parts.slice(2).join('_');
+                
+                if (key.startsWith('bg_')) {
+                    return 'wallpaper';
+                }
+                if (key === 'rq') {
+                    return 'history';
+                }
+                if (key === 'sc' || key === 'custom_apps' || key.startsWith('app_storage_')) {
+                    return 'shortcuts';
+                }
+                return 'settings';
+            }
+
+            importSelConfirm?.addEventListener('click', () => {
+                if (!tempImportData) return;
+
+                const importProfiles = document.getElementById('import-sel-profiles').checked;
+                const importSettings = document.getElementById('import-sel-settings').checked;
+                const importWallpaper = document.getElementById('import-sel-wallpaper').checked;
+                const importHistory = document.getElementById('import-sel-history').checked;
+                const importShortcuts = document.getElementById('import-sel-shortcuts').checked;
+
+                if (!importProfiles && !importSettings && !importWallpaper && !importHistory && !importShortcuts) {
+                    showToast('Please select at least one component to import.', 4000);
+                    return;
+                }
+
+                try {
+                    if (importProfiles) {
+                        const profilesJson = JSON.stringify(tempImportData.profiles);
+                        const activeId = tempImportData.activeProfileId || 'default';
+                        localStorage.setItem('search_profiles', profilesJson);
+                        localStorage.setItem('search_active_profile', activeId);
+                        ProfileManager.setCookie('search_profiles', profilesJson);
+                        ProfileManager.setCookie('search_active_profile', activeId);
+                    }
+
+                    if (tempImportData.settings) {
+                        Object.entries(tempImportData.settings).forEach(([k, v]) => {
+                            const category = getSettingCategory(k);
+                            if (category === 'settings' && importSettings) {
+                                localStorage.setItem(k, v);
+                            } else if (category === 'wallpaper' && importWallpaper) {
+                                localStorage.setItem(k, v);
+                            } else if (category === 'history' && importHistory) {
+                                localStorage.setItem(k, v);
+                            } else if (category === 'shortcuts' && importShortcuts) {
+                                localStorage.setItem(k, v);
+                            }
+                        });
+                    }
+
+                    closeImportSelModal();
+                    showToast('Import successful! Reloading page...');
+                    setTimeout(() => window.location.reload(), 1500);
+                } catch (err) {
+                    console.error('Import error:', err);
+                    showToast('Failed to import selected data.', 4000);
+                }
+            });
+
             importFile.addEventListener('change', e => {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -9569,20 +10713,11 @@
                     try {
                         const parsed = JSON.parse(evt.target.result);
                         if (parsed.version && parsed.profiles) {
-                            // Restore settings
-                            const profilesJson = JSON.stringify(parsed.profiles);
-                            const activeId = parsed.activeProfileId || 'default';
-                            localStorage.setItem('search_profiles', profilesJson);
-                            localStorage.setItem('search_active_profile', activeId);
-                            ProfileManager.setCookie('search_profiles', profilesJson);
-                            ProfileManager.setCookie('search_active_profile', activeId);
-                            if (parsed.settings) {
-                                Object.entries(parsed.settings).forEach(([k, v]) => {
-                                    localStorage.setItem(k, v);
-                                });
+                            tempImportData = parsed;
+                            if (importSelModal) {
+                                importSelModal.classList.add('open');
+                                runOpenAnimation(importSelModal, 360);
                             }
-                            showToast('Import successful! Reloading page...');
-                            setTimeout(() => window.location.reload(), 1500);
                         } else {
                             showToast('Invalid backup file structure.');
                         }
@@ -9862,11 +10997,86 @@
             }
             updateSuggestionsBoxHeight();
 
+            // Suggestions item spacing slider
+            const savedSpacingStep = ProfileManager.getItem('suggestions_spacing_step') || '2';
+            const spacingInput = document.getElementById('suggestions-spacing-range');
+            const spacingVal = document.getElementById('suggestions-spacing-val');
+            if (spacingInput && spacingVal) {
+                spacingInput.value = savedSpacingStep;
+                spacingVal.textContent = (SUGGESTION_SPACINGS[savedSpacingStep] || SUGGESTION_SPACINGS['2']).label;
+            }
+            updateSuggestionsSpacing();
+ 
+            // Search width range slider
+            const savedWidthStep = ProfileManager.getItem('search_width_step') || '2';
+            const widthInput = document.getElementById('search-width-range');
+            const widthVal = document.getElementById('search-width-val');
+            if (widthInput && widthVal) {
+                widthInput.value = savedWidthStep;
+                widthVal.textContent = (LENS_WIDTHS[savedWidthStep] || LENS_WIDTHS['2']).label;
+            }
+            updateSearchWidth();
+
+            // Search position range slider
+            const savedPosStep = ProfileManager.getItem('search_position_step') || '3';
+            const posInput = document.getElementById('search-position-range');
+            const posVal = document.getElementById('search-position-val');
+            if (posInput && posVal) {
+                posInput.value = savedPosStep;
+                posVal.textContent = (LENS_POSITIONS[savedPosStep] || LENS_POSITIONS['3']).label;
+            }
+            updateSearchPosition();
+
             // Logo visibility toggle
             applyLogoVisibility();
 
             // Firefox logo toggle
             applyFirefoxLogo();
+
+            // Shortcuts dock & position sync
+            const shortcutsDock = ProfileManager.getItem('shortcuts_dock_enabled') !== '0';
+            const shortcutsDockAvailable = (ProfileManager.getItem('search_position_step') || '3') !== '3';
+            const shortcutsDockToggle = document.getElementById('shortcuts-dock-toggle');
+            if (shortcutsDockToggle) {
+                shortcutsDockToggle.checked = shortcutsDock;
+                shortcutsDockToggle.disabled = !shortcutsDockAvailable;
+            }
+            const shortcutsDockRow = document.getElementById('shortcuts-dock-row');
+            if (shortcutsDockRow) {
+                shortcutsDockRow.style.opacity = shortcutsDockAvailable ? '1' : '0.5';
+                shortcutsDockRow.style.pointerEvents = shortcutsDockAvailable ? 'auto' : 'none';
+            }
+            const shortcutsPositionVal = ProfileManager.getItem('shortcuts_position_margin') || '40';
+            const shortcutsPositionRange = document.getElementById('shortcuts-position-range');
+            const shortcutsPositionValSpan = document.getElementById('shortcuts-position-val');
+            if (shortcutsPositionRange && shortcutsPositionValSpan) {
+                shortcutsPositionRange.value = shortcutsPositionVal;
+                shortcutsPositionValSpan.textContent = `${shortcutsPositionVal}px`;
+            }
+            const shortcutsSliderRow = document.getElementById('shortcuts-position-slider-row');
+            if (shortcutsPositionRange && shortcutsSliderRow) {
+                const shortcutsDockActive = shortcutsDock && shortcutsDockAvailable;
+                shortcutsPositionRange.disabled = shortcutsDockActive;
+                shortcutsSliderRow.style.opacity = shortcutsDockActive ? '0.5' : '1';
+                shortcutsSliderRow.style.pointerEvents = shortcutsDockActive ? 'none' : 'auto';
+            }
+            const shortcutsDockBgToggle = document.getElementById('shortcuts-dock-bg-toggle');
+            const shortcutsDockBgRow = document.getElementById('shortcuts-dock-bg-row');
+            const shortcutsDockActive = shortcutsDock && shortcutsDockAvailable;
+            if (shortcutsDockBgToggle) {
+                shortcutsDockBgToggle.disabled = !shortcutsDockActive;
+            }
+            if (shortcutsDockBgRow) {
+                shortcutsDockBgRow.style.opacity = shortcutsDockActive ? '1' : '0.5';
+                shortcutsDockBgRow.style.pointerEvents = shortcutsDockActive ? 'auto' : 'none';
+            }
+            const shortcutsCollapse = ProfileManager.getItem('shortcuts_collapse_enabled') === '1';
+            const shortcutsCollapseToggle = document.getElementById('shortcuts-collapse-toggle');
+            if (shortcutsCollapseToggle) {
+                shortcutsCollapseToggle.checked = shortcutsCollapse;
+            }
+            updateShortcutsDock();
+            updateShortcutsCollapseState();
         }
 
         function renderProfileDropdown() {
@@ -10444,9 +11654,14 @@
         initSearchTargetControl();
         initHistoryPreviewLengthControl();
         initSuggestionsBoxHeightControl();
+        initSuggestionsSpacingControl();
+        initSearchWidthControl();
+        initSearchPositionControl();
+        initCustomizeAccordionAnimation();
         initLogoVisibilityControl();
         initFirefoxLogoControl();
         initShortcutsControl();
+        initShortcutsPositionControl();
         initSystemResetControl();
         initRandomBgControl();
         initWallpaperRefreshControl();
@@ -10458,6 +11673,10 @@
         initHistoryAutoImport();
         requestAnimationFrame(() => {
             inp.focus({ preventScroll: true });
+            setTimeout(() => {
+                const area = document.getElementById('shortcuts-area');
+                if (area) area.classList.remove('no-transitions');
+            }, 150);
         });
     </script>
     <div class="modal-overlay" id="permission-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="permission-title">
