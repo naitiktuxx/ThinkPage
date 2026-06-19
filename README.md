@@ -15,22 +15,20 @@ A personalized new-tab dashboard inspired by modern “new tab” experiences.
 
 ---
 
-## Quick start
+## Firefox setup (recommended)
 
-### Run locally
-This repo is static. You can run it in a few ways:
+1. In Firefox, install recommended extensions for best experience (visual + navigation):
+   - **New Tab Override** (to load this page as your new tab)
+   - **Adaptive Tab Colour** (browser color theming)
+   - **Gesturify** (navigation gestures)
+2. Set **this page URL** as your default homepage/new tab.
+3. In Firefox “New Tab” settings, ensure:
+   - **Focus** behavior is enabled so this page can receive focus when opened.
 
-**Option A: open directly**
-- Open `index.html` in your browser.
-- Note: service-worker registration may be limited depending on browser rules and whether the file is loaded with `file://`.
-
-**Option B (recommended): local server**
-If you have any static server available, serve the folder and open:
-- `http://localhost:<port>/index.html`
-
-The PWA will work correctly once the service worker can be registered under the site origin.
+> Note: The PWA/service-worker offline behavior requires a site origin (not `file://`).
 
 ---
+
 
 ## Features
 
@@ -132,6 +130,7 @@ Navigation behavior:
 
 ## Project structure
 
+
 - `index.html`
   - All UI markup + styling (large single-file app)
   - App logic is also embedded in the page (in later parts of the file)
@@ -155,7 +154,8 @@ Navigation behavior:
 
 ## License
 
-Not specified in this repo snapshot. Add a license file (e.g. `LICENSE`) if you intend redistribution.
+MIT License. See [LICENSE](./LICENSE).
+
 
 ---
 
