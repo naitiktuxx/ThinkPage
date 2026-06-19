@@ -11060,7 +11060,7 @@
             );
         }
 
-        function renderSug(items, type) {
+        function renderCombinedSug(items) {
             const wasOpen = sugEl.classList.contains('open');
             sugEl.innerHTML = '';
             resetSugSelection();
@@ -11074,8 +11074,11 @@
             } else if (!animEnabled || wasOpen) {
                 sugEl.classList.remove('animate');
             }
-            items.forEach(s => {
-                const d = document.createElement('div'); d.className = 'sug-item';
+            items.forEach(item => {
+                const s = item.query;
+                const type = item.type;
+                const d = document.createElement('div'); 
+                d.className = 'sug-item';
                 if (type === 'recent') d.classList.add('has-remove');
                 d.dataset.query = s;
                 
@@ -11112,7 +11115,6 @@
                     } else {
                         inp.value = s; 
                         sugEl.classList.remove('open', 'animate'); 
-                        // DRY Fix: Only doSearch is needed since it automatically calls addRecent internally
                         doSearch(s); 
                     }
                 };
@@ -11123,12 +11125,43 @@
 
         function showSug(q) {
             clearTimeout(sgt);
-            if (!q.trim()) { renderSug(getRecent(), 'recent'); return; }
-            const rec = getRecent().filter(r => r.toLowerCase().includes(q.toLowerCase()));
-            if (rec.length) renderSug(rec, 'recent');
+            if (!q.trim()) {
+                const recentQueries = getRecent().map(item => ({ query: item, type: 'recent' }));
+                renderCombinedSug(recentQueries);
+                return;
+            }
+            
+            const matchedHistory = getRecent()
+                .filter(r => r.toLowerCase().includes(q.toLowerCase()))
+                .slice(0, 3);
+                
+            const initialList = matchedHistory.map(item => ({ query: item, type: 'recent' }));
+            
+            if (initialList.length) {
+                renderCombinedSug(initialList);
+            }
+            
             sgt = setTimeout(() => fetchSug(q, res => { 
-                if (res.length) renderSug(res, 'suggest'); 
-                else if (!rec.length) closeSugDropdown(); 
+                const combinedList = [...initialList];
+                const historySet = new Set(matchedHistory.map(h => h.toLowerCase()));
+                
+                const maxSuggestions = 8;
+                const onlineCountNeeded = maxSuggestions - combinedList.length;
+                
+                let added = 0;
+                for (const s of res) {
+                    if (added >= onlineCountNeeded) break;
+                    if (!historySet.has(s.toLowerCase())) {
+                        combinedList.push({ query: s, type: 'suggest' });
+                        added++;
+                    }
+                }
+                
+                if (combinedList.length) {
+                    renderCombinedSug(combinedList);
+                } else {
+                    closeSugDropdown();
+                }
             }), 180);
         }
 
