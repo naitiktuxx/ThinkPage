@@ -1283,17 +1283,6 @@
         .suggestions.open.animate .sug-item:nth-child(7) { animation-delay: 0.28s; }
         .suggestions.open.animate .sug-item:nth-child(8) { animation-delay: 0.32s; }
 
-        @keyframes dropdownSlideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         @keyframes appItemFadeIn {
             from {
                 opacity: 0;
@@ -1306,7 +1295,11 @@
         }
 
         .apps-dropdown.open.animate {
-            animation: dropdownSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideDownFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .apps-dropdown.closing.animate {
+            animation: fadeOut 0.12s cubic-bezier(0.7, 0, 1, 0.84) forwards;
         }
 
         .apps-dropdown.open.animate .app-item {
@@ -1375,7 +1368,11 @@
         }
 
         body.animations-on .profile-dropdown.open.animate {
-            animation: dropdownSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: slideDownFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.animations-on .profile-dropdown.closing.animate {
+            animation: fadeOut 0.12s cubic-bezier(0.7, 0, 1, 0.84) forwards;
         }
 
         body.animations-on .picker-menu.open.animate {
@@ -6049,13 +6046,52 @@
             }
         }
 
+        function closeAppsDropdown() {
+            const dropdown = document.getElementById('apps-dropdown');
+            if (!dropdown) return false;
+            const animEnabled = isAnimEnabled();
+
+            if (animEnabled && dropdown.classList.contains('open')) {
+                dropdown.classList.add('animate', 'closing');
+                setTimeout(() => {
+                    dropdown.classList.remove('open', 'closing', 'animate');
+                }, 200);
+            } else {
+                dropdown.classList.remove('open', 'closing', 'animate');
+            }
+
+            document.getElementById('apps-edit-toggle')?.classList.remove('active');
+            document.querySelectorAll('#apps-grid .app-item').forEach(item => item.classList.remove('edit-mode'));
+            const title = document.getElementById('apps-header-title');
+            if (title) {
+                title.contentEditable = 'false';
+                title.classList.remove('editable');
+            }
+            return true;
+        }
+
+        function closeProfileDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            if (!dropdown) return false;
+            const animEnabled = isAnimEnabled();
+
+            if (animEnabled && dropdown.classList.contains('open')) {
+                dropdown.classList.add('animate', 'closing');
+                setTimeout(() => {
+                    dropdown.classList.remove('open', 'closing', 'animate');
+                }, 200);
+            } else {
+                dropdown.classList.remove('open', 'closing', 'animate');
+            }
+            return true;
+        }
+
         document.getElementById('apps-toggle').onclick = e => {
             e.stopPropagation();
             const dropdown = document.getElementById('apps-dropdown');
-            const editToggle = document.getElementById('apps-edit-toggle');
             const isOpen = dropdown.classList.contains('open');
             const animEnabled = isAnimEnabled();
-            
+
             if (!isOpen) {
                 dropdown.classList.add('open');
                 if (animEnabled) {
@@ -6065,17 +6101,7 @@
                 const firstApp = dropdown.querySelector('.app-item');
                 if (firstApp) requestAnimationFrame(() => firstApp.focus());
             } else {
-                if (animEnabled) {
-                    dropdown.classList.remove('animate');
-                }
-                dropdown.classList.remove('open');
-                editToggle.classList.remove('active');
-                document.querySelectorAll('#apps-grid .app-item').forEach(item => item.classList.remove('edit-mode'));
-                const title = document.getElementById('apps-header-title');
-                if (title) {
-                    title.contentEditable = 'false';
-                    title.classList.remove('editable');
-                }
+                closeAppsDropdown();
             }
         };
 
@@ -6101,14 +6127,7 @@
         document.addEventListener('click', e => {
             if (e.target.closest('#modal-overlay')) return;
             if (!e.target.closest('#apps-toggle') && !e.target.closest('#apps-dropdown') && !e.target.closest('#app-dropdown')) {
-                document.getElementById('apps-dropdown').classList.remove('open');
-                document.getElementById('apps-edit-toggle').classList.remove('active');
-                document.querySelectorAll('#apps-grid .app-item').forEach(item => item.classList.remove('edit-mode'));
-                const title = document.getElementById('apps-header-title');
-                if (title) {
-                    title.contentEditable = 'false';
-                    title.classList.remove('editable');
-                }
+                closeAppsDropdown();
             }
         });
 
@@ -6227,15 +6246,8 @@
             if (document.getElementById('apps-dropdown')?.classList.contains('open')) closed = true;
             if (document.getElementById('profile-dropdown')?.classList.contains('open')) closed = true;
             if (getOpenPickerMenu()) closed = true;
-            document.getElementById('apps-dropdown')?.classList.remove('open');
-            document.getElementById('apps-edit-toggle')?.classList.remove('active');
-            document.querySelectorAll('#apps-grid .app-item').forEach(item => item.classList.remove('edit-mode'));
-            const title = document.getElementById('apps-header-title');
-            if (title) {
-                title.contentEditable = 'false';
-                title.classList.remove('editable');
-            }
-            document.getElementById('profile-dropdown')?.classList.remove('open');
+            closeAppsDropdown();
+            closeProfileDropdown();
             document.querySelectorAll('.picker-menu.open').forEach(menu => {
                 menu.classList.remove('open');
                 menu.querySelectorAll('.picker-menu-item.kb-highlight').forEach(item => item.classList.remove('kb-highlight'));
@@ -6424,7 +6436,7 @@
             if (profileDropdown?.classList.contains('open') && document.activeElement?.closest('#profile-dropdown')) {
                 if (e.key === 'Escape') {
                     e.preventDefault();
-                    profileDropdown.classList.remove('open');
+                    closeProfileDropdown();
                     document.getElementById('profile-button')?.focus();
                     return;
                 }
@@ -10660,7 +10672,7 @@
             window.modalMode = 'app';
             window.keepAppsTrayOpen = keepAppsTrayOpen;
             if (!keepAppsTrayOpen) {
-                document.getElementById('apps-dropdown').classList.remove('open');
+                closeAppsDropdown();
             }
             const modalOverlay = document.getElementById('modal-overlay');
             modalOverlay.classList.add('open');
@@ -11589,37 +11601,37 @@
             profileBtn.addEventListener('click', e => {
                 e.stopPropagation();
                 const opening = !dropdown.classList.contains('open');
-                dropdown.classList.toggle('open');
                 if (opening) {
+                    dropdown.classList.add('open');
                     renderProfileDropdown();
                     runOpenAnimation(dropdown, 280);
                 } else {
-                    dropdown.classList.remove('animate');
+                    closeProfileDropdown();
                 }
             });
 
             document.addEventListener('click', e => {
                 if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
-                    dropdown.classList.remove('open');
+                    closeProfileDropdown();
                 }
             });
 
             // Close dropdown when portal links are clicked
             document.querySelectorAll('.pd-portal-link').forEach(link => {
                 link.addEventListener('click', () => {
-                    dropdown.classList.remove('open');
+                    closeProfileDropdown();
                 });
             });
 
             // 2. Add / Edit Profile modal triggers
             addProfileBtn.addEventListener('click', () => {
-                dropdown.classList.remove('open');
+                closeProfileDropdown();
                 openProfileModal(null);
             });
 
             editActiveBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                dropdown.classList.remove('open');
+                closeProfileDropdown();
                 openProfileModal(ProfileManager.getActiveProfileId());
             });
 
@@ -11715,7 +11727,7 @@
 
             // 3. Manage Profiles triggers
             manageProfilesBtn.addEventListener('click', () => {
-                dropdown.classList.remove('open');
+                closeProfileDropdown();
                 openManageProfilesModal();
             });
 
@@ -12022,7 +12034,7 @@
             const profiles = ProfileManager.getProfiles();
             if (!profiles.some(p => p.id === id)) return;
             if (ProfileManager.getActiveProfileId() === id) {
-                document.getElementById('profile-dropdown')?.classList.remove('open');
+                closeProfileDropdown();
                 return;
             }
             ProfileManager.setActiveProfileId(id);
@@ -12030,8 +12042,7 @@
             const activeProfile = ProfileManager.getActiveProfile();
             if (activeProfile?.avatar) saveProfileChoice(activeProfile.avatar);
             
-            const dropdown = document.getElementById('profile-dropdown');
-            if (dropdown) dropdown.classList.remove('open');
+            closeProfileDropdown();
             
             applyProfileButton();
             applyTheme();
@@ -12351,7 +12362,7 @@
             const historySaveToggle = document.getElementById('history-save-toggle');
             
             historyBtn.addEventListener('click', () => {
-                document.getElementById('profile-dropdown').classList.remove('open');
+                closeProfileDropdown();
                 openHistoryModal();
             });
 

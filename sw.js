@@ -12,7 +12,8 @@ const RUNTIME_IMAGE_HOSTS = new Set([
   'apod.nasa.gov',
   'www.nasa.gov',
   'picsum.photos',
-  'fastly.picsum.photos'
+  'fastly.picsum.photos',
+  'www.google.com'
 ]);
 const MAX_RUNTIME_ITEMS = 80;
 
