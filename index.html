@@ -12,6 +12,9 @@
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="apple-touch-icon" href="./app-icon.svg">
     <title>New tab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Quicksand:wght@600;700&family=Inter:wght@600;700;800&family=Outfit:wght@600;700;800&family=Montserrat:wght@600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Pacifico&display=swap" rel="stylesheet">
     <style>
 
         :root {
@@ -347,6 +350,24 @@
             font-size: 14px;
             color: var(--text-muted);
             font-weight: 500;
+            transition: color 0.15s, border-color 0.15s;
+            padding-left: 8px;
+        }
+
+        .apps-header-title.editable {
+            outline: none;
+            cursor: text;
+            border-bottom: 1px dashed var(--border-light);
+            padding-bottom: 1px;
+            user-select: text !important;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+        }
+        .apps-header-title.editable:hover,
+        .apps-header-title.editable:focus {
+            color: var(--text-primary);
+            border-bottom-color: var(--accent);
         }
 
         .apps-edit-toggle {
@@ -361,6 +382,7 @@
             justify-content: center;
             border-radius: 50%;
             transition: background 0.15s, color 0.15s;
+            margin-right: 4px;
         }
 
         .apps-edit-toggle:hover {
@@ -453,6 +475,8 @@
             z-index: 100;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .customize-panel {
@@ -844,6 +868,7 @@
             justify-content: center;
             height: 80px;
             margin-bottom: 54px;
+            transform: translate(var(--logo-offset-x, 0px), var(--logo-offset-y, 0px));
         }
 
         /* SEARCH */
@@ -1132,6 +1157,8 @@
             white-space: nowrap;
             position: relative;
             z-index: 1;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .ai-btn::before {
@@ -1757,6 +1784,41 @@
             font-size: 12px;
             font-weight: 500;
             color: var(--text-secondary);
+        }
+
+        .cp-text-input {
+            background: var(--surface-3);
+            border: 1px solid var(--panel-border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            color: var(--text-main);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .cp-text-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        .cp-select {
+            background: var(--surface-3);
+            color: var(--text-main);
+            border: 1px solid var(--panel-border);
+            border-radius: 6px;
+            padding: 5px 8px;
+            font-size: 12px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .cp-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent);
         }
 
         .cp-range-input {
@@ -2424,7 +2486,7 @@
         }
 
         .shortcuts-area.docked .shortcuts-box {
-            border-radius: 20px;
+            border-radius: 28px;
             padding: 0;
             width: max-content;
             display: flex;
@@ -2446,6 +2508,20 @@
             -webkit-backdrop-filter: blur(24px) saturate(160%);
             box-shadow: inset 0 1px 0 var(--glass-inset), 0 8px 32px rgba(0, 0, 0, 0.3);
             padding: 8px 16px;
+            border-radius: 28px;
+        }
+
+        .shortcuts-area:not(.docked) .shortcuts-box.has-bg {
+            background: var(--glass-bg, rgba(32, 33, 36, 0.55));
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-top: 1px solid var(--glass-border-top, rgba(255, 255, 255, 0.18));
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: inset 0 1px 0 var(--glass-inset), 0 8px 32px rgba(0, 0, 0, 0.3);
+            padding: 8px 16px;
+            border-radius: 28px;
+            width: max-content;
+            max-width: min(90vw, var(--search-wrap-width, 680px));
         }
 
         .shortcuts-area.docked .shortcut {
@@ -2509,7 +2585,7 @@
         }
 
         body.animations-on .shortcuts-expand-btn {
-            transition: background 0.2s, color 0.2s, transform 0.2s, left 0.3s, right 0.3s;
+            transition: background 0.2s, color 0.2s, transform 0.2s, left 0.3s, right 0.3s, opacity 0.2s, visibility 0.2s;
         }
 
         .shortcuts-expand-btn svg {
@@ -2524,6 +2600,28 @@
 
         .shortcuts-expand-btn.expanded svg {
             transform: rotate(180deg);
+        }
+
+        /* When search is at bottom, dock sits above — flip arrow direction */
+        .shortcuts-expand-btn.bottom-pos svg {
+            transform: rotate(180deg);
+        }
+
+        .shortcuts-expand-btn.bottom-pos.expanded svg {
+            transform: rotate(0deg);
+        }
+
+        /* When search is at right corner, show expand button on the left of shortcuts box */
+        .shortcuts-expand-btn.left-pos {
+            left: auto;
+            right: calc(100% + 12px);
+        }
+
+        /* Hide shortcuts expand button when the search bar input is focused (if enabled in settings) */
+        body.hide-expand-on-focus .main:has(#search-input:focus) .shortcuts-expand-btn {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
         }
 
 
@@ -2598,8 +2696,8 @@
 
         .sc-menu-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
+            top: 2px;
+            right: 2px;
             width: 22px;
             height: 22px;
             border-radius: 50%;
@@ -4314,7 +4412,11 @@
             color: var(--text-muted);
             display: flex;
             align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            width: 16px;
+            height: 16px;
+            overflow: hidden;
         }
 
         .history-item-content {
@@ -4739,6 +4841,14 @@
             <input type="text" id="modal-name" placeholder="Site name" />
             <label>URL</label>
             <input type="text" id="modal-url" placeholder="https://" />
+            <div id="modal-custom-icon-row" style="display: none; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px;">
+                <span style="font-size: 13px; color: var(--text-muted);">Custom Icon</span>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn-cancel" id="btn-upload-icon" style="padding: 6px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; cursor: pointer; background: var(--surface-3);">Upload</button>
+                    <button type="button" class="btn-cancel" id="btn-remove-icon" style="padding: 6px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; color: #ef596f; cursor: pointer; background: var(--surface-3); display: none;">Remove</button>
+                </div>
+                <input type="file" id="modal-icon-upload" accept="image/*" style="display: none;" />
+            </div>
             <div id="modal-preview">
                 <img id="preview-icon" alt="">
                 <span id="preview-text">Enter a URL to preview icon</span>
@@ -4986,6 +5096,70 @@
                     <span>New Tab</span>
                 </label>
             </div>
+
+            <!-- Custom Search Engine Collapsible -->
+            <details class="cp-details" id="custom-search-details" style="margin-top: 12px;">
+                <summary>
+                    <span>Custom search engine settings</span>
+                    <span class="chevron">
+                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 1l4 4 4-4" />
+                        </svg>
+                    </span>
+                </summary>
+                <div class="cp-details-content" style="padding-top: 8px; display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Custom Engine Name -->
+                    <div class="config-row">
+                        <span class="config-label">Engine Name</span>
+                        <input type="text" id="custom-search-name" placeholder="Custom" class="cp-text-input" style="width: 140px; box-sizing: border-box;" />
+                    </div>
+                    <!-- Custom Search URL -->
+                    <div class="config-row">
+                        <span class="config-label">Search URL</span>
+                        <input type="text" id="custom-search-url" placeholder="https://example.com/search?q=" class="cp-text-input" style="width: 140px; box-sizing: border-box;" />
+                    </div>
+                    <!-- Custom Icon Type selection -->
+                    <div class="config-row">
+                        <span class="config-label">Icon Type</span>
+                        <div class="segment-control" id="custom-icon-type-segment" style="width: 140px; height: 28px; box-sizing: border-box;">
+                            <label class="segment-opt" style="font-size: 11px; padding: 2px 6px;">
+                                <input type="radio" name="custom_icon_type" value="url" checked>
+                                <span>URL</span>
+                            </label>
+                            <label class="segment-opt" style="font-size: 11px; padding: 2px 6px;">
+                                <input type="radio" name="custom_icon_type" value="upload">
+                                <span>Upload</span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Custom Icon URL input -->
+                    <div class="config-row" id="custom-icon-url-row">
+                        <span class="config-label">Icon URL</span>
+                        <input type="text" id="custom-icon-url" placeholder="https://example.com/icon.png" class="cp-text-input" style="width: 140px; box-sizing: border-box;" />
+                    </div>
+                    <!-- Custom Icon Upload input -->
+                    <div class="config-row" id="custom-icon-upload-row" style="display: none;">
+                        <span class="config-label">Upload Icon</span>
+                        <label class="file-upload-btn" style="padding: 6px 10px; background: var(--surface-3); border: 1px solid var(--panel-border); border-radius: 6px; font-size: 12px; cursor: pointer; text-align: center; width: 140px; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; color: var(--text-main); font-weight: 500; transition: border-color 0.15s;">
+                            Choose File
+                            <input type="file" id="custom-icon-file" accept="image/*" style="display: none;" />
+                        </label>
+                    </div>
+                    <!-- Font Selection for Logo -->
+                    <div class="config-row">
+                        <span class="config-label">Logo Font</span>
+                        <select id="custom-search-font" class="cp-select" style="width: 140px; box-sizing: border-box;">
+                            <option value="system-ui">System Default</option>
+                            <option value="'Inter'">Inter</option>
+                            <option value="'Outfit'">Outfit</option>
+                            <option value="'Montserrat'">Montserrat</option>
+                            <option value="'Playfair Display'">Playfair Display</option>
+                            <option value="'Pacifico'">Pacifico</option>
+                        </select>
+                    </div>
+                </div>
+            </details>
+
             <!-- Search Bar Layout Collapsible -->
             <details class="cp-details">
                 <summary>
@@ -5054,6 +5228,42 @@
                     <span class="switch-slider"></span>
                 </label>
             </div>
+            <details class="cp-details" id="logo-position-details" style="margin-top: 12px;">
+                <summary>
+                    <span>Logo position</span>
+                    <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </summary>
+                <div class="cp-details-content" style="padding-top: 8px;">
+                    <div class="config-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="config-label">Horizontal shift</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span id="logo-offset-x-val" style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">0px</span>
+                                <button type="button" id="logo-offset-x-reset" title="Reset to default" style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; color: var(--text-muted); border-radius: 6px; padding: 0; opacity: 0.7; transition: opacity 0.15s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.7'">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <input type="range" id="logo-offset-x-range" min="-600" max="600" step="1" value="0" class="cp-range-input" style="flex: 1; outline: none;" />
+                        </div>
+                    </div>
+                    <div class="config-row" style="margin-top: 12px; flex-direction: column; align-items: stretch; gap: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="config-label">Vertical shift</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span id="logo-offset-y-val" style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">0px</span>
+                                <button type="button" id="logo-offset-y-reset" title="Reset to default" style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; color: var(--text-muted); border-radius: 6px; padding: 0; opacity: 0.7; transition: opacity 0.15s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.7'">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <input type="range" id="logo-offset-y-range" min="-600" max="600" step="1" value="0" class="cp-range-input" style="flex: 1; outline: none;" />
+                        </div>
+                    </div>
+                </div>
+            </details>
         </div>
         <div class="cp-section">
             <h4>AI & tools</h4>
@@ -5119,39 +5329,60 @@
                     </div>
                 </div>
                 
-                <div id="shortcuts-position-config-container" style="transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); max-height: 340px; opacity: 1; overflow: hidden;">
-                    <div class="config-divider"></div>
-                    <div class="config-row" id="shortcuts-dock-row">
-                        <span class="config-label">Dock next to search bar</span>
-                        <label class="switch-toggle">
-                            <input type="checkbox" id="shortcuts-dock-toggle" checked />
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div class="config-row" id="shortcuts-dock-bg-row" style="margin-top: 12px; transition: opacity 0.3s ease;">
-                        <span class="config-label">Dock background & blur</span>
-                        <label class="switch-toggle">
-                            <input type="checkbox" id="shortcuts-dock-bg-toggle" checked />
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div class="config-row" style="margin-top: 12px;">
-                        <span class="config-label">Collapse extra shortcuts</span>
-                        <label class="switch-toggle">
-                            <input type="checkbox" id="shortcuts-collapse-toggle" />
-                            <span class="switch-slider"></span>
-                        </label>
-                    </div>
-                    <div class="config-row" id="shortcuts-position-slider-row" style="margin-top: 12px; display: flex; flex-direction: column; align-items: stretch; gap: 6px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                            <span class="config-label">Shortcuts position</span>
-                            <span id="shortcuts-position-val" style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">40px</span>
+                <details class="cp-details" id="shortcuts-advanced-details">
+                    <summary>
+                        <span>Advanced</span>
+                        <span class="chevron">
+                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 1l4 4 4-4" />
+                            </svg>
+                        </span>
+                    </summary>
+                    <div class="cp-details-content" id="shortcuts-position-config-container">
+                        <div class="config-row" id="shortcuts-dock-row" style="margin-top: 6px;">
+                            <span class="config-label">Dock next to search bar</span>
+                            <label class="switch-toggle">
+                                <input type="checkbox" id="shortcuts-dock-toggle" checked />
+                                <span class="switch-slider"></span>
+                            </label>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <input type="range" id="shortcuts-position-range" min="10" max="300" step="5" value="40" class="cp-range-input" style="flex: 1; outline: none;" />
+                        <div class="config-row" id="shortcuts-dock-bg-row" style="margin-top: 12px; transition: opacity 0.3s ease;">
+                            <span class="config-label">Dock background & blur</span>
+                            <label class="switch-toggle">
+                                <input type="checkbox" id="shortcuts-dock-bg-toggle" checked />
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="config-row" style="margin-top: 12px;">
+                            <span class="config-label">Collapse extra shortcuts</span>
+                            <label class="switch-toggle">
+                                <input type="checkbox" id="shortcuts-collapse-toggle" />
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="config-row" style="margin-top: 12px;">
+                            <span class="config-label">Hide expand button on focus</span>
+                            <label class="switch-toggle">
+                                <input type="checkbox" id="shortcuts-hide-on-focus-toggle" />
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                        <div class="config-row" id="shortcuts-position-slider-row" style="margin-top: 12px; display: flex; flex-direction: column; align-items: stretch; gap: 6px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <span class="config-label">Shortcuts position</span>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span id="shortcuts-position-val" style="font-size: 14px; font-weight: 500; color: var(--text-secondary);">40px</span>
+                                    <button type="button" id="shortcuts-position-reset" title="Reset to default" style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; color: var(--text-muted); border-radius: 6px; padding: 0; opacity: 0.7; transition: opacity 0.15s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.7'">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <input type="range" id="shortcuts-position-range" min="10" max="300" step="5" value="40" class="cp-range-input" style="flex: 1; outline: none;" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                </details>
                 <div class="config-divider"></div>
                 <button class="config-action-btn" id="keyboard-shortcuts-btn" type="button">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -5620,7 +5851,7 @@
             const iconBox = document.createElement('div');
             iconBox.className = 'app-icon-box';
             const img = document.createElement('img');
-            img.src = fav(app.url);
+            img.src = app.customIcon || fav(app.url);
             img.alt = app.name;
             img.onerror = () => {
                 iconBox.innerHTML = '';
@@ -5739,12 +5970,17 @@
             }
 
             const apps = loadDrawerApps(engine);
-            if (engine === 'bing') {
-                if (title) title.textContent = 'Microsoft apps';
-            } else if (engine === 'duckduckgo') {
-                if (title) title.textContent = 'Custom websites';
+            const customTitle = ProfileManager.getItem('apps_header_title');
+            if (customTitle) {
+                if (title) title.textContent = customTitle;
             } else {
-                if (title) title.textContent = 'Google apps';
+                if (engine === 'bing') {
+                    if (title) title.textContent = 'Microsoft apps';
+                } else if (engine === 'duckduckgo') {
+                    if (title) title.textContent = 'Custom websites';
+                } else {
+                    if (title) title.textContent = 'Google apps';
+                }
             }
 
             apps.forEach((a, i) => g.appendChild(appTile(a, i)));
@@ -5784,16 +6020,31 @@
                 dropdown.classList.remove('open');
                 editToggle.classList.remove('active');
                 document.querySelectorAll('#apps-grid .app-item').forEach(item => item.classList.remove('edit-mode'));
+                const title = document.getElementById('apps-header-title');
+                if (title) {
+                    title.contentEditable = 'false';
+                    title.classList.remove('editable');
+                }
             }
         };
 
         document.getElementById('apps-edit-toggle').onclick = e => {
             e.stopPropagation();
             const toggle = document.getElementById('apps-edit-toggle');
-            toggle.classList.toggle('active');
+            const active = toggle.classList.toggle('active');
             document.querySelectorAll('#apps-grid .app-item').forEach(item => {
-                item.classList.toggle('edit-mode');
+                item.classList.toggle('edit-mode', active);
             });
+            const title = document.getElementById('apps-header-title');
+            if (title) {
+                if (active) {
+                    title.contentEditable = 'true';
+                    title.classList.add('editable');
+                } else {
+                    title.contentEditable = 'false';
+                    title.classList.remove('editable');
+                }
+            }
         };
 
         document.addEventListener('click', e => {
@@ -5802,8 +6053,44 @@
                 document.getElementById('apps-dropdown').classList.remove('open');
                 document.getElementById('apps-edit-toggle').classList.remove('active');
                 document.querySelectorAll('#apps-grid .app-item').forEach(item => item.classList.remove('edit-mode'));
+                const title = document.getElementById('apps-header-title');
+                if (title) {
+                    title.contentEditable = 'false';
+                    title.classList.remove('editable');
+                }
             }
         });
+
+        const appsTitleEl = document.getElementById('apps-header-title');
+        if (appsTitleEl) {
+            appsTitleEl.addEventListener('blur', () => {
+                const text = appsTitleEl.textContent.trim();
+                if (text) {
+                    ProfileManager.setItem('apps_header_title', text);
+                } else {
+                    ProfileManager.removeItem('apps_header_title');
+                    renderApps();
+                }
+            });
+            appsTitleEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    appsTitleEl.blur();
+                }
+            });
+            appsTitleEl.addEventListener('dblclick', () => {
+                const editToggle = document.getElementById('apps-edit-toggle');
+                if (editToggle && !editToggle.classList.contains('active')) {
+                    editToggle.click();
+                }
+                appsTitleEl.focus();
+                const range = document.createRange();
+                range.selectNodeContents(appsTitleEl);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            });
+        }
 
         // ── CUSTOMIZE & WALLPAPER ────────────────────────────────────
         const cpBtn = document.getElementById('customize-btn');
@@ -5892,6 +6179,11 @@
             document.getElementById('apps-dropdown')?.classList.remove('open');
             document.getElementById('apps-edit-toggle')?.classList.remove('active');
             document.querySelectorAll('#apps-grid .app-item').forEach(item => item.classList.remove('edit-mode'));
+            const title = document.getElementById('apps-header-title');
+            if (title) {
+                title.contentEditable = 'false';
+                title.classList.remove('editable');
+            }
             document.getElementById('profile-dropdown')?.classList.remove('open');
             document.querySelectorAll('.picker-menu.open').forEach(menu => {
                 menu.classList.remove('open');
@@ -6746,8 +7038,12 @@
             const attr = document.getElementById('wallpaper-attribution');
             if (attr) {
                 if (imgSrc.includes('unsplash.com')) {
+                    let photoId = null;
+                    const match = imgSrc.match(/\/photo-([a-zA-Z0-9-]+)/);
+                    if (match) photoId = match[1];
+
                     attr.textContent = 'Photo via Unsplash';
-                    attr.href = 'https://unsplash.com';
+                    attr.href = photoId ? `https://unsplash.com/photos/${photoId}` : 'https://unsplash.com';
                     attr.style.display = 'block';
                 } else if (imgSrc.includes('nasa.gov')) {
                     attr.textContent = 'NASA Astronomy Picture of the Day';
@@ -6757,6 +7053,21 @@
                     attr.textContent = `Photo via ${WALLPAPER_FALLBACK_PROVIDER.name}`;
                     attr.href = WALLPAPER_FALLBACK_PROVIDER.url;
                     attr.style.display = 'block';
+
+                    // Asynchronously resolve direct picsum photo link
+                    (async () => {
+                        try {
+                            const res = await fetch(imgSrc, { method: 'HEAD' });
+                            if (res.ok && res.url) {
+                                const idMatch = res.url.match(/\/id\/(\d+)/);
+                                if (idMatch) {
+                                    attr.href = `https://picsum.photos/id/${idMatch[1]}`;
+                                }
+                            }
+                        } catch (e) {
+                            console.warn("Could not resolve direct Picsum URL", e);
+                        }
+                    })();
                 } else {
                     attr.style.display = 'none';
                 }
@@ -6974,19 +7285,44 @@
             return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 32 32"><g transform="matrix(.266667 0 0 .266667 -17.954934 -5.057333)"><circle cx="127.332" cy="78.966" r="51.15" fill="#de5833"/><defs><path id="A" d="M178.684 78.824c0 28.316-23.035 51.354-51.354 51.354-28.313 0-51.348-23.04-51.348-51.354s23.036-51.35 51.348-51.35c28.318 0 51.354 23.036 51.354 51.35z"/></defs><clipPath id="B"><use xlink:href="#A"/></clipPath><g clip-path="url(#B)"><path d="M148.293 155.158c-1.8-8.285-12.262-27.04-16.23-34.97s-7.938-19.1-6.13-26.322c.328-1.312-3.436-11.308-2.354-12.015 8.416-5.5 10.632.6 14.002-1.862 1.734-1.273 4.1 1.047 4.7-1.06 2.158-7.567-3.006-20.76-8.77-26.526-1.885-1.88-4.77-3.06-8.03-3.687-1.254-1.713-3.275-3.36-6.138-4.88-3.188-1.697-10.12-3.938-13.717-4.535-2.492-.4-3.055.287-4.12.46.992.088 5.7 2.414 6.615 2.55-.916.62-3.607-.028-5.324.742-.865.392-1.512 1.877-1.506 2.58 4.9-.496 12.574-.016 17.1 2-3.602.4-9.08.867-11.436 2.105-6.848 3.608-9.873 12.035-8.07 22.133 1.804 10.075 9.738 46.85 12.262 59.13 2.525 12.264-5.408 20.2-10.455 22.354l5.408.363-1.8 3.967c6.484.72 13.695-1.44 13.695-1.44-1.438 3.965-11.176 5.412-11.176 5.412s4.7 1.438 12.258-1.447l12.263-4.688 3.604 9.373 6.854-6.847 2.885 7.2c.014-.001 5.424-1.808 3.62-10.103z" fill="#d5d7d8"/><path d="M150.47 153.477c-1.795-8.3-12.256-27.043-16.228-34.98s-7.935-19.112-6.13-26.32c.335-1.3.34-6.668 1.43-7.38 8.4-5.494 7.812-.184 11.187-2.645 1.74-1.27 3.133-2.806 3.738-4.912 2.164-7.572-3.006-20.76-8.773-26.53-1.88-1.88-4.768-3.062-8.023-3.686-1.252-1.718-3.27-3.36-6.13-4.882-5.4-2.862-12.074-4.006-18.266-2.883 1 .1 3.256 2.138 4.168 2.273-1.38.936-5.053.815-5.03 2.896 4.916-.492 10.303.285 14.834 2.297-3.602.4-6.955 1.3-9.3 2.543-6.854 3.603-8.656 10.812-6.854 20.914 1.807 10.097 9.742 46.873 12.256 59.126 2.527 12.26-5.402 20.188-10.45 22.354l5.408.36-1.8 3.973c6.484.72 13.695-1.44 13.695-1.44-1.438 3.974-11.176 5.406-11.176 5.406s4.686 1.44 12.258-1.445l12.27-4.688 3.604 9.373 6.852-6.85 2.9 7.215c-.016.007 5.388-1.797 3.58-10.088z" fill="#fff"/><path d="M109.02 70.69c0-2.093 1.693-3.787 3.79-3.787 2.1 0 3.785 1.694 3.785 3.787s-1.695 3.786-3.785 3.786c-2.096.001-3.79-1.692-3.79-3.786z" fill="#2d4f8e"/><path d="M113.507 69.43a.98.98 0 0 1 .98-.983c.543 0 .984.438.984.983s-.44.984-.984.984c-.538.001-.98-.44-.98-.984z" fill="#fff"/><path d="M134.867 68.445c0-1.793 1.46-3.25 3.252-3.25 1.8 0 3.256 1.457 3.256 3.25 0 1.8-1.455 3.258-3.256 3.258a3.26 3.26 0 0 1-3.252-3.258z" fill="#2d4f8e"/><path d="M138.725 67.363c0-.463.38-.843.838-.843a.84.84 0 0 1 .846.843c0 .47-.367.842-.846.842a.84.84 0 0 1-.838-.842z" fill="#fff"/><linearGradient id="C" gradientUnits="userSpaceOnUse" x1="105.318" y1="60.979" x2="113.887" y2="60.979"><stop offset=".006" stop-color="#6176b9"/><stop offset=".691" stop-color="#394a9f"/></linearGradient><path d="M113.886 59.718s-2.854-1.3-5.63.453-2.668 3.523-2.668 3.523-1.473-3.283 2.453-4.892 5.844.916 5.844.916z" fill="url(#C)"/><linearGradient id="D" gradientUnits="userSpaceOnUse" x1="132.273" y1="58.371" x2="140.078" y2="58.371"><stop offset=".006" stop-color="#6176b9"/><stop offset=".691" stop-color="#394a9f"/></linearGradient><path d="M140.078 59.458s-2.05-1.172-3.643-1.152c-3.27.043-4.162 1.488-4.162 1.488s.55-3.445 4.732-2.754c2.268.377 3.073 2.418 3.073 2.418z" fill="url(#D)"/></g><path d="M124.4 85.295c.38-2.3 6.3-6.625 10.5-6.887 4.2-.265 5.5-.205 9-1.043s12.535-3.088 15.033-4.242c2.504-1.156 13.104.572 5.63 4.738-3.232 1.8-11.943 5.13-18.172 6.987-6.22 1.86-10-1.776-12.06 1.28-1.646 2.432-.334 5.762 7.1 6.453 10.037.93 19.66-4.52 20.72-1.625s-8.625 6.508-14.525 6.623c-5.893.1-17.77-3.896-19.555-5.137s-4.165-4.13-3.67-7.148z" fill="#fdd20a"/><path d="M128.943 115.592s-14.102-7.52-14.332-4.47c-.238 3.056 0 15.5 1.643 16.45s13.396-6.108 13.396-6.108zm5.403-.474s9.635-7.285 11.754-6.815c2.1.48 2.582 15.5.7 16.23-1.88.7-12.908-3.813-12.908-3.813z" fill="#65bc46"/><path d="M125.53 116.4c0 4.932-.7 7.05 1.4 7.52s6.104 0 7.518-.938.232-7.28-.232-8.465c-.477-1.174-8.696-.232-8.696 1.884z" fill="#43a244"/><path d="M126.426 115.292c0 4.933-.707 7.05 1.4 7.52 2.106.48 6.104 0 7.52-.938 1.4-.94.23-7.28-.236-8.466-.473-1.173-8.692-.227-8.692 1.885z" fill="#65bc46"/><circle cx="127.331" cy="78.965" r="57.5" fill="none" stroke="#de5833" stroke-width="5"/></g></svg>`;
         }
 
+        function getCustomSearchEngine() {
+            const name = ProfileManager.getItem('custom_search_engine_name') || 'Custom';
+            const url = ProfileManager.getItem('custom_search_engine_url') || 'https://www.google.com/search?q=';
+            return {
+                id: 'custom',
+                name: name,
+                searchUrl: url
+            };
+        }
+
         function getSearchEngineIcon(id) {
             if (id === 'bing') return iconBing();
             if (id === 'duckduckgo') return iconDuckDuckGo();
+            if (id === 'custom') {
+                const type = ProfileManager.getItem('custom_search_engine_icon_type') || 'url';
+                let iconSrc = '';
+                if (type === 'upload') {
+                    iconSrc = ProfileManager.getItem('custom_search_engine_icon_upload') || '';
+                } else {
+                    iconSrc = ProfileManager.getItem('custom_search_engine_icon_url') || '';
+                }
+                if (iconSrc) {
+                    return `<img src="${iconSrc}" style="width: 24px; height: 24px; object-fit: contain; border-radius: 4px;" alt="Icon">`;
+                }
+                return `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
+            }
             return iconGoogle();
         }
 
         function getSearchEngine(id) {
+            if (id === 'custom') return getCustomSearchEngine();
             return SEARCH_ENGINES.find(e => e.id === id) || SEARCH_ENGINES[0];
         }
 
         function getStoredSearchEngine() {
             try {
                 const v = ProfileManager.getItem('search_engine');
+                if (v === 'custom') return 'custom';
                 return SEARCH_ENGINES.some(e => e.id === v) ? v : 'google';
             } catch { return 'google'; }
         }
@@ -7019,6 +7355,24 @@
             }
             link.type = 'image/svg+xml';
             
+            if (engine === 'custom') {
+                const type = ProfileManager.getItem('custom_search_engine_icon_type') || 'url';
+                let iconSrc = '';
+                if (type === 'upload') {
+                    iconSrc = ProfileManager.getItem('custom_search_engine_icon_upload') || '';
+                } else {
+                    iconSrc = ProfileManager.getItem('custom_search_engine_icon_url') || '';
+                }
+                if (iconSrc) {
+                    link.type = iconSrc.includes('image/svg') ? 'image/svg+xml' : 'image/png';
+                    link.href = iconSrc;
+                } else {
+                    link.type = 'image/svg+xml';
+                    link.href = svgToFaviconDataUrl(`<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="%23888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`);
+                }
+                return;
+            }
+
             if (engine === 'bing') {
                 link.href = svgToFaviconDataUrl(MICROSOFT_FAVICON_SVG);
                 return;
@@ -7675,6 +8029,31 @@
             </div>`;
         }
 
+        function getCenterLogoCustom() {
+            const name = ProfileManager.getItem('custom_search_engine_name') || 'Custom';
+            const fontFamily = ProfileManager.getItem('custom_search_engine_font') || 'system-ui';
+            
+            const type = ProfileManager.getItem('custom_search_engine_icon_type') || 'url';
+            let iconSrc = '';
+            if (type === 'upload') {
+                iconSrc = ProfileManager.getItem('custom_search_engine_icon_upload') || '';
+            } else {
+                iconSrc = ProfileManager.getItem('custom_search_engine_icon_url') || '';
+            }
+            
+            let iconHtml = '';
+            if (iconSrc) {
+                iconHtml = `<img src="${iconSrc}" style="width: 64px; height: 64px; object-fit: contain; border-radius: 8px;" alt="Logo Icon">`;
+            } else {
+                iconHtml = `<svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="var(--text-main)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
+            }
+
+            return `<div style="display:flex;align-items:center;gap:16px;color:var(--text-main);height:80px;box-sizing:border-box">
+                ${iconHtml}
+                <span style="font-family:${fontFamily}, sans-serif;font-weight:700;font-size:52px;letter-spacing:-1px;margin-left:4px;line-height:1">${name}</span>
+            </div>`;
+        }
+
         function updateCenterLogo() {
             const logoEl = document.querySelector('.logo');
             if (!logoEl) return;
@@ -7688,6 +8067,8 @@
                 logoEl.innerHTML = getCenterLogoBing();
             } else if (engineId === 'duckduckgo') {
                 logoEl.innerHTML = getCenterLogoDDG();
+            } else if (engineId === 'custom') {
+                logoEl.innerHTML = getCenterLogoCustom();
             } else {
                 logoEl.innerHTML = getCenterLogoGoogle();
             }
@@ -7705,6 +8086,15 @@
                 lbl.addEventListener('click', () => setSearchEngine(e.id));
                 grid.appendChild(lbl);
             });
+
+            // Custom search engine picker block
+            const customEngine = getCustomSearchEngine();
+            const lbl = document.createElement('label');
+            lbl.className = 'picker-grid-opt';
+            const checked = getStoredSearchEngine() === 'custom' ? ' checked' : '';
+            lbl.innerHTML = `<input type="radio" name="search_engine" value="custom"${checked}><span class="picker-grid-icon" id="custom-engine-picker-icon">${getSearchEngineIcon('custom')}</span><span class="picker-grid-label" id="custom-engine-picker-label">${customEngine.name}</span>`;
+            lbl.addEventListener('click', () => setSearchEngine('custom'));
+            grid.appendChild(lbl);
         }
 
         function syncSearchEngineCustomize() {
@@ -7819,9 +8209,109 @@
             });
         }
 
+        function initCustomSearchEngineControl() {
+            const nameInput = document.getElementById('custom-search-name');
+            const urlInput = document.getElementById('custom-search-url');
+            const iconTypeSegment = document.getElementById('custom-icon-type-segment');
+            const iconUrlInput = document.getElementById('custom-icon-url');
+            const fileInput = document.getElementById('custom-icon-file');
+            const fontSelect = document.getElementById('custom-search-font');
+
+            if (nameInput) {
+                nameInput.addEventListener('input', () => {
+                    const val = nameInput.value.trim() || 'Custom';
+                    ProfileManager.setItem('custom_search_engine_name', val);
+                    const pickerLabel = document.getElementById('custom-engine-picker-label');
+                    if (pickerLabel) pickerLabel.textContent = val;
+                    if (getStoredSearchEngine() === 'custom') {
+                        updateCenterLogo();
+                        updateSearchPlaceholder();
+                    }
+                });
+            }
+
+            if (urlInput) {
+                urlInput.addEventListener('input', () => {
+                    const val = urlInput.value.trim() || 'https://www.google.com/search?q=';
+                    ProfileManager.setItem('custom_search_engine_url', val);
+                });
+            }
+
+            if (iconTypeSegment) {
+                iconTypeSegment.querySelectorAll('input[name="custom_icon_type"]').forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        const type = radio.value;
+                        ProfileManager.setItem('custom_search_engine_icon_type', type);
+                        const urlRow = document.getElementById('custom-icon-url-row');
+                        const uploadRow = document.getElementById('custom-icon-upload-row');
+                        if (type === 'upload') {
+                            if (urlRow) urlRow.style.display = 'none';
+                            if (uploadRow) uploadRow.style.display = '';
+                        } else {
+                            if (urlRow) urlRow.style.display = '';
+                            if (uploadRow) uploadRow.style.display = 'none';
+                        }
+                        const pickerIcon = document.getElementById('custom-engine-picker-icon');
+                        if (pickerIcon) pickerIcon.innerHTML = getSearchEngineIcon('custom');
+                        if (getStoredSearchEngine() === 'custom') {
+                            updateCenterLogo();
+                        }
+                    });
+                });
+            }
+
+            if (iconUrlInput) {
+                iconUrlInput.addEventListener('input', () => {
+                    const val = iconUrlInput.value.trim();
+                    ProfileManager.setItem('custom_search_engine_icon_url', val);
+                    const pickerIcon = document.getElementById('custom-engine-picker-icon');
+                    if (pickerIcon) pickerIcon.innerHTML = getSearchEngineIcon('custom');
+                    if (getStoredSearchEngine() === 'custom') {
+                        updateCenterLogo();
+                    }
+                });
+            }
+
+            if (fileInput) {
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        const base64 = evt.target.result;
+                        ProfileManager.setItem('custom_search_engine_icon_upload', base64);
+                        const pickerIcon = document.getElementById('custom-engine-picker-icon');
+                        if (pickerIcon) pickerIcon.innerHTML = getSearchEngineIcon('custom');
+                        if (getStoredSearchEngine() === 'custom') {
+                            updateCenterLogo();
+                        }
+                        
+                        const label = fileInput.closest('.file-upload-btn');
+                        if (label) {
+                            label.firstChild.textContent = file.name;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            if (fontSelect) {
+                fontSelect.addEventListener('change', () => {
+                    const val = fontSelect.value;
+                    ProfileManager.setItem('custom_search_engine_font', val);
+                    if (getStoredSearchEngine() === 'custom') {
+                        updateCenterLogo();
+                    }
+                });
+            }
+        }
+
         function initAiAssistant() {
             buildAiCustomize();
             buildSearchEngineCustomize();
+            initCustomSearchEngineControl();
+            syncCustomSearchEnginePanel();
             updateAiButton();
             syncAiCustomize();
             initAiButtonVisibilityControl();
@@ -8294,9 +8784,36 @@
             }
             window.syncShortcutsDockControlState?.();
             updateShortcutsDock();
+            updateShortcutsCollapseState();
+        }
+
+        function applyShortcutsHideOnFocus(enabled = ProfileManager.getItem('shortcuts_hide_on_focus') === '1') {
+            document.body.classList.toggle('hide-expand-on-focus', enabled);
+            const toggle = document.getElementById('shortcuts-hide-on-focus-toggle');
+            if (toggle) {
+                toggle.checked = enabled;
+            }
+        }
+
+        function updateShortcutsMarginDefault() {
+            const searchPos = ProfileManager.getItem('search_position_step') || '3';
+            const dockBgEnabled = ProfileManager.getItem('shortcuts_dock_bg_enabled') === '1';
+            const isAutoState = (searchPos === '3' && dockBgEnabled);
+            const currentMargin = ProfileManager.getItem('shortcuts_position_margin');
+
+            if (isAutoState) {
+                if (!currentMargin || currentMargin === '40') {
+                    ProfileManager.setItem('shortcuts_position_margin', '10');
+                }
+            } else {
+                if (currentMargin === '10') {
+                    ProfileManager.setItem('shortcuts_position_margin', '40');
+                }
+            }
         }
 
         function updateShortcutsDock() {
+            updateShortcutsMarginDefault();
             const area = document.getElementById('shortcuts-area');
             if (!area) return;
 
@@ -8308,7 +8825,7 @@
                 area.style.display = '';
             }
 
-            const dockEnabled = ProfileManager.getItem('shortcuts_dock_enabled') !== '0';
+            const dockEnabled = ProfileManager.getItem('shortcuts_dock_enabled') === '1';
             const val = ProfileManager.getItem('search_position_step') || '3';
             const dockAvailable = val !== '3';
 
@@ -8368,14 +8885,16 @@
             const dockBgToggle = document.getElementById('shortcuts-dock-bg-toggle');
             const dockRow = document.getElementById('shortcuts-dock-row');
             const dockBgRow = document.getElementById('shortcuts-dock-bg-row');
+            const resetBtn = document.getElementById('shortcuts-position-reset');
+            const hideOnFocusToggle = document.getElementById('shortcuts-hide-on-focus-toggle');
 
             if (!dockToggle || !rangeInput || !valSpan) return;
 
             // Load saved values
-            const dockEnabled = ProfileManager.getItem('shortcuts_dock_enabled') !== '0';
+            const dockEnabled = ProfileManager.getItem('shortcuts_dock_enabled') === '1';
             const positionMargin = ProfileManager.getItem('shortcuts_position_margin') || '40';
             const collapseEnabled = ProfileManager.getItem('shortcuts_collapse_enabled') === '1';
-            const dockBgEnabled = ProfileManager.getItem('shortcuts_dock_bg_enabled') !== '0';
+            const dockBgEnabled = ProfileManager.getItem('shortcuts_dock_bg_enabled') === '1';
 
             dockToggle.checked = dockEnabled;
             rangeInput.value = positionMargin;
@@ -8386,27 +8905,44 @@
             if (dockBgToggle) {
                 dockBgToggle.checked = dockBgEnabled;
             }
+            if (hideOnFocusToggle) {
+                hideOnFocusToggle.checked = ProfileManager.getItem('shortcuts_hide_on_focus') === '1';
+            }
+            applyShortcutsHideOnFocus();
 
             function updateSliderState() {
-                const dockAvailable = (ProfileManager.getItem('search_position_step') || '3') !== '3';
+                updateShortcutsMarginDefault();
+
+                const searchPos = ProfileManager.getItem('search_position_step') || '3';
+                const dockAvailable = searchPos !== '3';
                 const isDocked = dockToggle.checked && dockAvailable;
+
                 dockToggle.disabled = !dockAvailable;
                 if (dockRow) {
                     dockRow.style.opacity = dockAvailable ? '1' : '0.5';
                     dockRow.style.pointerEvents = dockAvailable ? 'auto' : 'none';
                 }
+
+                // Slider remains fully enabled when in auto-10px state, only disabled when isDocked
                 rangeInput.disabled = isDocked;
+                if (resetBtn) {
+                    resetBtn.disabled = isDocked;
+                }
                 if (sliderRow) {
                     sliderRow.style.opacity = isDocked ? '0.5' : '1';
                     sliderRow.style.pointerEvents = isDocked ? 'none' : 'auto';
                 }
                 if (dockBgToggle) {
-                    dockBgToggle.disabled = !isDocked || !dockAvailable;
+                    dockBgToggle.disabled = false;
                 }
                 if (dockBgRow) {
-                    dockBgRow.style.opacity = isDocked ? '1' : '0.5';
-                    dockBgRow.style.pointerEvents = isDocked ? 'auto' : 'none';
+                    dockBgRow.style.opacity = '1';
+                    dockBgRow.style.pointerEvents = 'auto';
                 }
+
+                const margin = ProfileManager.getItem('shortcuts_position_margin') || '40';
+                rangeInput.value = margin;
+                valSpan.textContent = `${margin}px`;
             }
 
             window.syncShortcutsDockControlState = updateSliderState;
@@ -8427,6 +8963,18 @@
                 updateShortcutsDock();
             });
 
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    const searchPos = ProfileManager.getItem('search_position_step') || '3';
+                    const currentDockBgEnabled = ProfileManager.getItem('shortcuts_dock_bg_enabled') === '1';
+                    const defaultVal = (searchPos === '3' && currentDockBgEnabled) ? '10' : '40';
+                    rangeInput.value = defaultVal;
+                    valSpan.textContent = `${defaultVal}px`;
+                    ProfileManager.setItem('shortcuts_position_margin', defaultVal);
+                    updateShortcutsDock();
+                });
+            }
+
             if (collapseToggle) {
                 collapseToggle.addEventListener('change', () => {
                     ProfileManager.setItem('shortcuts_collapse_enabled', collapseToggle.checked ? '1' : '0');
@@ -8438,6 +8986,16 @@
                 dockBgToggle.addEventListener('change', () => {
                     ProfileManager.setItem('shortcuts_dock_bg_enabled', dockBgToggle.checked ? '1' : '0');
                     renderShortcuts();
+                    updateSliderState();
+                    updateShortcutsDock();
+                });
+            }
+
+            if (hideOnFocusToggle) {
+                hideOnFocusToggle.addEventListener('change', () => {
+                    const enabled = hideOnFocusToggle.checked;
+                    ProfileManager.setItem('shortcuts_hide_on_focus', enabled ? '1' : '0');
+                    applyShortcutsHideOnFocus(enabled);
                 });
             }
         }
@@ -8538,87 +9096,171 @@
             }
         }
 
+        function applyLogoOffset(offsetX = parseInt(ProfileManager.getItem('logo_offset_x') || '0', 10), offsetY = parseInt(ProfileManager.getItem('logo_offset_y') || '0', 10)) {
+            document.documentElement.style.setProperty('--logo-offset-x', `${offsetX}px`);
+            document.documentElement.style.setProperty('--logo-offset-y', `${offsetY}px`);
+            
+            const xRange = document.getElementById('logo-offset-x-range');
+            const xVal = document.getElementById('logo-offset-x-val');
+            if (xRange && xVal) {
+                xRange.value = offsetX;
+                xVal.textContent = `${offsetX}px`;
+            }
+            
+            const yRange = document.getElementById('logo-offset-y-range');
+            const yVal = document.getElementById('logo-offset-y-val');
+            if (yRange && yVal) {
+                yRange.value = offsetY;
+                yVal.textContent = `${offsetY}px`;
+            }
+        }
+
+        function initLogoOffsetControl() {
+            applyLogoOffset();
+            
+            const xRange = document.getElementById('logo-offset-x-range');
+            const xReset = document.getElementById('logo-offset-x-reset');
+            if (xRange) {
+                xRange.addEventListener('input', () => {
+                    const val = parseInt(xRange.value, 10);
+                    ProfileManager.setItem('logo_offset_x', val.toString());
+                    applyLogoOffset(val, parseInt(ProfileManager.getItem('logo_offset_y') || '0', 10));
+                });
+            }
+            if (xReset) {
+                xReset.addEventListener('click', () => {
+                    ProfileManager.setItem('logo_offset_x', '0');
+                    applyLogoOffset(0, parseInt(ProfileManager.getItem('logo_offset_y') || '0', 10));
+                });
+            }
+            
+            const yRange = document.getElementById('logo-offset-y-range');
+            const yReset = document.getElementById('logo-offset-y-reset');
+            if (yRange) {
+                yRange.addEventListener('input', () => {
+                    const val = parseInt(yRange.value, 10);
+                    ProfileManager.setItem('logo_offset_y', val.toString());
+                    applyLogoOffset(parseInt(ProfileManager.getItem('logo_offset_x') || '0', 10), val);
+                });
+            }
+            if (yReset) {
+                yReset.addEventListener('click', () => {
+                    ProfileManager.setItem('logo_offset_y', '0');
+                    applyLogoOffset(parseInt(ProfileManager.getItem('logo_offset_x') || '0', 10), 0);
+                });
+            }
+        }
+
         function getCenterLogoFirefox() {
-            return `<svg width="244" height="70" viewBox="0 0 1730 496" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M610 128H774.898V165.266H658.48V237.819H747.855V275.085H658.48V372.702H610V128ZM809.527 196.596H856.688V372.702H809.527V196.596ZM899.563 196.596H942.766V228.255H947.712C951.89 216.822 957.936 208.359 965.852 202.861C973.987 197.146 984.321 194.287 996.852 194.287H1024.23V230.234H977.394C966.841 230.234 959.036 233.201 953.979 239.138C948.923 245.075 946.394 254.967 946.394 268.82V372.702H899.563V196.596ZM807.548 128H858.667V165.266H807.548V128ZM1121.52 376C1094.03 376 1072.6 368.085 1057.21 352.256C1042.04 336.205 1034.45 313.671 1034.45 284.649C1034.45 255.628 1042.04 233.201 1057.21 217.372C1072.6 201.322 1094.03 193.298 1121.52 193.298C1148.34 193.298 1169.12 200.663 1183.85 215.394C1198.58 230.125 1205.94 251.011 1205.94 278.053V293.884H1083.92V297.51C1083.92 313.561 1086.89 325.433 1092.82 333.129C1098.98 340.603 1108.54 344.34 1121.52 344.34C1132.07 344.34 1139.99 342.253 1145.26 338.075C1150.76 333.677 1153.51 329.061 1153.51 324.224V322.905H1201.66C1196.6 340.053 1187.15 353.245 1173.29 362.48C1159.66 371.493 1142.4 376 1121.52 376ZM1159.11 264.202C1158.23 250.352 1154.71 240.238 1148.56 233.862C1142.62 227.266 1133.61 223.968 1121.52 223.968C1109.42 223.968 1100.3 227.266 1094.14 233.862C1088.21 240.238 1084.8 250.352 1083.92 264.202H1159.11ZM1251.46 227.596H1221.45V196.596H1251.46V156.362C1251.46 147.348 1253.88 140.422 1258.71 135.585C1263.77 130.528 1271.02 128 1280.48 128H1351.72V159H1298.62V196.596H1351.72V227.596H1298.62V372.702H1251.46V227.596ZM1450.65 376C1422.95 376 1401.29 368.085 1385.68 352.256C1370.07 336.205 1362.27 313.671 1362.27 284.649C1362.27 255.628 1370.07 233.201 1385.68 217.372C1401.29 201.322 1422.95 193.298 1450.65 193.298C1478.36 193.298 1499.9 201.322 1515.3 217.372C1530.91 233.201 1538.71 255.628 1538.71 284.649C1538.71 313.671 1530.91 336.205 1515.3 352.256C1499.9 368.085 1478.36 376 1450.65 376ZM1450.65 344.34C1463.85 344.34 1473.52 340.603 1479.68 333.129C1486.05 325.433 1489.24 313.561 1489.24 297.51V271.787C1489.24 255.737 1486.05 243.976 1479.68 236.499C1473.52 228.805 1463.85 224.957 1450.65 224.957C1437.46 224.957 1427.68 228.805 1421.3 236.499C1414.93 243.976 1411.74 255.737 1411.74 271.787V297.51C1411.74 313.561 1414.93 325.433 1421.3 333.129C1427.68 340.603 1437.46 344.34 1450.65 344.34ZM1603.02 282.012L1546.3 196.596H1595.11L1635.01 259.256H1638.64L1678.55 196.596H1726.03L1669.31 282.012L1729 372.702H1680.85L1637.65 304.767H1634.02L1590.82 372.702H1543.33L1603.02 282.012Z" fill="var(--text-main)"/>
-                <path d="M462.606 166.433C452.154 141.316 431.031 114.203 414.402 105.624C426.227 128.525 434.432 153.11 438.738 178.539L438.8 178.944C411.625 111.208 365.573 83.9081 327.946 24.4719C326.012 21.4454 324.109 18.3878 322.298 15.2678C321.363 13.6453 320.489 11.9918 319.647 10.3069C318.087 7.28054 316.87 4.09812 316.059 0.790909C316.059 0.478907 315.84 0.198106 315.528 0.135705C315.372 0.104505 315.216 0.104505 315.061 0.135705C315.03 0.135705 314.967 0.198106 314.936 0.198106C314.905 0.198106 314.811 0.260506 314.78 0.291706L314.874 0.166905C254.532 35.5167 234.065 100.912 232.162 133.61C208.075 135.264 185.018 144.156 166.048 159.1C164.052 157.416 161.961 155.856 159.809 154.389C154.348 135.233 154.098 114.953 159.122 95.6706C136.97 106.403 117.283 121.629 101.308 140.35H101.184C91.6671 128.275 92.3224 88.4946 92.884 80.1954C90.076 81.3186 87.3928 82.7537 84.8655 84.4385C76.4727 90.429 68.6102 97.1682 61.3718 104.562C53.1661 112.894 45.6469 121.879 38.9389 131.457C23.4948 153.36 12.5435 178.102 6.7091 204.247C6.5843 204.777 6.49071 205.308 6.3971 205.839C5.9603 207.96 4.33789 218.537 4.02588 220.846C4.02588 221.033 3.9947 221.189 3.9635 221.376C1.87308 232.327 0.562679 243.403 0.0634766 254.51C0.0634766 254.916 0.0634766 255.322 0.0634766 255.759C0.0634766 388.421 107.642 495.969 240.304 495.969C357.305 495.969 457.271 411.697 477.051 296.381C477.457 293.292 477.8 290.204 478.144 287.115C483.105 246.211 477.738 204.715 462.575 166.401L462.606 166.433ZM185.735 354.476C186.859 355.006 187.919 355.599 189.074 356.13L189.23 356.224C188.044 355.662 186.89 355.069 185.704 354.476H185.735Z" fill="url(#paint0_linear_137_57)"/>
-                <path d="M462.605 166.433C452.153 141.316 431.031 114.204 414.401 105.624C426.226 128.524 434.431 153.11 438.737 178.538C438.737 178.475 438.737 178.569 438.768 178.756V179.006C461.482 240.47 449.127 302.965 431.342 341.122C403.824 400.215 337.18 460.743 232.847 457.811C120.12 454.628 20.8419 370.981 2.30896 261.437C-1.06065 244.152 2.30896 235.416 3.99377 221.345C1.65376 232.234 0.374551 243.341 0.09375 254.479C0.09375 254.885 0.09375 255.291 0.09375 255.728C0.09375 388.39 107.641 495.969 240.335 495.969C357.336 495.969 457.301 411.697 477.113 296.382C477.519 293.292 477.862 290.203 478.205 287.115C483.166 246.212 477.8 204.715 462.637 166.401L462.605 166.433Z" fill="url(#paint1_radial_137_57)"/>
-                <path d="M462.605 166.433C452.153 141.316 431.031 114.204 414.401 105.624C426.226 128.524 434.431 153.11 438.737 178.538C438.737 178.475 438.737 178.569 438.768 178.756V179.006C461.482 240.47 449.127 302.965 431.342 341.122C403.824 400.215 337.18 460.743 232.847 457.811C120.12 454.628 20.8419 370.981 2.30896 261.437C-1.06065 244.152 2.30896 235.416 3.99377 221.345C1.65376 232.234 0.374551 243.341 0.09375 254.479C0.09375 254.885 0.09375 255.291 0.09375 255.728C0.09375 388.39 107.641 495.969 240.335 495.969C357.336 495.969 457.301 411.697 477.113 296.382C477.519 293.292 477.862 290.203 478.205 287.115C483.166 246.212 477.8 204.715 462.637 166.401L462.605 166.433Z" fill="url(#paint2_radial_137_57)"/>
-                <path d="M345.853 194.668C346.384 195.043 346.852 195.417 347.351 195.761C341.329 185.059 333.81 175.262 325.043 166.651C250.381 91.9889 305.481 4.75322 314.778 0.322799L314.872 0.197998C254.53 35.5478 234.063 100.944 232.16 133.641C234.968 133.453 237.745 133.236 240.584 133.236C284.171 133.329 324.326 156.791 345.822 194.699L345.853 194.668Z" fill="url(#paint3_radial_137_57)"/>
-                <path d="M240.742 209.582C240.336 215.572 219.245 236.165 211.85 236.165C143.522 236.165 132.446 277.474 132.446 277.474C135.473 312.262 159.684 340.935 189.043 356.098C190.385 356.785 191.726 357.409 193.1 358.032C195.408 359.062 197.78 360.03 200.15 360.934C210.197 364.491 220.742 366.519 231.413 366.955C351.128 372.572 374.341 223.809 287.948 180.597C310.068 176.759 333.032 185.651 345.886 194.637C324.39 156.729 284.204 133.266 240.617 133.173C237.778 133.173 234.97 133.422 232.193 133.578C208.106 135.232 185.049 144.125 166.079 159.069C169.73 162.158 173.88 166.308 182.616 174.888C198.902 190.956 240.711 207.617 240.805 209.551L240.742 209.582Z" fill="url(#paint4_radial_137_57)"/>
-                <path d="M240.742 209.582C240.336 215.572 219.245 236.165 211.85 236.165C143.522 236.165 132.446 277.474 132.446 277.474C135.473 312.262 159.684 340.935 189.043 356.098C190.385 356.785 191.726 357.409 193.1 358.032C195.408 359.062 197.78 360.03 200.15 360.934C210.197 364.491 220.742 366.519 231.413 366.955C351.128 372.572 374.341 223.809 287.948 180.597C310.068 176.759 333.032 185.651 345.886 194.637C324.39 156.729 284.204 133.266 240.617 133.173C237.778 133.173 234.97 133.422 232.193 133.578C208.106 135.232 185.049 144.125 166.079 159.069C169.73 162.158 173.88 166.308 182.616 174.888C198.902 190.956 240.711 207.617 240.805 209.551L240.742 209.582Z" fill="url(#paint5_radial_137_57)"/>
-                <path d="M154.845 151.114C156.53 152.174 158.184 153.298 159.807 154.42C154.346 135.264 154.096 114.984 159.12 95.7019C136.968 106.434 117.281 121.661 101.306 140.381C102.46 140.381 137.311 139.725 154.845 151.114Z" fill="url(#paint6_radial_137_57)"/>
-                <path d="M2.3063 261.468C20.8392 371.012 120.118 454.659 232.844 457.842C337.146 460.807 403.821 400.246 431.34 341.153C449.124 302.964 461.511 240.471 438.828 179.038V178.788C438.828 178.601 438.797 178.507 438.797 178.57L438.859 178.975C447.377 234.636 419.078 288.518 374.805 324.991L374.68 325.304C288.474 395.504 205.981 367.674 189.288 356.255C188.103 355.693 186.948 355.1 185.795 354.507C135.531 330.483 114.783 284.681 119.213 245.431C94.846 245.774 72.5379 231.765 62.3042 209.645C62.3042 209.645 100.4 182.469 150.631 206.088C179.087 219.005 211.441 220.285 240.832 209.645C240.738 207.679 198.93 191.049 182.643 174.981C173.938 166.401 169.789 162.252 166.108 159.163C164.141 157.478 162.051 155.918 159.898 154.451C158.463 153.485 156.872 152.423 154.938 151.145C137.403 139.757 102.584 140.412 101.429 140.412H101.304C91.7884 128.337 92.4436 88.5571 93.0052 80.2578C90.1972 81.381 87.514 82.8163 84.9867 84.501C76.5939 90.4915 68.7314 97.2307 61.493 104.625C53.2873 112.956 45.7681 121.941 39.0601 131.52C23.616 153.422 12.6647 178.164 6.83032 204.31C6.70552 204.84 -1.84333 242.156 2.36869 261.53L2.3063 261.468Z" fill="url(#paint7_radial_137_57)"/>
-                <path d="M325.042 166.651C333.809 175.262 341.329 185.059 347.35 195.761C348.599 196.697 349.815 197.664 350.97 198.725C405.414 248.895 376.897 319.907 374.775 324.96C419.017 288.518 447.316 234.605 438.829 178.944C411.623 111.239 365.571 83.9394 327.944 24.5031C326.01 21.4767 324.107 18.4191 322.297 15.2991C321.361 13.6766 320.487 12.023 319.645 10.3383C318.084 7.31179 316.868 4.12937 316.057 0.822159C316.057 0.510157 315.838 0.229355 315.527 0.166955C315.371 0.135755 315.215 0.135755 315.059 0.166955C315.027 0.166955 314.965 0.229355 314.934 0.229355C314.903 0.229355 314.809 0.291756 314.778 0.322956C305.48 4.75338 250.38 91.989 325.042 166.651Z" fill="url(#paint8_linear_137_57)" fill-opacity="0.8"/>
-                <path d="M350.97 198.725C349.816 197.695 348.6 196.696 347.351 195.761C346.852 195.386 346.384 195.012 345.854 194.668C333.03 185.651 310.067 176.759 287.915 180.629C374.308 223.84 351.126 372.603 231.38 366.988C220.71 366.551 210.195 364.523 200.118 360.965C197.747 360.061 195.375 359.093 193.066 358.063C191.725 357.44 190.352 356.816 189.011 356.129L189.167 356.223C205.858 367.611 288.352 395.473 374.558 325.273L374.683 324.96C376.804 319.906 405.353 248.925 350.877 198.725H350.97Z" fill="url(#paint9_radial_137_57)"/>
-                <path d="M132.476 277.474C132.476 277.474 143.552 236.165 211.881 236.165C219.275 236.165 240.398 215.541 240.773 209.582C211.413 220.221 179.027 218.943 150.572 206.025C100.371 182.407 62.2451 209.582 62.2451 209.582C72.4787 231.703 94.7869 245.369C119.154 245.369C114.692 284.65 135.472 330.452 185.735 354.444C186.858 354.975 187.919 355.567 189.073 356.098C159.745 340.935 135.503 312.262 132.476 277.474Z" fill="url(#paint10_radial_137_57)"/>
-                <path d="M462.605 166.433C452.153 141.316 431.03 114.204 414.4 105.624C426.225 128.525 434.431 153.11 438.737 178.539L438.8 178.944C411.623 111.208 365.573 83.9081 327.945 24.4719C326.01 21.4454 324.107 18.3878 322.298 15.2678C321.361 13.6453 320.488 11.9918 319.646 10.3069C318.086 7.28054 316.869 4.09812 316.058 0.790909C316.058 0.478907 315.84 0.198106 315.527 0.135705C315.371 0.104505 315.215 0.104505 315.059 0.135705C315.028 0.135705 314.966 0.198106 314.934 0.198106C314.903 0.198106 314.81 0.260506 314.778 0.291706L314.872 0.166905C254.531 35.5167 234.064 100.912 232.16 133.61C234.968 133.423 237.745 133.205 240.585 133.205C284.171 133.298 324.326 156.76 345.822 194.669C332.999 185.652 310.036 176.759 287.884 180.629C374.277 223.841 351.095 372.603 231.349 366.987C220.679 366.55 210.164 364.523 200.087 360.965C197.716 360.061 195.345 359.093 193.036 358.064C191.694 357.44 190.321 356.816 188.979 356.13L189.135 356.224C187.95 355.662 186.795 355.069 185.641 354.476C186.764 355.006 187.825 355.599 188.979 356.13C159.651 340.966 135.409 312.294 132.382 277.505C132.382 277.505 143.458 236.196 211.786 236.196C219.181 236.196 240.304 215.572 240.678 209.614C240.585 207.648 198.776 191.018 182.489 174.95C173.785 166.37 169.635 162.221 165.954 159.132C163.956 157.447 161.897 155.856 159.744 154.42C154.285 135.264 154.035 114.984 159.059 95.7018C136.906 106.434 117.219 121.661 101.244 140.38H101.12C91.6037 128.306 92.2589 88.5258 92.8205 80.2266C90.0125 81.3498 87.3292 82.7849 84.802 84.4698C76.4092 90.4602 68.5468 97.1994 61.3083 104.594C53.1026 112.925 45.5835 121.91 38.8754 131.488C23.4313 153.391 12.48 178.133 6.64563 204.278C6.52082 204.809 6.42723 205.339 6.33363 205.87C5.89683 207.991 3.86882 218.724 3.55681 221.033C1.716 232.14 0.530403 243.31 0 254.542C0 254.947 0 255.353 0 255.79C0 388.453 107.578 496 240.241 496C357.241 496 457.241 411.728 476.988 296.413C477.394 293.323 477.736 290.235 478.08 287.146C483.041 246.243 477.674 204.746 462.511 166.433H462.605ZM438.768 178.757V179.007H438.8V178.757H438.768Z" fill="url(#paint11_linear_137_57)"/>
-                <defs>
-                    <linearGradient id="paint0_linear_137_57" x1="439.089" y1="76.6073" x2="53.7851" y2="445.865" gradientUnits="userSpaceOnUse">
-                        <stop offset="0.05" stop-color="#FFF44F"/>
-                        <stop offset="0.37" stop-color="#FF980E"/>
-                        <stop offset="0.53" stop-color="#FF3647"/>
-                        <stop offset="0.7" stop-color="#E31587"/>
-                    </linearGradient>
-                    <radialGradient id="paint1_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(410.922 104.109) scale(492.797 501.072)">
-                        <stop offset="0.13" stop-color="#FFBD4F"/>
-                        <stop offset="0.28" stop-color="#FF980E"/>
-                        <stop offset="0.47" stop-color="#FF3750"/>
-                        <stop offset="0.78" stop-color="#EB0878"/>
-                        <stop offset="0.86" stop-color="#E50080"/>
-                    </radialGradient>
-                    <radialGradient id="paint2_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(237.593 260.61) scale(505.103 501.072)">
-                        <stop offset="0.3" stop-color="#960E18"/>
-                        <stop offset="0.35" stop-color="#B11927" stop-opacity="0.74"/>
-                        <stop offset="0.43" stop-color="#DB293D" stop-opacity="0.34"/>
-                        <stop offset="0.5" stop-color="#F5334B" stop-opacity="0.09"/>
-                        <stop offset="0.53" stop-color="#FF3750" stop-opacity="0"/>
-                    </radialGradient>
-                    <radialGradient id="paint3_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(299.854 -18.2223) scale(160.866 273.19)">
-                        <stop offset="0.13" stop-color="#FFF44F"/>
-                        <stop offset="0.53" stop-color="#FF980E"/>
-                    </radialGradient>
-                    <radialGradient id="paint4_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(189.045 389.124) scale(212.675 233.143)">
-                        <stop offset="0.35" stop-color="#3A8EE6"/>
-                        <stop offset="0.67" stop-color="#9059FF"/>
-                        <stop offset="1" stop-color="#C139E6"/>
-                    </radialGradient>
-                    <radialGradient id="paint5_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(239.087 218.028) rotate(5.84609) scale(107.51 124.872)">
-                        <stop offset="0.21" stop-color="#9059FF" stop-opacity="0"/>
-                        <stop offset="1" stop-color="#6E008B" stop-opacity="0.6"/>
-                    </radialGradient>
-                    <radialGradient id="paint6_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(243.999 35.251) scale(169.529 170.248)">
-                        <stop offset="0.1" stop-color="#FFE226"/>
-                        <stop offset="0.79" stop-color="#FF7139"/>
-                    </radialGradient>
-                    <radialGradient id="paint7_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(359.502 -82.2582) scale(808.652 678.852)">
-                        <stop offset="0.11" stop-color="#FFF44F"/>
-                        <stop offset="0.46" stop-color="#FF980E"/>
-                        <stop offset="0.72" stop-color="#FF3647"/>
-                        <stop offset="0.9" stop-color="#E31587"/>
-                    </radialGradient>
-                    <linearGradient id="paint8_linear_137_57" x1="309.505" y1="-57.5846" x2="409.345" y2="383.897" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#FFF44F"/>
-                        <stop offset="0.3" stop-color="#FF980E"/>
-                        <stop offset="0.57" stop-color="#FF3647"/>
-                        <stop offset="0.74" stop-color="#E31587"/>
-                    </linearGradient>
-                    <radialGradient id="paint9_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(206.283 89.5511) scale(465.455 457.371)">
-                        <stop offset="0.14" stop-color="#FFF44F"/>
-                        <stop offset="0.48" stop-color="#FF980E"/>
-                        <stop offset="0.66" stop-color="#FF3647"/>
-                        <stop offset="0.9" stop-color="#E31587"/>
-                    </radialGradient>
-                    <radialGradient id="paint10_radial_137_57" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(355.264 118.926) scale(559.357 500.573)">
-                        <stop offset="0.09" stop-color="#FFF44F"/>
-                        <stop offset="0.63" stop-color="#FF980E"/>
-                    </radialGradient>
-                    <linearGradient id="paint11_linear_137_57" x1="413.694" y1="76.5137" x2="105.584" y2="414.685" gradientUnits="userSpaceOnUse">
-                        <stop offset="0.17" stop-color="#FFF44F" stop-opacity="0.8"/>
-                        <stop offset="0.677885" stop-color="#FFF44F" stop-opacity="0"/>
-                    </linearGradient>
-                </defs>
-            </svg>`;
+            return `<div style="display:flex;align-items:center;gap:16px;color:var(--text-main);height:100px;box-sizing:border-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="84" height="100" viewBox="-11.61279 -19.99175 100.64418 119.9505">
+                    <defs>
+                        <radialGradient id="b" cx="-7907.187" cy="-8515.1211" r="80.797" gradientTransform="translate(7973.7 8523.9959)" gradientUnits="userSpaceOnUse">
+                            <stop offset=".129" stop-color="#ffbd4f"/>
+                            <stop offset=".186" stop-color="#ffac31"/>
+                            <stop offset=".247" stop-color="#ff9d17"/>
+                            <stop offset=".283" stop-color="#ff980e"/>
+                            <stop offset=".403" stop-color="#ff563b"/>
+                            <stop offset=".467" stop-color="#ff3750"/>
+                            <stop offset=".71" stop-color="#f5156c"/>
+                            <stop offset=".782" stop-color="#eb0878"/>
+                            <stop offset=".86" stop-color="#e50080"/>
+                        </radialGradient>
+                        <radialGradient id="c" cx="-7936.7109" cy="-8482.0889" r="80.797" gradientTransform="translate(7973.7 8523.9959)" gradientUnits="userSpaceOnUse">
+                            <stop offset=".3" stop-color="#960e18"/>
+                            <stop offset=".351" stop-color="#b11927" stop-opacity=".74"/>
+                            <stop offset=".435" stop-color="#db293d" stop-opacity=".343"/>
+                            <stop offset=".497" stop-color="#f5334b" stop-opacity=".094"/>
+                            <stop offset=".53" stop-color="#ff3750" stop-opacity="0"/>
+                        </radialGradient>
+                        <radialGradient id="d" cx="-7926.9702" cy="-8533.457" r="58.534" gradientTransform="translate(7973.7 8523.9959)" gradientUnits="userSpaceOnUse">
+                            <stop offset=".132" stop-color="#fff44f"/>
+                            <stop offset=".252" stop-color="#ffdc3e"/>
+                            <stop offset=".506" stop-color="#ff9d12"/>
+                            <stop offset=".526" stop-color="#ff980e"/>
+                        </radialGradient>
+                        <radialGradient id="e" cx="-7945.6479" cy="-8460.9844" r="38.471" gradientTransform="translate(7973.7 8523.9959)" gradientUnits="userSpaceOnUse">
+                            <stop offset=".353" stop-color="#3a8ee6"/>
+                            <stop offset=".472" stop-color="#5c79f0"/>
+                            <stop offset=".669" stop-color="#9059ff"/>
+                            <stop offset="1" stop-color="#c139e6"/>
+                        </radialGradient>
+                        <radialGradient id="f" cx="-7935.6201" cy="-8491.5459" r="20.397" gradientTransform="matrix(.972 -.235 .275 1.138 10090.002 7833.7939)" gradientUnits="userSpaceOnUse">
+                            <stop offset=".206" stop-color="#9059ff" stop-opacity="0"/>
+                            <stop offset=".278" stop-color="#8c4ff3" stop-opacity=".064"/>
+                            <stop offset=".747" stop-color="#7716a8" stop-opacity=".45"/>
+                            <stop offset=".975" stop-color="#6e008b" stop-opacity=".6"/>
+                        </radialGradient>
+                        <radialGradient id="g" cx="-7937.731" cy="-8518.4268" r="27.676" gradientTransform="translate(7973.7 8523.9959)" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#ffe226"/>
+                            <stop offset=".121" stop-color="#ffdb27"/>
+                            <stop offset=".295" stop-color="#ffc82a"/>
+                            <stop offset=".502" stop-color="#ffa930"/>
+                            <stop offset=".732" stop-color="#ff7e37"/>
+                            <stop offset=".792" stop-color="#ff7139"/>
+                        </radialGradient>
+                        <radialGradient id="h" cx="-7915.9771" cy="-8535.9814" r="118.081" gradientTransform="translate(7973.7 8523.9959)" gradientUnits="userSpaceOnUse">
+                            <stop offset=".113" stop-color="#fff44f"/>
+                            <stop offset=".456" stop-color="#ff980e"/>
+                            <stop offset=".622" stop-color="#ff5634"/>
+                            <stop offset=".716" stop-color="#ff3647"/>
+                            <stop offset=".904" stop-color="#e31587"/>
+                        </radialGradient>
+                        <radialGradient id="i" cx="-7927.165" cy="-8522.8594" r="86.499" gradientTransform="matrix(.105 .995 -.653 .069 -4685.304 8470.1869)" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#fff44f"/>
+                            <stop offset=".06" stop-color="#ffe847"/>
+                            <stop offset=".168" stop-color="#ffc830"/>
+                            <stop offset=".304" stop-color="#ff980e"/>
+                            <stop offset=".356" stop-color="#ff8b16"/>
+                            <stop offset=".455" stop-color="#ff672a"/>
+                            <stop offset=".57" stop-color="#ff3647"/>
+                            <stop offset=".737" stop-color="#e31587"/>
+                        </radialGradient>
+                        <radialGradient id="j" cx="-7938.3828" cy="-8508.1758" r="73.72" gradientTransform="translate(7973.7 8523.9959)" gradientUnits="userSpaceOnUse">
+                            <stop offset=".137" stop-color="#fff44f"/>
+                            <stop offset=".48" stop-color="#ff980e"/>
+                            <stop offset=".592" stop-color="#ff5634"/>
+                            <stop offset=".655" stop-color="#ff3647"/>
+                            <stop offset=".904" stop-color="#e31587"/>
+                        </radialGradient>
+                        <radialGradient id="k" cx="-7918.9229" cy="-8503.8613" r="80.686" gradientTransform="translate(7973.7 8523.9959)" gradientUnits="userSpaceOnUse">
+                            <stop offset=".094" stop-color="#fff44f"/>
+                            <stop offset=".231" stop-color="#ffe141"/>
+                            <stop offset=".509" stop-color="#ffaf1e"/>
+                            <stop offset=".626" stop-color="#ff980e"/>
+                        </radialGradient>
+                        <linearGradient id="a" x1="70.786" y1="12.393" x2="6.447" y2="74.468" gradientUnits="userSpaceOnUse" gradientTransform="translate(-1.3 -.004)">
+                            <stop offset=".048" stop-color="#fff44f"/>
+                            <stop offset=".111" stop-color="#ffe847"/>
+                            <stop offset=".225" stop-color="#ffc830"/>
+                            <stop offset=".368" stop-color="#ff980e"/>
+                            <stop offset=".401" stop-color="#ff8b16"/>
+                            <stop offset=".462" stop-color="#ff672a"/>
+                            <stop offset=".534" stop-color="#ff3647"/>
+                            <stop offset=".705" stop-color="#e31587"/>
+                        </linearGradient>
+                        <linearGradient id="l" x1="70.013" y1="12.061" x2="15.267" y2="66.806" gradientUnits="userSpaceOnUse" gradientTransform="translate(-1.3 -.004)">
+                            <stop offset=".167" stop-color="#fff44f" stop-opacity=".8"/>
+                            <stop offset=".266" stop-color="#fff44f" stop-opacity=".634"/>
+                            <stop offset=".489" stop-color="#fff44f" stop-opacity=".217"/>
+                            <stop offset=".6" stop-color="#fff44f" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M74.616 26.827c-1.684-4.052-5.1-8.427-7.775-9.81a40.266 40.266 0 013.925 11.764l.007.065C66.391 17.921 58.96 13.516 52.891 3.924c-.307-.485-.614-.971-.913-1.484-.171-.293-.308-.557-.427-.8a7.053 7.053 0 01-.578-1.535.1.1 0 00-.088-.1.138.138 0 00-.073 0c-.005 0-.013.009-.019.011s-.019.011-.028.015l.015-.026c-9.735 5.7-13.038 16.252-13.342 21.53a19.387 19.387 0 00-10.666 4.111 11.587 11.587 0 00-1-.758 17.968 17.968 0 01-.109-9.473 28.705 28.705 0 00-9.329 7.21h-.018c-1.536-1.947-1.428-8.367-1.34-9.708a6.928 6.928 0 00-1.294.687 28.225 28.225 0 00-3.788 3.245 33.845 33.845 0 00-3.623 4.347v.006-.007a32.733 32.733 0 00-5.2 11.743l-.052.256c-.073.341-.336 2.049-.381 2.42 0 .029-.006.056-.009.085A36.937 36.937 0 000 41.042v.2a38.759 38.759 0 0076.954 6.554c.065-.5.118-.995.176-1.5a39.857 39.857 0 00-2.514-19.469zm-44.67 30.338c.181.087.351.181.537.264l.027.017q-.282-.135-.564-.281zm8.878-23.376zm31.952-4.934v-.037l.007.041z" fill="url(#a)"/>
+                    <path d="M74.616 26.827c-1.684-4.052-5.1-8.427-7.775-9.81a40.266 40.266 0 013.925 11.764v.037l.007.041a35.1 35.1 0 01-1.206 26.158c-4.442 9.531-15.194 19.3-32.024 18.825-18.185-.515-34.2-14.009-37.194-31.683-.545-2.787 0-4.2.274-6.465A28.876 28.876 0 000 41.042v.2a38.759 38.759 0 0076.954 6.554c.065-.5.118-.995.176-1.5a39.857 39.857 0 00-2.514-19.469z" fill="url(#b)"/>
+                    <path d="M74.616 26.827c-1.684-4.052-5.1-8.427-7.775-9.81a40.266 40.266 0 013.925 11.764v.037l.007.041a35.1 35.1 0 01-1.206 26.158c-4.442 9.531-15.194 19.3-32.024 18.825-18.185-.515-34.2-14.009-37.194-31.683-.545-2.787 0-4.2.274-6.465A28.876 28.876 0 000 41.042v.2a38.759 38.759 0 0076.954 6.554c.065-.5.118-.995.176-1.5a39.857 39.857 0 00-2.514-19.469z" fill="url(#c)"/>
+                    <path d="M55.782 31.383c.084.059.162.118.241.177a21.1 21.1 0 00-3.6-4.695C40.377 14.817 49.266.742 50.765.027l.015-.022c-9.735 5.7-13.038 16.252-13.342 21.53.452-.031.9-.069 1.362-.069a19.56 19.56 0 0116.982 9.917z" fill="url(#d)"/>
+                    <path d="M38.825 33.789c-.064.964-3.47 4.289-4.661 4.289-11.021 0-12.81 6.667-12.81 6.667.488 5.614 4.4 10.238 9.129 12.684.216.112.435.213.654.312q.569.252 1.138.466a17.235 17.235 0 005.043.973c19.317.906 23.059-23.1 9.119-30.066a13.38 13.38 0 019.345 2.269A19.56 19.56 0 0038.8 21.466c-.46 0-.91.038-1.362.069a19.387 19.387 0 00-10.666 4.111c.591.5 1.258 1.168 2.663 2.553 2.63 2.591 9.375 5.275 9.39 5.59z" fill="url(#e)"/>
+                    <path d="M38.825 33.789c-.064.964-3.47 4.289-4.661 4.289-11.021 0-12.81 6.667-12.81 6.667.488 5.614 4.4 10.238 9.129 12.684.216.112.435.213.654.312q.569.252 1.138.466a17.235 17.235 0 005.043.973c19.317.906 23.059-23.1 9.119-30.066a13.38 13.38 0 019.345 2.269A19.56 19.56 0 0038.8 21.466c-.46 0-.91.038-1.362.069a19.387 19.387 0 00-10.666 4.111c.591.5 1.258 1.168 2.663 2.553 2.63 2.591 9.375 5.275 9.39 5.59z" fill="url(#f)"/>
+                    <path d="M24.965 24.357c.314.2.573.374.8.531a17.968 17.968 0 01-.109-9.473 28.705 28.705 0 00-9.329 7.21c.189-.005 5.811-.106 8.638 1.732z" fill="url(#g)"/>
+                    <path d="M.354 42.159c2.991 17.674 19.009 31.168 37.194 31.683 16.83.476 27.582-9.294 32.024-18.825a35.1 35.1 0 001.206-26.158v-.037c0-.029-.006-.046 0-.037l.007.065c1.375 8.977-3.191 17.674-10.329 23.555l-.022.05c-13.908 11.327-27.218 6.834-29.912 5q-.282-.135-.564-.281c-8.109-3.876-11.459-11.264-10.741-17.6a9.953 9.953 0 01-9.181-5.775 14.618 14.618 0 0114.249-.572 19.3 19.3 0 0014.552.572c-.015-.315-6.76-3-9.39-5.59-1.405-1.385-2.072-2.052-2.663-2.553a11.587 11.587 0 00-1-.758c-.23-.157-.489-.327-.8-.531-2.827-1.838-8.449-1.737-8.635-1.732h-.018c-1.536-1.947-1.428-8.367-1.34-9.708a6.928 6.928 0 00-1.294.687 28.225 28.225 0 00-3.788 3.245 33.845 33.845 0 00-3.638 4.337v.006-.007a32.733 32.733 0 00-5.2 11.743c-.019.079-1.396 6.099-.717 9.221z" fill="url(#h)"/>
+                    <path d="M52.425 26.865a21.1 21.1 0 013.6 4.7c.213.161.412.321.581.476 8.787 8.1 4.183 19.55 3.84 20.365 7.138-5.881 11.7-14.578 10.329-23.555-4.384-10.93-11.815-15.335-17.884-24.927-.307-.485-.614-.971-.913-1.484-.171-.293-.308-.557-.427-.8a7.053 7.053 0 01-.578-1.535.1.1 0 00-.088-.1.138.138 0 00-.073 0c-.005 0-.013.009-.019.011s-.019.011-.028.015c-1.499.711-10.388 14.786 1.66 26.834z" fill="url(#i)"/>
+                    <path d="M56.6 32.036c-.169-.155-.368-.315-.581-.476-.079-.059-.157-.118-.241-.177a13.38 13.38 0 00-9.345-2.269c13.94 6.97 10.2 30.972-9.119 30.066a17.235 17.235 0 01-5.043-.973q-.569-.213-1.138-.466c-.219-.1-.438-.2-.654-.312l.027.017c2.694 1.839 16 6.332 29.912-5l.022-.05c.347-.81 4.951-12.263-3.84-20.36z" fill="url(#j)"/>
+                    <path d="M21.354 44.745s1.789-6.667 12.81-6.667c1.191 0 4.6-3.325 4.661-4.289a19.3 19.3 0 01-14.552-.572 14.618 14.618 0 00-14.249.572 9.953 9.953 0 009.181 5.775c-.718 6.337 2.632 13.725 10.741 17.6.181.087.351.181.537.264-4.733-2.445-8.641-7.069-9.129-12.683z" fill="url(#k)"/>
+                    <path d="M74.616 26.827c-1.684-4.052-5.1-8.427-7.775-9.81a40.266 40.266 0 013.925 11.764l.007.065C66.391 17.921 58.96 13.516 52.891 3.924c-.307-.485-.614-.971-.913-1.484-.171-.293-.308-.557-.427-.8a7.053 7.053 0 01-.578-1.535.1.1 0 00-.088-.1.138.138 0 00-.073 0c-.005 0-.013.009-.019.011s-.019.011-.028.015l.015-.026c-9.735 5.7-13.038 16.252-13.342 21.53.452-.031.9-.069 1.362-.069a19.56 19.56 0 0116.982 9.917 13.38 13.38 0 00-9.345-2.269c13.94 6.97 10.2 30.972-9.119 30.066a17.235 17.235 0 01-5.043-.973q-.569-.213-1.138-.466c-.219-.1-.438-.2-.654-.312l.027.017q-.282-.135-.564-.281c.181.087.351.181.537.264-4.733-2.446-8.641-7.07-9.129-12.684 0 0 1.789-6.667 12.81-6.667 1.191 0 4.6-3.325 4.661-4.289-.015-.315-6.76-3-9.39-5.59-1.405-1.385-2.072-2.052-2.663-2.553a11.587 11.587 0 00-1-.758 17.968 17.968 0 01-.109-9.473 28.705 28.705 0 00-9.329 7.21h-.018c-1.536-1.947-1.428-8.367-1.34-9.708a6.928 6.928 0 00-1.294.687 28.225 28.225 0 00-3.788 3.245 33.845 33.845 0 00-3.623 4.347v.006-.007a32.733 32.733 0 00-5.2 11.743l-.052.256c-.073.341-.4 2.073-.447 2.445 0 .028 0-.029 0 0A45.094 45.094 0 000 41.042v.2a38.759 38.759 0 0076.954 6.554c.065-.5.118-.995.176-1.5a39.857 39.857 0 00-2.514-19.469zm-3.845 1.991l.007.041z" fill="url(#l)"/>
+                </svg>
+                <span style="font-family:'Quicksand', 'Nunito', sans-serif;font-weight:700;font-size:68px;letter-spacing:-1.5px;margin-left:6px;line-height:1">Firefox</span>
+            </div>`;
         }
 
         function applyFirefoxLogo(useFirefox = ProfileManager.getItem('use_firefox_logo') === '1') {
@@ -8653,10 +9295,9 @@
                     typeContainer.style.maxHeight = showShortcuts ? '100px' : '0';
                     typeContainer.style.opacity = showShortcuts ? '1' : '0';
                 }
-                const posContainer = document.getElementById('shortcuts-position-config-container');
-                if (posContainer) {
-                    posContainer.style.maxHeight = showShortcuts ? '340px' : '0';
-                    posContainer.style.opacity = showShortcuts ? '1' : '0';
+                const advancedDetails = document.getElementById('shortcuts-advanced-details');
+                if (advancedDetails) {
+                    advancedDetails.style.display = showShortcuts ? '' : 'none';
                 }
                 typeRadios.forEach(r => {
                     r.checked = r.value === shortcutsType;
@@ -9532,7 +10173,7 @@
                 box.className = 'shortcuts-box';
                 area.appendChild(box);
             }
-            const dockBgEnabled = ProfileManager.getItem('shortcuts_dock_bg_enabled') !== '0';
+            const dockBgEnabled = ProfileManager.getItem('shortcuts_dock_bg_enabled') === '1';
             box.classList.toggle('has-bg', dockBgEnabled);
 
             let grid = document.getElementById('shortcuts-grid');
@@ -9602,7 +10243,7 @@
                 const iconBox = document.createElement('div');
                 iconBox.className = 'sc-icon';
                 const img = document.createElement('img');
-                img.src = fav(sc.url);
+                img.src = sc.customIcon || fav(sc.url);
                 img.alt = sc.name;
                 img.draggable = false;
                 img.onerror = () => {
@@ -9775,6 +10416,15 @@
                 expandBtn.setAttribute('aria-expanded', 'false');
             }
 
+            // Flip arrow when search bar is at bottom (position step 4)
+            const searchStep = ProfileManager.getItem('search_position_step') || '3';
+            const isBottomPos = searchStep === '4';
+            expandBtn.classList.toggle('bottom-pos', isBottomPos);
+
+            // Shift expand button to the left side when search bar is at bottom-right (position step 5)
+            const isRightCorner = searchStep === '5';
+            expandBtn.classList.toggle('left-pos', isRightCorner);
+
             if (area.classList.contains('docked')) {
                 requestAnimationFrame(updateShortcutsDock);
             }
@@ -9834,12 +10484,24 @@
             const modalOverlay = document.getElementById('modal-overlay');
             modalOverlay.classList.add('open');
             runOpenAnimation(modalOverlay, 360);
+            
+            // Show custom icon row
+            const customIconRow = document.getElementById('modal-custom-icon-row');
+            if (customIconRow) customIconRow.style.display = 'flex';
+            
+            // Reset file input
+            const fileInp = document.getElementById('modal-icon-upload');
+            if (fileInp) fileInp.value = '';
+
             document.querySelector('.modal h3').textContent = scData ? 'Edit shortcut' : 'Add shortcut';
             document.getElementById('modal-name').value = scData ? scData.name : '';
             document.getElementById('modal-url').value = scData ? scData.url : '';
+            
+            window.customIconBase64 = scData ? (scData.customIcon || null) : null;
+            
             if (scData) {
                 const ic = document.getElementById('preview-icon');
-                ic.src = fav(scData.url); ic.style.display = 'inline';
+                ic.src = window.customIconBase64 || fav(scData.url); ic.style.display = 'inline';
                 let host = '';
                 try { host = new URL(scData.url).hostname; } catch(e) { host = scData.url; }
                 document.getElementById('preview-text').textContent = host;
@@ -9847,6 +10509,12 @@
                 document.getElementById('preview-icon').style.display = 'none';
                 document.getElementById('preview-text').textContent = 'Enter a URL to preview icon';
             }
+            
+            const btnRemove = document.getElementById('btn-remove-icon');
+            if (btnRemove) {
+                btnRemove.style.display = window.customIconBase64 ? 'inline' : 'none';
+            }
+
             window.editingScIndex = index;
             setTimeout(() => document.getElementById('modal-url').focus(), 50);
         }
@@ -9860,12 +10528,24 @@
             const modalOverlay = document.getElementById('modal-overlay');
             modalOverlay.classList.add('open');
             runOpenAnimation(modalOverlay, 360);
+            
+            // Show custom icon row
+            const customIconRow = document.getElementById('modal-custom-icon-row');
+            if (customIconRow) customIconRow.style.display = 'flex';
+
+            // Reset file input
+            const fileInp = document.getElementById('modal-icon-upload');
+            if (fileInp) fileInp.value = '';
+
             document.querySelector('.modal h3').textContent = appData ? 'Edit website' : 'Add website';
             document.getElementById('modal-name').value = appData ? appData.name : '';
             document.getElementById('modal-url').value = appData ? appData.url : '';
+            
+            window.customIconBase64 = appData ? (appData.customIcon || null) : null;
+
             if (appData) {
                 const ic = document.getElementById('preview-icon');
-                ic.src = fav(appData.url); ic.style.display = 'inline';
+                ic.src = window.customIconBase64 || fav(appData.url); ic.style.display = 'inline';
                 let host = '';
                 try { host = new URL(appData.url).hostname; } catch(e) { host = appData.url; }
                 document.getElementById('preview-text').textContent = host;
@@ -9873,10 +10553,90 @@
                 document.getElementById('preview-icon').style.display = 'none';
                 document.getElementById('preview-text').textContent = 'Enter a URL to preview icon';
             }
+
+            const btnRemove = document.getElementById('btn-remove-icon');
+            if (btnRemove) {
+                btnRemove.style.display = window.customIconBase64 ? 'inline' : 'none';
+            }
+
             window.editingScIndex = null;
             window.editingAppIndex = index;
             window.editingAppEngine = getStoredSearchEngine();
             setTimeout(() => document.getElementById('modal-url').focus(), 50);
+        }
+
+        // ── CUSTOM ICON UPLOAD HANDLERS ──────────────────────────────
+        const btnUploadIcon = document.getElementById('btn-upload-icon');
+        const btnRemoveIcon = document.getElementById('btn-remove-icon');
+        const modalIconUpload = document.getElementById('modal-icon-upload');
+
+        if (btnUploadIcon && modalIconUpload) {
+            btnUploadIcon.onclick = () => {
+                modalIconUpload.click();
+            };
+        }
+
+        if (modalIconUpload) {
+            modalIconUpload.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 64;
+                        canvas.height = 64;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Center crop to 64x64
+                        const size = Math.min(img.width, img.height);
+                        const sx = (img.width - size) / 2;
+                        const sy = (img.height - size) / 2;
+                        ctx.drawImage(img, sx, sy, size, size, 0, 0, 64, 64);
+                        
+                        const dataUrl = canvas.toDataURL('image/png');
+                        window.customIconBase64 = dataUrl;
+
+                        const ic = document.getElementById('preview-icon');
+                        if (ic) {
+                            ic.src = dataUrl;
+                            ic.style.display = 'inline';
+                        }
+                        if (btnRemoveIcon) {
+                            btnRemoveIcon.style.display = 'inline';
+                        }
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+
+        if (btnRemoveIcon) {
+            btnRemoveIcon.onclick = () => {
+                window.customIconBase64 = null;
+                if (modalIconUpload) modalIconUpload.value = '';
+                btnRemoveIcon.style.display = 'none';
+
+                const urlVal = document.getElementById('modal-url').value.trim();
+                const ic = document.getElementById('preview-icon');
+                if (ic) {
+                    if (urlVal) {
+                        let u = urlVal;
+                        if (!u.startsWith('http')) u = 'https://' + u;
+                        try {
+                            ic.src = fav(u);
+                            ic.style.display = 'inline';
+                        } catch(err) {
+                            ic.style.display = 'none';
+                        }
+                    } else {
+                        ic.style.display = 'none';
+                    }
+                }
+            };
         }
 
         document.getElementById('modal-cancel').onclick = () => {
@@ -9884,6 +10644,27 @@
             document.getElementById('modal-overlay').classList.remove('open');
         };
         document.getElementById('modal-overlay').onclick = e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); };
+        // ── AUTO-FETCH WEBSITE TITLE ─────────────────────────────────
+        let _titleFetchId = 0;
+        async function fetchWebsiteTitle(url) {
+            const proxies = [
+                u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+                u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`
+            ];
+            for (const proxy of proxies) {
+                try {
+                    const resp = await fetch(proxy(url), { signal: AbortSignal.timeout(5000) });
+                    if (!resp.ok) continue;
+                    const text = await resp.text();
+                    const match = text.match(/<title[^>]*>([^<]+)<\/title>/i);
+                    if (match && match[1]) {
+                        return match[1].trim().replace(/\s+/g, ' ');
+                    }
+                } catch { }
+            }
+            return null;
+        }
+
         document.getElementById('modal-url').addEventListener('input', e => {
             clearTimeout(dbt); dbt = setTimeout(() => {
                 let u = e.target.value.trim(); if (!u) return;
@@ -9891,10 +10672,25 @@
                 try {
                     const p = new URL(u);
                     const ic = document.getElementById('preview-icon');
-                    ic.src = fav(u); ic.style.display = 'inline';
+                    if (!window.customIconBase64) {
+                        ic.src = fav(u); ic.style.display = 'inline';
+                    }
                     document.getElementById('preview-text').textContent = p.hostname;
-                    if (!document.getElementById('modal-name').value)
-                        document.getElementById('modal-name').value = p.hostname.replace('www.', '');
+                    const nameInput = document.getElementById('modal-name');
+                    const hostFallback = p.hostname.replace('www.', '');
+                    if (!nameInput.value) {
+                        nameInput.value = hostFallback;
+                    }
+                    // Auto-fetch real title in background
+                    const myFetchId = ++_titleFetchId;
+                    fetchWebsiteTitle(u).then(title => {
+                        if (!title || myFetchId !== _titleFetchId) return;
+                        // Only overwrite if user hasn't manually typed a custom name
+                        const cur = nameInput.value.trim();
+                        if (!cur || cur === hostFallback) {
+                            nameInput.value = title;
+                        }
+                    });
                 } catch { }
             }, 400);
         });
@@ -9915,7 +10711,11 @@
             if (window.modalMode === 'app') {
                 const engine = window.editingAppEngine || getStoredSearchEngine();
                 const apps = loadDrawerApps(engine);
-                const nextApp = { name: nm || host.replace('www.', ''), url: u };
+                const nextApp = { 
+                    name: nm || host.replace('www.', ''), 
+                    url: u,
+                    customIcon: window.customIconBase64 || null
+                };
                 if (window.editingAppIndex !== null && window.editingAppIndex !== undefined) {
                     apps[window.editingAppIndex] = nextApp;
                     if (typeof showToast === 'function') showToast('Website edited');
@@ -9936,10 +10736,19 @@
             const s = loadSC();
             if (window.editingScIndex !== null && window.editingScIndex !== undefined) {
                 const existingShortcut = s[window.editingScIndex] || {};
-                s[window.editingScIndex] = { ...existingShortcut, name: nm || host.replace('www.', ''), url: u };
+                s[window.editingScIndex] = { 
+                    ...existingShortcut, 
+                    name: nm || host.replace('www.', ''), 
+                    url: u,
+                    customIcon: window.customIconBase64 || null
+                };
                 if (typeof showToast === 'function') showToast('Shortcut edited');
             } else {
-                s.push({ name: nm || host.replace('www.', ''), url: u });
+                s.push({ 
+                    name: nm || host.replace('www.', ''), 
+                    url: u,
+                    customIcon: window.customIconBase64 || null
+                });
                 if (typeof showToast === 'function') showToast('Shortcut added');
             }
             saveSC(s); renderShortcuts();
@@ -9990,14 +10799,14 @@
             return queries;
         };
 
-        const addRecent = q => {
+        const addRecent = (q, engineId) => {
             if (!q.trim()) return;
             const saveHistory = ProfileManager.getItem('save_history') !== '0';
             if (!saveHistory) return;
 
             let hist = getHistory();
             hist = hist.filter(x => x.query !== q);
-            hist.unshift({ query: q, timestamp: Date.now() });
+            hist.unshift({ query: q, timestamp: Date.now(), engine: engineId || getStoredSearchEngine() });
             hist = hist.slice(0, 200);
             try {
                 ProfileManager.setItem('rq', JSON.stringify(hist));
@@ -10388,7 +11197,7 @@
         function doSearch(q) {
             const query = sanitizeQuery(q);
             if (!query) return;
-            addRecent(query);
+            addRecent(query, getStoredSearchEngine());
             const target = getSearchTarget();
             let url = '';
             if (/^https?:\/\//.test(query)) {
@@ -11033,43 +11842,19 @@
             // Firefox logo toggle
             applyFirefoxLogo();
 
+            // Logo offset synchronization
+            applyLogoOffset();
+
             // Shortcuts dock & position sync
-            const shortcutsDock = ProfileManager.getItem('shortcuts_dock_enabled') !== '0';
-            const shortcutsDockAvailable = (ProfileManager.getItem('search_position_step') || '3') !== '3';
             const shortcutsDockToggle = document.getElementById('shortcuts-dock-toggle');
             if (shortcutsDockToggle) {
-                shortcutsDockToggle.checked = shortcutsDock;
-                shortcutsDockToggle.disabled = !shortcutsDockAvailable;
-            }
-            const shortcutsDockRow = document.getElementById('shortcuts-dock-row');
-            if (shortcutsDockRow) {
-                shortcutsDockRow.style.opacity = shortcutsDockAvailable ? '1' : '0.5';
-                shortcutsDockRow.style.pointerEvents = shortcutsDockAvailable ? 'auto' : 'none';
-            }
-            const shortcutsPositionVal = ProfileManager.getItem('shortcuts_position_margin') || '40';
-            const shortcutsPositionRange = document.getElementById('shortcuts-position-range');
-            const shortcutsPositionValSpan = document.getElementById('shortcuts-position-val');
-            if (shortcutsPositionRange && shortcutsPositionValSpan) {
-                shortcutsPositionRange.value = shortcutsPositionVal;
-                shortcutsPositionValSpan.textContent = `${shortcutsPositionVal}px`;
-            }
-            const shortcutsSliderRow = document.getElementById('shortcuts-position-slider-row');
-            if (shortcutsPositionRange && shortcutsSliderRow) {
-                const shortcutsDockActive = shortcutsDock && shortcutsDockAvailable;
-                shortcutsPositionRange.disabled = shortcutsDockActive;
-                shortcutsSliderRow.style.opacity = shortcutsDockActive ? '0.5' : '1';
-                shortcutsSliderRow.style.pointerEvents = shortcutsDockActive ? 'none' : 'auto';
+                shortcutsDockToggle.checked = ProfileManager.getItem('shortcuts_dock_enabled') === '1';
             }
             const shortcutsDockBgToggle = document.getElementById('shortcuts-dock-bg-toggle');
-            const shortcutsDockBgRow = document.getElementById('shortcuts-dock-bg-row');
-            const shortcutsDockActive = shortcutsDock && shortcutsDockAvailable;
             if (shortcutsDockBgToggle) {
-                shortcutsDockBgToggle.disabled = !shortcutsDockActive;
+                shortcutsDockBgToggle.checked = ProfileManager.getItem('shortcuts_dock_bg_enabled') === '1';
             }
-            if (shortcutsDockBgRow) {
-                shortcutsDockBgRow.style.opacity = shortcutsDockActive ? '1' : '0.5';
-                shortcutsDockBgRow.style.pointerEvents = shortcutsDockActive ? 'auto' : 'none';
-            }
+            window.syncShortcutsDockControlState?.();
             const shortcutsCollapse = ProfileManager.getItem('shortcuts_collapse_enabled') === '1';
             const shortcutsCollapseToggle = document.getElementById('shortcuts-collapse-toggle');
             if (shortcutsCollapseToggle) {
@@ -11077,6 +11862,49 @@
             }
             updateShortcutsDock();
             updateShortcutsCollapseState();
+            applyShortcutsHideOnFocus();
+
+            // Custom search engine synchronization
+            syncCustomSearchEnginePanel();
+        }
+
+        function syncCustomSearchEnginePanel() {
+            const nameInput = document.getElementById('custom-search-name');
+            const urlInput = document.getElementById('custom-search-url');
+            const iconUrlInput = document.getElementById('custom-icon-url');
+            const fontSelect = document.getElementById('custom-search-font');
+            const iconTypeSegment = document.getElementById('custom-icon-type-segment');
+
+            if (nameInput) nameInput.value = ProfileManager.getItem('custom_search_engine_name') || 'Custom';
+            if (urlInput) urlInput.value = ProfileManager.getItem('custom_search_engine_url') || 'https://www.google.com/search?q=';
+            if (iconUrlInput) iconUrlInput.value = ProfileManager.getItem('custom_search_engine_icon_url') || '';
+            if (fontSelect) fontSelect.value = ProfileManager.getItem('custom_search_engine_font') || 'system-ui';
+            
+            const type = ProfileManager.getItem('custom_search_engine_icon_type') || 'url';
+            if (iconTypeSegment) {
+                const radio = iconTypeSegment.querySelector(`input[name="custom_icon_type"][value="${type}"]`);
+                if (radio) radio.checked = true;
+            }
+            
+            const urlRow = document.getElementById('custom-icon-url-row');
+            const uploadRow = document.getElementById('custom-icon-upload-row');
+            if (urlRow && uploadRow) {
+                if (type === 'upload') {
+                    urlRow.style.display = 'none';
+                    uploadRow.style.display = '';
+                } else {
+                    urlRow.style.display = '';
+                    uploadRow.style.display = 'none';
+                }
+            }
+
+            // Sync picker name & icon
+            const pickerLabel = document.getElementById('custom-engine-picker-label');
+            const pickerIcon = document.getElementById('custom-engine-picker-icon');
+            if (pickerLabel) pickerLabel.textContent = ProfileManager.getItem('custom_search_engine_name') || 'Custom';
+            if (pickerIcon) pickerIcon.innerHTML = getSearchEngineIcon('custom');
+            
+            syncSearchEngineCustomize();
         }
 
         function renderProfileDropdown() {
@@ -11452,10 +12280,22 @@
                     const row = document.createElement('div');
                     row.className = 'history-item-row';
 
-                    // 1. Icon
+                    // 1. Icon — show search engine logo if stored, else generic search icon
                     const iconContainer = document.createElement('div');
                     iconContainer.className = 'history-item-icon';
-                    iconContainer.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
+                    const itemEngine = item.engine || 'google';
+                    const engineIconSvg = getSearchEngineIcon(itemEngine);
+                    // Robustly set width and height to 16 on the root svg tag
+                    const scaledSvg = engineIconSvg.replace(/<svg([^>]*)>/, (match, attrs) => {
+                        const cleaned = attrs
+                            .replace(/\bwidth="[^"]*"/, '')
+                            .replace(/\bheight="[^"]*"/, '')
+                            .replace(/\bstyle="[^"]*"/, '')
+                            .trim();
+                        return `<svg width="16" height="16" ${cleaned}>`;
+                    });
+                    iconContainer.innerHTML = scaledSvg;
+                    iconContainer.title = getSearchEngine(itemEngine)?.name || itemEngine;
                     row.appendChild(iconContainer);
 
                     // 2. Query Content
@@ -11464,7 +12304,17 @@
                     queryContent.textContent = item.query;
                     queryContent.onclick = () => {
                         document.getElementById('history-modal-overlay').classList.remove('open');
-                        doSearch(item.query);
+                        // Search on the original engine
+                        const origEngine = item.engine || getStoredSearchEngine();
+                        const engine = getSearchEngine(origEngine);
+                        const target = getSearchTarget();
+                        const url = engine.searchUrl + encodeURIComponent(item.query);
+                        addRecent(item.query, origEngine);
+                        if (target === '_self') {
+                            window.location.href = url;
+                        } else {
+                            window.open(url, target);
+                        }
                     };
                     row.appendChild(queryContent);
 
@@ -11660,6 +12510,7 @@
         initCustomizeAccordionAnimation();
         initLogoVisibilityControl();
         initFirefoxLogoControl();
+        initLogoOffsetControl();
         initShortcutsControl();
         initShortcutsPositionControl();
         initSystemResetControl();
