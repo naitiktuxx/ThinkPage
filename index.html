@@ -2063,6 +2063,19 @@
             flex-shrink: 0;
         }
 
+        /* History items use separate spacing variables so they can be tuned independently */
+        .sug-item.has-remove {
+            padding: var(--sug-item-hist-padding-v, 14px) 20px;
+            min-height: var(--sug-item-hist-min-height, 50px);
+            padding-right: 48px; /* space for the absolute-positioned remove button */
+        }
+
+        .suggestions.is-searching .sug-item.has-remove {
+            padding-top: var(--sug-item-padding-v, 10px);
+            padding-bottom: var(--sug-item-padding-v, 10px);
+            min-height: var(--sug-item-min-height, 42px);
+        }
+
         .sug-item span {
             flex: 1;
             min-width: 0;
@@ -2100,7 +2113,10 @@
         }
 
         .sug-item .remove-sug {
-            margin-left: auto;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
             background: transparent;
             border: none;
             color: var(--text-muted);
@@ -4841,13 +4857,35 @@
             <input type="text" id="modal-name" placeholder="Site name" />
             <label>URL</label>
             <input type="text" id="modal-url" placeholder="https://" />
-            <div id="modal-custom-icon-row" style="display: none; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px;">
-                <span style="font-size: 13px; color: var(--text-muted);">Custom Icon</span>
-                <div style="display: flex; gap: 8px;">
-                    <button type="button" class="btn-cancel" id="btn-upload-icon" style="padding: 6px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; cursor: pointer; background: var(--surface-3);">Upload</button>
-                    <button type="button" class="btn-cancel" id="btn-remove-icon" style="padding: 6px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; color: #ef596f; cursor: pointer; background: var(--surface-3); display: none;">Remove</button>
+            <div id="modal-custom-icon-row" style="display: none; flex-direction: column; margin-bottom: 16px; gap: 8px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 4px;">
+                    <span style="font-size: 13px; color: var(--text-muted);">Custom Icon</span>
+                    <div class="segment-control" id="modal-icon-type-segment" style="width: 140px; height: 28px; box-sizing: border-box;">
+                        <label class="segment-opt" style="font-size: 11px; padding: 2px 6px;">
+                            <input type="radio" name="modal_icon_type" value="url" checked>
+                            <span style="padding: 2px 6px; font-size: 11px;">Link</span>
+                        </label>
+                        <label class="segment-opt" style="font-size: 11px; padding: 2px 6px;">
+                            <input type="radio" name="modal_icon_type" value="upload">
+                            <span style="padding: 2px 6px; font-size: 11px;">Upload</span>
+                        </label>
+                    </div>
                 </div>
-                <input type="file" id="modal-icon-upload" accept="image/*" style="display: none;" />
+                
+                <!-- Link input -->
+                <div id="modal-icon-url-row" style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <input type="text" id="modal-icon-url" placeholder="Paste icon URL (e.g. https://...)" style="flex: 1; margin: 0; padding: 8px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; background: var(--surface-3); color: var(--text-main);" />
+                </div>
+                
+                <!-- Upload row -->
+                <div id="modal-icon-upload-row" style="display: none; align-items: center; gap: 8px; width: 100%;">
+                    <button type="button" class="btn-cancel" id="btn-upload-icon" style="flex: 1; padding: 8px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; cursor: pointer; background: var(--surface-3); color: var(--text-main); font-weight: 500;">Choose File</button>
+                    <input type="file" id="modal-icon-upload" accept="image/*" style="display: none;" />
+                </div>
+
+                <div id="modal-remove-icon-row" style="display: none; width: 100%; margin-top: 4px;">
+                    <button type="button" class="btn-cancel" id="btn-remove-icon" style="flex: 1; padding: 8px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; color: #ef596f; cursor: pointer; background: var(--surface-3); font-weight: 500;">Remove Custom Icon</button>
+                </div>
             </div>
             <div id="modal-preview">
                 <img id="preview-icon" alt="">
@@ -5209,6 +5247,19 @@
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <input type="range" id="suggestions-spacing-range" min="1" max="4" value="2" class="cp-range-input" style="flex: 1; outline: none;" />
                         <span id="suggestions-spacing-val" style="font-size: 14px; font-weight: 500; min-width: 65px; text-align: right; color: var(--text-secondary);">Default</span>
+                    </div>
+                    <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">History item spacing</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" id="history-spacing-range" min="1" max="4" value="3" class="cp-range-input" style="flex: 1; outline: none;" />
+                        <span id="history-spacing-val" style="font-size: 14px; font-weight: 500; min-width: 65px; text-align: right; color: var(--text-secondary);">Default</span>
+                    </div>
+                    <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">History suggestion duration</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <select id="history-duration-select" class="cp-select" style="flex: 1; outline: none; height: 28px; box-sizing: border-box;">
+                            <option value="forever">Forever</option>
+                            <option value="week">Last week</option>
+                            <option value="2days">Two days</option>
+                        </select>
                     </div>
                 </div>
             </details>
@@ -8562,6 +8613,13 @@
             '4': { label: 'Spacious', paddingV: '18px', minHeight: '58px' }
         };
 
+        const HISTORY_SPACINGS = {
+            '1': { label: 'Compact', paddingV: '6px', minHeight: '34px' },
+            '2': { label: 'Classic', paddingV: '10px', minHeight: '42px' },
+            '3': { label: 'Default', paddingV: '14px', minHeight: '50px' },
+            '4': { label: 'Spacious', paddingV: '18px', minHeight: '58px' }
+        };
+
         function updateSuggestionsSpacing() {
             const val = ProfileManager.getItem('suggestions_spacing_step') || '2';
             const config = SUGGESTION_SPACINGS[val] || SUGGESTION_SPACINGS['2'];
@@ -8570,6 +8628,15 @@
                 suggestions.style.setProperty('--sug-item-padding-v', config.paddingV);
                 suggestions.style.setProperty('--sug-item-min-height', config.minHeight);
             }
+        }
+
+        function updateHistorySpacing() {
+            const saved = ProfileManager.getItem('history_spacing_step') || '3';
+            const suggestions = document.querySelector('.suggestions');
+            if (!suggestions) return;
+            const config = HISTORY_SPACINGS[saved] || HISTORY_SPACINGS['3'];
+            suggestions.style.setProperty('--sug-item-hist-padding-v', config.paddingV);
+            suggestions.style.setProperty('--sug-item-hist-min-height', config.minHeight);
         }
 
         function initSuggestionsSpacingControl() {
@@ -8587,6 +8654,39 @@
                 valSpan.textContent = (SUGGESTION_SPACINGS[stepVal] || SUGGESTION_SPACINGS['2']).label;
                 ProfileManager.setItem('suggestions_spacing_step', stepVal);
                 updateSuggestionsSpacing();
+            });
+        }
+
+        function initHistorySpacingControl() {
+            const rangeInput = document.getElementById('history-spacing-range');
+            const valSpan = document.getElementById('history-spacing-val');
+            if (!rangeInput || !valSpan) return;
+
+            const histSaved = ProfileManager.getItem('history_spacing_step') || '3';
+            rangeInput.value = histSaved;
+            valSpan.textContent = (HISTORY_SPACINGS[histSaved] || HISTORY_SPACINGS['3']).label;
+            updateHistorySpacing();
+
+            rangeInput.addEventListener('input', () => {
+                const stepVal = rangeInput.value;
+                valSpan.textContent = (HISTORY_SPACINGS[stepVal] || HISTORY_SPACINGS['3']).label;
+                ProfileManager.setItem('history_spacing_step', stepVal);
+                updateHistorySpacing();
+            });
+        }
+
+        function initHistoryDurationControl() {
+            const selectEl = document.getElementById('history-duration-select');
+            if (!selectEl) return;
+
+            const savedDuration = ProfileManager.getItem('history_duration') || 'forever';
+            selectEl.value = savedDuration;
+
+            selectEl.addEventListener('change', () => {
+                ProfileManager.setItem('history_duration', selectEl.value);
+                if (sugEl && (document.activeElement === inp || sugEl.classList.contains('open'))) {
+                    showSug(inp.value);
+                }
             });
         }
 
@@ -10479,6 +10579,41 @@
 
         // ── MODAL ────────────────────────────────────────────────────
         let dbt;
+        function setupModalCustomIconFields() {
+            const urlRow = document.getElementById('modal-icon-url-row');
+            const uploadRow = document.getElementById('modal-icon-upload-row');
+            const urlInp = document.getElementById('modal-icon-url');
+            const btnRemove = document.getElementById('btn-remove-icon');
+            const removeRow = document.getElementById('modal-remove-icon-row');
+            
+            if (window.customIconBase64) {
+                const isUpload = window.customIconBase64.startsWith('data:');
+                document.querySelectorAll('input[name="modal_icon_type"]').forEach(r => {
+                    r.checked = r.value === (isUpload ? 'upload' : 'url');
+                });
+                if (isUpload) {
+                    if (urlRow) urlRow.style.display = 'none';
+                    if (uploadRow) uploadRow.style.display = 'flex';
+                    if (urlInp) urlInp.value = '';
+                } else {
+                    if (urlRow) urlRow.style.display = 'flex';
+                    if (uploadRow) uploadRow.style.display = 'none';
+                    if (urlInp) urlInp.value = window.customIconBase64;
+                }
+                if (btnRemove) btnRemove.style.display = 'inline-block';
+                if (removeRow) removeRow.style.display = 'flex';
+            } else {
+                document.querySelectorAll('input[name="modal_icon_type"]').forEach(r => {
+                    r.checked = r.value === 'url';
+                });
+                if (urlRow) urlRow.style.display = 'flex';
+                if (uploadRow) uploadRow.style.display = 'none';
+                if (urlInp) urlInp.value = '';
+                if (btnRemove) btnRemove.style.display = 'none';
+                if (removeRow) removeRow.style.display = 'none';
+            }
+        }
+
         function openModal(scData = null, index = null) {
             window.modalMode = 'shortcut';
             const modalOverlay = document.getElementById('modal-overlay');
@@ -10498,21 +10633,23 @@
             document.getElementById('modal-url').value = scData ? scData.url : '';
             
             window.customIconBase64 = scData ? (scData.customIcon || null) : null;
+            setupModalCustomIconFields();
             
             if (scData) {
                 const ic = document.getElementById('preview-icon');
-                ic.src = window.customIconBase64 || fav(scData.url); ic.style.display = 'inline';
+                if (ic) {
+                    ic.src = window.customIconBase64 || fav(scData.url); 
+                    ic.style.display = 'inline';
+                }
                 let host = '';
                 try { host = new URL(scData.url).hostname; } catch(e) { host = scData.url; }
-                document.getElementById('preview-text').textContent = host;
+                const previewText = document.getElementById('preview-text');
+                if (previewText) previewText.textContent = host;
             } else {
-                document.getElementById('preview-icon').style.display = 'none';
-                document.getElementById('preview-text').textContent = 'Enter a URL to preview icon';
-            }
-            
-            const btnRemove = document.getElementById('btn-remove-icon');
-            if (btnRemove) {
-                btnRemove.style.display = window.customIconBase64 ? 'inline' : 'none';
+                const previewIcon = document.getElementById('preview-icon');
+                if (previewIcon) previewIcon.style.display = 'none';
+                const previewText = document.getElementById('preview-text');
+                if (previewText) previewText.textContent = 'Enter a URL to preview icon';
             }
 
             window.editingScIndex = index;
@@ -10542,21 +10679,23 @@
             document.getElementById('modal-url').value = appData ? appData.url : '';
             
             window.customIconBase64 = appData ? (appData.customIcon || null) : null;
+            setupModalCustomIconFields();
 
             if (appData) {
                 const ic = document.getElementById('preview-icon');
-                ic.src = window.customIconBase64 || fav(appData.url); ic.style.display = 'inline';
+                if (ic) {
+                    ic.src = window.customIconBase64 || fav(appData.url); 
+                    ic.style.display = 'inline';
+                }
                 let host = '';
                 try { host = new URL(appData.url).hostname; } catch(e) { host = appData.url; }
-                document.getElementById('preview-text').textContent = host;
+                const previewText = document.getElementById('preview-text');
+                if (previewText) previewText.textContent = host;
             } else {
-                document.getElementById('preview-icon').style.display = 'none';
-                document.getElementById('preview-text').textContent = 'Enter a URL to preview icon';
-            }
-
-            const btnRemove = document.getElementById('btn-remove-icon');
-            if (btnRemove) {
-                btnRemove.style.display = window.customIconBase64 ? 'inline' : 'none';
+                const previewIcon = document.getElementById('preview-icon');
+                if (previewIcon) previewIcon.style.display = 'none';
+                const previewText = document.getElementById('preview-text');
+                if (previewText) previewText.textContent = 'Enter a URL to preview icon';
             }
 
             window.editingScIndex = null;
@@ -10565,7 +10704,7 @@
             setTimeout(() => document.getElementById('modal-url').focus(), 50);
         }
 
-        // ── CUSTOM ICON UPLOAD HANDLERS ──────────────────────────────
+        // ── CUSTOM ICON UPLOAD/LINK HANDLERS ──────────────────────────────
         const btnUploadIcon = document.getElementById('btn-upload-icon');
         const btnRemoveIcon = document.getElementById('btn-remove-icon');
         const modalIconUpload = document.getElementById('modal-icon-upload');
@@ -10605,7 +10744,11 @@
                             ic.style.display = 'inline';
                         }
                         if (btnRemoveIcon) {
-                            btnRemoveIcon.style.display = 'inline';
+                            btnRemoveIcon.style.display = 'inline-block';
+                        }
+                        const removeRow = document.getElementById('modal-remove-icon-row');
+                        if (removeRow) {
+                            removeRow.style.display = 'flex';
                         }
                     };
                     img.src = event.target.result;
@@ -10618,7 +10761,12 @@
             btnRemoveIcon.onclick = () => {
                 window.customIconBase64 = null;
                 if (modalIconUpload) modalIconUpload.value = '';
+                const urlInp = document.getElementById('modal-icon-url');
+                if (urlInp) urlInp.value = '';
+                
                 btnRemoveIcon.style.display = 'none';
+                const removeRow = document.getElementById('modal-remove-icon-row');
+                if (removeRow) removeRow.style.display = 'none';
 
                 const urlVal = document.getElementById('modal-url').value.trim();
                 const ic = document.getElementById('preview-icon');
@@ -10637,6 +10785,111 @@
                     }
                 }
             };
+        }
+
+        // Segment switch handler
+        document.querySelectorAll('input[name="modal_icon_type"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                const urlRow = document.getElementById('modal-icon-url-row');
+                const uploadRow = document.getElementById('modal-icon-upload-row');
+                const isUpload = radio.value === 'upload';
+                if (isUpload) {
+                    if (urlRow) urlRow.style.display = 'none';
+                    if (uploadRow) uploadRow.style.display = 'flex';
+                    if (window.customIconBase64 && !window.customIconBase64.startsWith('data:')) {
+                        window.customIconBase64 = null;
+                        const removeRow = document.getElementById('modal-remove-icon-row');
+                        if (removeRow) removeRow.style.display = 'none';
+                        const urlVal = document.getElementById('modal-url').value.trim();
+                        const ic = document.getElementById('preview-icon');
+                        if (ic) {
+                            if (urlVal) {
+                                let u = urlVal;
+                                if (!u.startsWith('http')) u = 'https://' + u;
+                                try {
+                                    ic.src = fav(u);
+                                    ic.style.display = 'inline';
+                                } catch(err) {
+                                    ic.style.display = 'none';
+                                }
+                            } else {
+                                ic.style.display = 'none';
+                            }
+                        }
+                    }
+                } else {
+                    if (urlRow) urlRow.style.display = 'flex';
+                    if (uploadRow) uploadRow.style.display = 'none';
+                    const urlInp = document.getElementById('modal-icon-url');
+                    const val = urlInp ? urlInp.value.trim() : '';
+                    window.customIconBase64 = val || null;
+                    
+                    const ic = document.getElementById('preview-icon');
+                    const btnRemove = document.getElementById('btn-remove-icon');
+                    const removeRow = document.getElementById('modal-remove-icon-row');
+                    if (ic) {
+                        if (val) {
+                            ic.src = val;
+                            ic.style.display = 'inline';
+                            if (btnRemove) btnRemove.style.display = 'inline-block';
+                            if (removeRow) removeRow.style.display = 'flex';
+                        } else {
+                            const urlVal = document.getElementById('modal-url').value.trim();
+                            if (urlVal) {
+                                let u = urlVal;
+                                if (!u.startsWith('http')) u = 'https://' + u;
+                                try {
+                                    ic.src = fav(u);
+                                    ic.style.display = 'inline';
+                                } catch(err) {
+                                    ic.style.display = 'none';
+                                }
+                            } else {
+                                ic.style.display = 'none';
+                            }
+                            if (btnRemove) btnRemove.style.display = 'none';
+                            if (removeRow) removeRow.style.display = 'none';
+                        }
+                    }
+                }
+            });
+        });
+
+        // URL input typing handler
+        const modalIconUrlInp = document.getElementById('modal-icon-url');
+        if (modalIconUrlInp) {
+            modalIconUrlInp.addEventListener('input', () => {
+                const val = modalIconUrlInp.value.trim();
+                window.customIconBase64 = val || null;
+                const ic = document.getElementById('preview-icon');
+                const btnRemove = document.getElementById('btn-remove-icon');
+                const removeRow = document.getElementById('modal-remove-icon-row');
+                
+                if (ic) {
+                    if (val) {
+                        ic.src = val;
+                        ic.style.display = 'inline';
+                        if (btnRemove) btnRemove.style.display = 'inline-block';
+                        if (removeRow) removeRow.style.display = 'flex';
+                    } else {
+                        const urlVal = document.getElementById('modal-url').value.trim();
+                        if (urlVal) {
+                            let u = urlVal;
+                            if (!u.startsWith('http')) u = 'https://' + u;
+                            try {
+                                ic.src = fav(u);
+                                ic.style.display = 'inline';
+                            } catch(err) {
+                                ic.style.display = 'none';
+                            }
+                        } else {
+                            ic.style.display = 'none';
+                        }
+                        if (btnRemove) btnRemove.style.display = 'none';
+                        if (removeRow) removeRow.style.display = 'none';
+                    }
+                }
+            });
         }
 
         document.getElementById('modal-cancel').onclick = () => {
@@ -10790,8 +11043,22 @@
             const hist = getHistory();
             const queries = [];
             const previewLength = parseInt(ProfileManager.getItem('history_preview_length') || '8', 10);
+            
+            // Filter by duration
+            const duration = ProfileManager.getItem('history_duration') || 'forever';
+            const now = Date.now();
+            let cutoffTime = 0;
+            if (duration === 'week') {
+                cutoffTime = now - 7 * 24 * 60 * 60 * 1000;
+            } else if (duration === '2days') {
+                cutoffTime = now - 2 * 24 * 60 * 60 * 1000;
+            }
+
             for (const item of hist) {
                 if (item && item.query && !queries.includes(item.query)) {
+                    if (cutoffTime > 0 && (!item.timestamp || item.timestamp < cutoffTime)) {
+                        continue;
+                    }
                     queries.push(item.query);
                 }
                 if (queries.length >= previewLength) break;
@@ -11074,6 +11341,11 @@
             } else if (!animEnabled || wasOpen) {
                 sugEl.classList.remove('animate');
             }
+            // Detect mixed view: history + online suggestions shown together
+            const hasRecent = items.some(i => i.type === 'recent');
+            const hasSuggest = items.some(i => i.type === 'suggest');
+            sugEl.classList.toggle('mixed-view', hasRecent && hasSuggest);
+            sugEl.classList.toggle('is-searching', !!inp.value.trim());
             items.forEach(item => {
                 const s = item.query;
                 const type = item.type;
@@ -11131,9 +11403,31 @@
                 return;
             }
             
-            const matchedHistory = getRecent()
-                .filter(r => r.toLowerCase().includes(q.toLowerCase()))
-                .slice(0, 3);
+            // Search across ALL history items, filtered by duration
+            const duration = ProfileManager.getItem('history_duration') || 'forever';
+            const now = Date.now();
+            let cutoffTime = 0;
+            if (duration === 'week') {
+                cutoffTime = now - 7 * 24 * 60 * 60 * 1000;
+            } else if (duration === '2days') {
+                cutoffTime = now - 2 * 24 * 60 * 60 * 1000;
+            }
+
+            const matchedHistory = [];
+            const hist = getHistory();
+            for (const item of hist) {
+                if (item && item.query) {
+                    const queryLower = item.query.toLowerCase();
+                    const qLower = q.toLowerCase();
+                    if (queryLower.includes(qLower) && !matchedHistory.includes(item.query)) {
+                        if (cutoffTime > 0 && (!item.timestamp || item.timestamp < cutoffTime)) {
+                            continue;
+                        }
+                        matchedHistory.push(item.query);
+                    }
+                }
+                if (matchedHistory.length >= 3) break;
+            }
                 
             const initialList = matchedHistory.map(item => ({ query: item, type: 'recent' }));
             
@@ -11848,6 +12142,24 @@
                 spacingVal.textContent = (SUGGESTION_SPACINGS[savedSpacingStep] || SUGGESTION_SPACINGS['2']).label;
             }
             updateSuggestionsSpacing();
+
+            // History item spacing slider
+            const savedHistSpacingStep = ProfileManager.getItem('history_spacing_step') || '3';
+            const histSpacingInput = document.getElementById('history-spacing-range');
+            const histSpacingVal = document.getElementById('history-spacing-val');
+            const histDisplayVal = savedHistSpacingStep;
+            if (histSpacingInput && histSpacingVal) {
+                histSpacingInput.value = histDisplayVal;
+                histSpacingVal.textContent = (HISTORY_SPACINGS[histDisplayVal] || HISTORY_SPACINGS['3']).label;
+            }
+            updateHistorySpacing();
+
+            // History suggestion duration select
+            const savedHistDuration = ProfileManager.getItem('history_duration') || 'forever';
+            const histDurationSelect = document.getElementById('history-duration-select');
+            if (histDurationSelect) {
+                histDurationSelect.value = savedHistDuration;
+            }
  
             // Search width range slider
             const savedWidthStep = ProfileManager.getItem('search_width_step') || '2';
@@ -12538,6 +12850,8 @@
         initHistoryPreviewLengthControl();
         initSuggestionsBoxHeightControl();
         initSuggestionsSpacingControl();
+        initHistorySpacingControl();
+        initHistoryDurationControl();
         initSearchWidthControl();
         initSearchPositionControl();
         initCustomizeAccordionAnimation();
