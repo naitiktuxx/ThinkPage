@@ -10422,6 +10422,21 @@
         let pendingUpdateWorker = null;
         let applyPendingUpdate = null;
 
+        window.syncSWAutoUpdatePreference = async () => {
+            const enabled = ProfileManager.getItem('offline_auto_update') !== '0';
+            try {
+                if ('caches' in window) {
+                    const cache = await caches.open('app-settings-cache-v1');
+                    await cache.put(
+                        new Request(window.location.origin + '/__offline_auto_update_pref'),
+                        new Response(enabled ? '1' : '0')
+                    );
+                }
+            } catch (e) {
+                console.warn('Could not sync SW preference:', e);
+            }
+        };
+
         window.syncAllAutoUpdateControls = () => {
             const enabled = ProfileManager.getItem('offline_auto_update') !== '0';
             const radios = document.querySelectorAll('input[name="offline_auto_update"]');
@@ -10438,6 +10453,8 @@
             if (typeof window.__wnShowUpdateBtn === 'function') {
                 window.__wnShowUpdateBtn(Boolean(pendingUpdateWorker) && !enabled);
             }
+            // Sync to SW Cache
+            window.syncSWAutoUpdatePreference();
         };
 
         function initOfflineAppSupport() {
@@ -10653,6 +10670,9 @@
                 navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
                     .then(reg => {
                         offlineServiceWorkerRegistration = reg;
+                        if (typeof window.syncSWAutoUpdatePreference === 'function') {
+                            window.syncSWAutoUpdatePreference();
+                        }
 
                         // First-ever install: SW needs to skipWaiting so it can control the page
                         if (!navigator.serviceWorker.controller && !reg.active) {

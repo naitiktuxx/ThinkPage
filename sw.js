@@ -64,6 +64,18 @@ async function cacheAppShell({ bust = false } = {}) {
   }));
 }
 
+async function isAutoUpdateEnabledInSW() {
+  try {
+    const cache = await caches.open('app-settings-cache-v1');
+    const response = await cache.match(new URL('/__offline_auto_update_pref', self.location.origin).href);
+    if (response) {
+      const text = await response.text();
+      return text === '1';
+    }
+  } catch (e) {}
+  return true; // Default to true
+}
+
 async function handleNavigation(request) {
   const cache = await caches.open(APP_CACHE);
   const indexRequest = new Request(new URL('./index.html', self.registration.scope).href);
@@ -73,14 +85,17 @@ async function handleNavigation(request) {
     || await cache.match(indexRequest);
 
   if (cached) {
-    fetch(request, { cache: 'reload' })
-      .then(response => {
-        if (response && (response.ok || response.type === 'opaque')) {
-          cache.put(request, response.clone());
-          cache.put(indexRequest, response.clone());
-        }
-      })
-      .catch(() => {});
+    const autoUpdate = await isAutoUpdateEnabledInSW();
+    if (autoUpdate) {
+      fetch(request, { cache: 'reload' })
+        .then(response => {
+          if (response && (response.ok || response.type === 'opaque')) {
+            cache.put(request, response.clone());
+            cache.put(indexRequest, response.clone());
+          }
+        })
+        .catch(() => {});
+    }
     return cached;
   }
 
@@ -93,8 +108,14 @@ async function handleNavigation(request) {
 
 async function handleSameOriginAsset(request) {
   const cached = await caches.match(request);
-  const fetchPromise = fetchAndCache(request, APP_CACHE).catch(() => cached);
-  return cached || fetchPromise;
+  const autoUpdate = await isAutoUpdateEnabledInSW();
+  if (autoUpdate) {
+    const fetchPromise = fetchAndCache(request, APP_CACHE).catch(() => cached);
+    return cached || fetchPromise;
+  } else {
+    if (cached) return cached;
+    return fetchAndCache(request, APP_CACHE).catch(() => cached);
+  }
 }
 
 async function handleRuntimeImage(request) {
