@@ -417,88 +417,262 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--panel-border);
             flex-shrink: 0;
+            gap: 8px;
+        }
+
+        .wn-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .wn-title {
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-primary);
         }
 
         .wn-version {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            color: var(--accent);
-            background: var(--accent-soft);
-            padding: 2px 8px;
-            border-radius: 12px;
+            color: var(--text-muted);
+            background: var(--btn-bg);
+            padding: 2px 7px;
+            border-radius: 10px;
+            letter-spacing: 0.03em;
+        }
+
+        .wn-auto-update-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .wn-auto-update-row .wn-au-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Mini toggle specifically for the wn header */
+        .wn-mini-toggle {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .wn-mini-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .wn-mini-slider {
+            width: 28px;
+            height: 16px;
+            background: var(--border-color);
+            border-radius: 99px;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .wn-mini-slider::before {
+            content: '';
+            position: absolute;
+            width: 11px;
+            height: 11px;
+            background: #fff;
+            border-radius: 50%;
+            top: 2.5px;
+            left: 2.5px;
+            transition: transform 0.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .wn-mini-toggle input:checked + .wn-mini-slider {
+            background: #22c55e;
+        }
+
+        .wn-mini-toggle input:checked + .wn-mini-slider::before {
+            transform: translateX(12px);
+        }
+
+        /* Update Available button inside dropdown */
+        .wn-update-btn {
+            display: none;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: opacity 0.15s, transform 0.15s;
+            flex-shrink: 0;
+        }
+
+        .wn-update-btn:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .wn-update-btn.visible {
+            display: flex;
         }
 
         .wn-content {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 4px;
             overflow-y: auto;
-            max-height: 350px;
-            padding-right: 4px;
+            max-height: 380px;
+            padding-right: 2px;
         }
 
-        .wn-content::-webkit-scrollbar {
-            width: 4px;
-        }
-        .wn-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .wn-content::-webkit-scrollbar-thumb {
-            background: var(--panel-border);
-            border-radius: 10px;
-        }
+        .wn-content::-webkit-scrollbar { width: 4px; }
+        .wn-content::-webkit-scrollbar-track { background: transparent; }
+        .wn-content::-webkit-scrollbar-thumb { background: var(--panel-border); border-radius: 10px; }
 
         .wn-item {
             display: flex;
-            gap: 10px;
-            align-items: flex-start;
-            padding: 8px;
-            border-radius: 8px;
+            flex-direction: column;
+            gap: 5px;
+            padding: 10px 8px;
+            border-radius: 10px;
             transition: background 0.15s;
+            cursor: default;
         }
 
-        .wn-item:hover {
-            background: var(--btn-bg);
+        .wn-item:hover { background: var(--btn-bg); }
+
+        .wn-item-top {
+            display: flex;
+            align-items: center;
+            gap: 7px;
         }
 
         .wn-item-badge {
-            background: #10b981;
-            color: white;
             font-size: 9px;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
-            padding: 2px 5px;
+            padding: 2px 6px;
             border-radius: 4px;
-            margin-top: 2px;
+            letter-spacing: 0.05em;
             flex-shrink: 0;
         }
 
-        .wn-item-details {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
+        .wn-badge-feat    { background: #1d4ed8; color: #fff; }
+        .wn-badge-fix     { background: #dc2626; color: #fff; }
+        .wn-badge-style   { background: #7c3aed; color: #fff; }
+        .wn-badge-improve { background: #d97706; color: #fff; }
+        .wn-badge-other   { background: #475569; color: #fff; }
 
         .wn-item-title {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-primary);
+            flex: 1;
         }
 
-        .wn-item-desc {
-            font-size: 11px;
+        .wn-item-bullets {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-left: 4px;
+        }
+
+        .wn-item-bullet {
+            font-size: 11.5px;
             color: var(--text-secondary);
-            line-height: 1.4;
+            line-height: 1.45;
+            display: flex;
+            gap: 5px;
+            align-items: flex-start;
+        }
+
+        .wn-item-bullet::before {
+            content: '•';
+            color: var(--text-muted);
+            flex-shrink: 0;
+            margin-top: 0px;
+        }
+
+        .wn-item-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2px;
+        }
+
+        .wn-item-readmore {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            transition: opacity 0.15s;
+        }
+
+        .wn-item-readmore:hover { opacity: 1; }
+
+        .wn-item-date {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Separator between items */
+        .wn-item + .wn-item {
+            border-top: 1px solid var(--panel-border);
+            border-radius: 0;
+        }
+
+        .wn-item:last-child { border-radius: 0 0 8px 8px; }
+        .wn-item:first-child { border-radius: 8px 8px 0 0; }
+
+        /* Footer */
+        .wn-footer {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--panel-border);
+            flex-shrink: 0;
+        }
+
+        .wn-feedback-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            background: none;
+            border: 1px solid var(--panel-border);
+            border-radius: 9px;
+            padding: 8px 14px;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .wn-feedback-btn:hover {
+            background: var(--btn-bg);
+            color: var(--text-primary);
         }
 
         .apps-header {
@@ -4877,40 +5051,27 @@
         <div class="whats-new-dropdown" id="whats-new-dropdown">
             <div class="wn-header">
                 <span class="wn-title">What's New</span>
-                <span class="wn-version">v1.2.0</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="wn-auto-update-row">
+                        <span>Auto-update: <span id="wn-au-state-label" style="font-weight: 600;">Off</span></span>
+                        <label class="wn-mini-toggle" title="Toggle auto-update">
+                            <input type="checkbox" id="wn-auto-update-toggle" />
+                            <span class="wn-mini-slider"></span>
+                        </label>
+                    </div>
+                    <span class="wn-version" id="wn-version-label">v1.2.0</span>
+                </div>
             </div>
-            <div class="wn-content">
-                <div class="wn-item">
-                    <div class="wn-item-badge">New</div>
-                    <div class="wn-item-details">
-                        <div class="wn-item-title">Offline Icon Saving</div>
-                        <div class="wn-item-desc">Website & shortcut icons are now stored offline as Base64, and dynamically cached by the service worker.</div>
-                    </div>
-                </div>
-                <div class="wn-item">
-                    <div class="wn-item-details">
-                        <div class="wn-item-title">Smooth Menu Animations</div>
-                        <div class="wn-item-desc">Dropdowns and popup menus now slide open and close with elegant glassmorphic micro-animations.</div>
-                    </div>
-                </div>
-                <div class="wn-item">
-                    <div class="wn-item-details">
-                        <div class="wn-item-title">History Duration Filter</div>
-                        <div class="wn-item-desc">Filter suggestions dropdown by 2 days, last week, or forever.</div>
-                    </div>
-                </div>
-                <div class="wn-item">
-                    <div class="wn-item-details">
-                        <div class="wn-item-title">Custom Icons via Link</div>
-                        <div class="wn-item-desc">Enter any custom image URL link to use as a shortcut or app icon.</div>
-                    </div>
-                </div>
-                <div class="wn-item">
-                    <div class="wn-item-details">
-                        <div class="wn-item-title">Title Auto-fetch</div>
-                        <div class="wn-item-desc">Real website titles are automatically fetched in the background when adding new shortcuts.</div>
-                    </div>
-                </div>
+            <button class="wn-update-btn" id="wn-update-available-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Update Available — Refresh now
+            </button>
+            <div class="wn-content" id="wn-content"></div>
+            <div class="wn-footer">
+                <button class="wn-feedback-btn" id="wn-feedback-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Give Feedback
+                </button>
             </div>
         </div>
 
@@ -10167,6 +10328,8 @@
 
         let deferredOfflineInstallPrompt = null;
         let offlineServiceWorkerRegistration = null;
+        let pendingUpdateWorker = null;
+        let applyPendingUpdate = null;
 
         function initOfflineAppSupport() {
             const installBtn = document.getElementById('offline-install-btn');
@@ -10324,7 +10487,8 @@
             const updateBannerText = document.getElementById('update-notify-text');
             const updateBannerRefreshBtn = document.getElementById('update-notify-refresh-btn');
             const updateBannerDismissBtn = document.getElementById('update-notify-dismiss-btn');
-            let pendingUpdateWorker = null;
+            // Use parent scope variables
+            pendingUpdateWorker = null;
 
             function showUpdateBanner(versionLabel, timeLabel) {
                 if (!updateBanner) return;
@@ -10348,12 +10512,12 @@
                 updateBanner.classList.remove('visible');
             }
 
-            function applyPendingUpdate() {
+            applyPendingUpdate = function() {
                 if (pendingUpdateWorker) {
                     pendingUpdateWorker.postMessage({ type: 'SKIP_WAITING' });
                 }
                 window.location.reload();
-            }
+            };
 
             updateBannerRefreshBtn?.addEventListener('click', () => applyPendingUpdate());
             updateBannerDismissBtn?.addEventListener('click', () => hideUpdateBanner());
@@ -13352,14 +13516,18 @@
                         }
                         
                         const lines = rawMsg.split('\n');
-                        let title = lines[0].trim();
-                        title = title.replace(/^(feat|fix|chore|refactor|style|docs|test|ci)\s*(\([^)]+\))?\s*:\s*/i, '');
+                        const rawTitle = lines[0].trim();
+                        const typeMatch = rawTitle.match(/^(feat|fix|chore|refactor|style|docs|test|ci|improve|perf)\b/i);
+                        const type = typeMatch ? typeMatch[1].toLowerCase() : 'other';
+
+                        let title = rawTitle.replace(/^(feat|fix|chore|refactor|style|docs|test|ci|improve|perf)\s*(\([^)]+\))?\s*:\s*/i, '');
                         title = title.charAt(0).toUpperCase() + title.slice(1);
 
                         const desc = lines.slice(1).join('\n').trim();
                         
                         cleanCommits.push({
                             sha: c.sha,
+                            type: type,
                             title: title,
                             desc: desc,
                             date: new Date(c.commit.author.date).toLocaleDateString(undefined, {
@@ -13388,57 +13556,51 @@
         }
 
         async function renderWhatsNewDropdownContent() {
-            const container = document.querySelector('#whats-new-dropdown .wn-content');
+            const container = document.getElementById('wn-content');
             if (!container) return;
             container.innerHTML = '<div style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 24px 0;">Loading updates...</div>';
-            
+
             const limit = parseInt(ProfileManager.getItem('whats_new_limit') || '8', 10);
             const githubCommits = await fetchGitHubCommits(limit);
             const allUpdates = [...WHATS_NEW_MANUAL_UPDATES, ...githubCommits].slice(0, limit);
-            
+
             if (allUpdates.length === 0) {
                 container.innerHTML = '<div style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 24px 0;">No updates found.</div>';
                 return;
             }
-            
+
             container.innerHTML = '';
-            allUpdates.forEach((item, index) => {
+            allUpdates.forEach(item => {
                 const itemEl = document.createElement('div');
                 itemEl.className = 'wn-item';
-                
-                let badgeHtml = '';
-                if (index === 0) {
-                    badgeHtml = `<span class="wn-item-badge">Latest</span>`;
-                }
-                
-                let descHtml = '';
+
+                // Determine badge type from raw commit type stored in item
+                let badgeClass = 'wn-badge-other';
+                let badgeLabel = 'UPDATE';
+                const t = (item.type || '').toLowerCase();
+                if (t === 'feat' || t === 'feature') { badgeClass = 'wn-badge-feat'; badgeLabel = 'FEATURES'; }
+                else if (t === 'fix') { badgeClass = 'wn-badge-fix'; badgeLabel = 'BUG FIXES'; }
+                else if (t === 'style' || t === 'refactor') { badgeClass = 'wn-badge-style'; badgeLabel = 'STYLE'; }
+                else if (t === 'improve' || t === 'perf' || t === 'chore') { badgeClass = 'wn-badge-improve'; badgeLabel = 'IMPROVEMENTS'; }
+
+                // Parse desc into bullet lines
+                let bulletsHtml = '';
                 if (item.desc) {
-                    descHtml = `<div class="wn-item-desc">${item.desc.replace(/\n/g, '<br>')}</div>`;
+                    const lines = item.desc.split(/\n/).map(l => l.replace(/^[-*]\s*/, '').trim()).filter(Boolean);
+                    if (lines.length > 0) {
+                        bulletsHtml = `<div class="wn-item-bullets">${lines.map(l => `<div class="wn-item-bullet"><span>${l}</span></div>`).join('')}</div>`;
+                    }
                 }
-                
-                let linkHtml = '';
-                if (item.url) {
-                    linkHtml = `
-                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" title="View commit on GitHub" style="color: var(--accent); margin-left: auto; align-self: center; display: flex; align-items: center; opacity: 0.7; transition: opacity 0.15s;" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0.7'">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                <polyline points="15 3 21 3 21 9"></polyline>
-                                <line x1="10" y1="14" x2="21" y2="3"></line>
-                            </svg>
-                        </a>
-                    `;
-                }
-                
+
+                const readMoreHtml = item.url ? `<a class="wn-item-readmore" href="${item.url}" target="_blank" rel="noopener noreferrer">Read More <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : '';
+
                 itemEl.innerHTML = `
-                    ${badgeHtml}
-                    <div class="wn-item-details" style="flex: 1;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                            <div class="wn-item-title">${item.title}</div>
-                            <div style="font-size: 10px; color: var(--text-muted); white-space: nowrap;">${item.date || ''}</div>
-                        </div>
-                        ${descHtml}
+                    <div class="wn-item-top">
+                        <span class="wn-item-badge ${badgeClass}">${badgeLabel}</span>
+                        <span class="wn-item-title">${item.title}</span>
                     </div>
-                    ${linkHtml}
+                    ${bulletsHtml}
+                    ${(readMoreHtml || item.date) ? `<div class="wn-item-footer">${readMoreHtml}<span class="wn-item-date">${item.date || ''}</span></div>` : ''}
                 `;
                 container.appendChild(itemEl);
             });
@@ -13447,20 +13609,15 @@
         async function checkWhatsNewNotifications() {
             const badge = document.getElementById('whats-new-badge');
             if (!badge) return;
-            
+
             const limit = parseInt(ProfileManager.getItem('whats_new_limit') || '8', 10);
             const githubCommits = await fetchGitHubCommits(limit);
             const allUpdates = [...WHATS_NEW_MANUAL_UPDATES, ...githubCommits];
-            
+
             if (allUpdates.length > 0) {
                 const latestSha = allUpdates[0].sha || allUpdates[0].title;
                 const lastSeenSha = ProfileManager.getItem('whats_new_last_seen_sha');
-                
-                if (lastSeenSha !== latestSha) {
-                    badge.style.display = 'block';
-                } else {
-                    badge.style.display = 'none';
-                }
+                badge.style.display = lastSeenSha !== latestSha ? 'block' : 'none';
             }
         }
 
@@ -13468,22 +13625,68 @@
             const dropdown = document.getElementById('whats-new-dropdown');
             const toggleBtn = document.getElementById('whats-new-toggle');
             const badge = document.getElementById('whats-new-badge');
+            const auToggle = document.getElementById('wn-auto-update-toggle');
+            const auLabel = document.getElementById('wn-au-state-label');
+            const updateAvailableBtn = document.getElementById('wn-update-available-btn');
+            const feedbackBtn = document.getElementById('wn-feedback-btn');
             if (!dropdown || !toggleBtn) return;
-            
+
+            // Sync auto-update toggle state
+            const syncAutoUpdateToggle = () => {
+                const enabled = ProfileManager.getItem('offline_auto_update') !== '0';
+                if (auToggle) auToggle.checked = enabled;
+                if (auLabel) {
+                    auLabel.textContent = enabled ? 'On' : 'Off';
+                    auLabel.style.color = enabled ? '#22c55e' : 'var(--text-muted)';
+                }
+                if (typeof window.__wnShowUpdateBtn === 'function') {
+                    window.__wnShowUpdateBtn(Boolean(pendingUpdateWorker) && !enabled);
+                }
+            };
+            syncAutoUpdateToggle();
+
+            auToggle?.addEventListener('change', () => {
+                const val = auToggle.checked ? '1' : '0';
+                ProfileManager.setItem('offline_auto_update', val);
+                // also sync the Customize Panel radios
+                document.querySelectorAll('input[name="offline_auto_update"]').forEach(r => { r.checked = r.value === val; });
+                syncAutoUpdateToggle();
+                if (auToggle.checked && pendingUpdateWorker) {
+                    if (typeof applyPendingUpdate === 'function') applyPendingUpdate();
+                }
+            });
+
+            // Also sync when Customize Panel radios change
+            document.querySelectorAll('input[name="offline_auto_update"]').forEach(r => {
+                r.addEventListener('change', () => syncAutoUpdateToggle());
+            });
+
+            // Expose a function to show/hide the green Update Available button inside the dropdown
+            window.__wnShowUpdateBtn = (show) => {
+                if (updateAvailableBtn) updateAvailableBtn.classList.toggle('visible', show);
+            };
+            updateAvailableBtn?.addEventListener('click', () => {
+                if (typeof applyPendingUpdate === 'function') applyPendingUpdate();
+            });
+
+            feedbackBtn?.addEventListener('click', () => {
+                window.open('https://github.com/naitiktuxx/ThinkPage/issues', '_blank', 'noopener');
+            });
+
             checkWhatsNewNotifications();
-            
+
             toggleBtn.onclick = async e => {
                 e.stopPropagation();
                 const opening = !dropdown.classList.contains('open');
                 if (opening) {
                     closeAppsDropdown();
                     closeProfileDropdown();
-                    
+
                     dropdown.classList.add('open');
                     runOpenAnimation(dropdown, 280);
-                    
+
                     await renderWhatsNewDropdownContent();
-                    
+
                     const limit = parseInt(ProfileManager.getItem('whats_new_limit') || '8', 10);
                     const githubCommits = await fetchGitHubCommits(limit);
                     const allUpdates = [...WHATS_NEW_MANUAL_UPDATES, ...githubCommits];
