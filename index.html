@@ -10655,7 +10655,7 @@
                         offlineServiceWorkerRegistration = reg;
 
                         // First-ever install: SW needs to skipWaiting so it can control the page
-                        if (!navigator.serviceWorker.controller) {
+                        if (!navigator.serviceWorker.controller && !reg.active) {
                             if (reg.installing) {
                                 reg.installing.postMessage({ type: 'SKIP_WAITING' });
                             } else if (reg.waiting) {
@@ -10686,7 +10686,7 @@
                             const worker = reg.installing;
                             if (!worker) return;
                             worker.addEventListener('statechange', () => {
-                                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                                if (worker.state === 'installed' && reg.active) {
                                     if (isAutoUpdateEnabled()) {
                                         // Auto-update ON: activate immediately, controllerchange will reload
                                         worker.postMessage({ type: 'SKIP_WAITING' });
@@ -10707,7 +10707,7 @@
                         });
 
                         // If there's already a waiting worker on load (e.g. tab was open)
-                        if (reg.waiting && navigator.serviceWorker.controller) {
+                        if (reg.waiting && reg.active) {
                             if (isAutoUpdateEnabled()) {
                                 // Auto-update ON: activate immediately
                                 reg.waiting.postMessage({ type: 'SKIP_WAITING' });
