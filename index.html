@@ -1828,18 +1828,20 @@
             justify-content: space-between;
             gap: 16px;
             background: var(--panel-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--panel-border);
-            border-radius: 14px;
-            padding: 10px 14px;
-            box-shadow: var(--shadow-strong);
+            border-radius: 16px;
+            padding: 12px 18px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                        0 0 0 1px rgba(0, 0, 0, 0.05);
             z-index: 9999;
-            min-width: 280px;
+            min-width: 320px;
             max-width: calc(100vw - 48px);
             opacity: 0;
             pointer-events: none;
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
         }
 
         #update-notify-banner.visible {
@@ -1851,15 +1853,33 @@
         #update-notify-content {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 13px;
+            gap: 12px;
+            font-size: 13.5px;
             font-weight: 500;
             color: var(--text-secondary);
         }
 
-        #update-notify-content svg {
-            flex-shrink: 0;
+        .un-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--accent) 12%, transparent);
+            border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
             color: var(--accent);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .un-icon-container svg {
+            animation: un-spin 8s linear infinite;
+        }
+
+        @keyframes un-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         #update-notify-text {
@@ -1868,27 +1888,46 @@
             gap: 2px;
         }
 
+        .un-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 13.5px;
+        }
+
+        .un-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
         #update-notify-text .un-version {
             font-size: 11px;
             color: var(--text-muted);
             font-weight: 400;
+            margin-top: 1px;
         }
 
         #update-notify-refresh-btn {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, #000));
             color: #fff;
             border: none;
-            border-radius: 8px;
-            padding: 6px 14px;
-            font-size: 12px;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 12.5px;
             font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: opacity 0.15s;
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         #update-notify-refresh-btn:hover {
-            opacity: 0.85;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 35%, transparent);
+            filter: brightness(1.05);
+        }
+
+        #update-notify-refresh-btn:active {
+            transform: translateY(0) scale(0.97);
         }
 
         #update-notify-dismiss-btn {
@@ -1898,13 +1937,15 @@
             color: var(--text-muted);
             display: flex;
             align-items: center;
-            padding: 4px;
-            border-radius: 6px;
-            transition: color 0.15s;
+            justify-content: center;
+            padding: 6px;
+            border-radius: 50%;
+            transition: background 0.2s, color 0.2s;
         }
 
         #update-notify-dismiss-btn:hover {
-            color: var(--text-secondary);
+            background: var(--hover-bg);
+            color: var(--text-primary);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -5107,14 +5148,10 @@
                 </button>
             </div>
             <div class="wn-content" id="wn-content"></div>
-            <div class="wn-footer" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class="wn-footer" style="display: flex; justify-content: center; align-items: center; width: 100%;">
                 <button class="wn-feedback-btn" id="wn-feedback-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                     Give Feedback
-                </button>
-                <button class="wn-feedback-btn" id="wn-test-update-btn" style="color: var(--accent); display: flex; align-items: center; gap: 4px;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                    Test Update UI
                 </button>
             </div>
         </div>
@@ -6106,6 +6143,10 @@
             <button class="upload-btn secondary" id="reset-system-btn" type="button" style="width: 100%; border-color: var(--text-error); color: var(--text-error); background: transparent; font-weight: 600;">
                 Reset All Settings & History
             </button>
+            <button class="upload-btn secondary" id="wn-test-update-btn" type="button" style="width: 100%; margin-top: 12px; border-color: var(--accent); color: var(--accent); background: transparent; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Test Update UI
+            </button>
         </div>
     </div>
 
@@ -6147,8 +6188,13 @@
 
     <div id="update-notify-banner" role="alert" aria-live="polite">
         <div id="update-notify-content">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-            <span id="update-notify-text">New update available</span>
+            <div class="un-icon-container">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            </div>
+            <div id="update-notify-text">
+                <span class="un-title">New update available</span>
+                <span class="un-subtitle">A fresh version of ThinkPage is ready.</span>
+            </div>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
             <button id="update-notify-refresh-btn">Refresh now</button>
@@ -10560,7 +10606,10 @@
             function showUpdateBanner(versionLabel, timeLabel) {
                 if (!updateBanner) return;
                 if (updateBannerText) {
-                    updateBannerText.innerHTML = `New update available &mdash; <button style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;padding:0;" id="update-notify-inline-btn">click to refresh</button>`;
+                    updateBannerText.innerHTML = `
+                        <span class="un-title">New update available</span>
+                        <span class="un-subtitle">Click <button style="background:none;border:none;color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;" id="update-notify-inline-btn">refresh</button> to update features</span>
+                    `;
                     if (versionLabel || timeLabel) {
                         const meta = document.createElement('span');
                         meta.className = 'un-version';
@@ -13878,7 +13927,10 @@
                 const updateBannerText = document.getElementById('update-notify-text');
                 if (updateBanner) {
                     if (updateBannerText) {
-                        updateBannerText.innerHTML = `New update available &mdash; <button style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;" id="update-notify-inline-btn">click to refresh</button>`;
+                        updateBannerText.innerHTML = `
+                            <span class="un-title">New update available</span>
+                            <span class="un-subtitle">Click <button style="background:none;border:none;color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;" id="update-notify-inline-btn">refresh</button> to update features</span>
+                        `;
                         
                         const meta = document.createElement('span');
                         meta.className = 'un-version';
