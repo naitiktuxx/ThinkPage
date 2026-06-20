@@ -167,4 +167,4 @@ If you contribute:
 1. Keep changes focused and documented.
 2. Validate offline behavior after modifications to `sw.js`.
 3. Test profiles + export/import flows.
-
+5. connect with me on X :- @naitiktux
