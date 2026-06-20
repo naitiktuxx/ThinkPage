@@ -346,7 +346,7 @@
             box-shadow: var(--shadow-soft);
             z-index: 200;
             display: none;
-            transform-origin: top right;
+            transform-origin: calc(100% - 54px) 0;
         }
 
         .apps-dropdown.open {
@@ -1456,12 +1456,12 @@
             }
         }
 
-        .apps-dropdown.open.animate {
-            animation: slideDownFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        body.animations-on .apps-dropdown.open.animate {
+            animation: wnPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .apps-dropdown.closing.animate {
-            animation: fadeOut 0.12s cubic-bezier(0.7, 0, 1, 0.84) forwards;
+        body.animations-on .apps-dropdown.closing.animate {
+            animation: wnPopOut 0.18s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         .apps-dropdown.open.animate .app-item {
@@ -1530,11 +1530,11 @@
         }
 
         body.animations-on .profile-dropdown.open.animate {
-            animation: slideDownFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: wnPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         body.animations-on .profile-dropdown.closing.animate {
-            animation: fadeOut 0.12s cubic-bezier(0.7, 0, 1, 0.84) forwards;
+            animation: wnPopOut 0.18s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         body.animations-on .picker-menu.open.animate {
@@ -4198,7 +4198,7 @@
             z-index: 200;
             display: none;
             flex-direction: column;
-            transform-origin: top right;
+            transform-origin: calc(100% - 16px) 0;
             transition: opacity 0.2s, transform 0.2s;
             opacity: 0;
             transform: scale(0.95);
