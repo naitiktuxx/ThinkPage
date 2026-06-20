@@ -588,10 +588,48 @@
         }
 
         .wn-item-bullets {
-            display: flex;
+            display: none;
             flex-direction: column;
             gap: 2px;
             padding-left: 4px;
+            margin-top: 4px;
+        }
+
+        .wn-item.expanded .wn-item-bullets {
+            display: flex;
+        }
+
+        .wn-item-expand-trigger {
+            background: none;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 0;
+            opacity: 0.85;
+            transition: opacity 0.15s;
+        }
+
+        .wn-item-expand-trigger:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .wn-item-github-link {
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            transition: color 0.15s;
+        }
+
+        .wn-item-github-link:hover {
+            color: var(--text-secondary);
+        }
+
+        @keyframes wn-progress-shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .wn-item-bullet {
@@ -614,22 +652,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 2px;
+            margin-top: 4px;
         }
-
-        .wn-item-readmore {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--accent);
-            text-decoration: none;
-            opacity: 0.8;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            transition: opacity 0.15s;
-        }
-
-        .wn-item-readmore:hover { opacity: 1; }
 
         .wn-item-date {
             font-size: 10px;
@@ -5066,6 +5090,22 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Update Available — Refresh now
             </button>
+            <div id="wn-update-progress-container" style="display: none; flex-direction: column; gap: 8px; margin-bottom: 12px; padding: 12px; background: var(--btn-bg); border-radius: 10px; border: 1px solid var(--panel-border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                    <span id="wn-progress-status" style="font-weight: 600; color: var(--text-primary);">Updating...</span>
+                    <span id="wn-progress-percent" style="font-weight: 700; color: #22c55e;">0%</span>
+                </div>
+                <div style="width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; position: relative;">
+                    <div id="wn-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #16a34a, #22c55e); border-radius: 3px; transition: width 0.2s ease-out; position: relative;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent); animation: wn-progress-shine 1.5s infinite;"></div>
+                    </div>
+                </div>
+                <div id="wn-progress-logs" style="font-size: 10px; color: var(--text-muted); font-family: monospace; max-height: 60px; overflow-y: auto; line-height: 1.4; margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--panel-border); text-align: left;">
+                </div>
+                <button id="wn-update-restart-btn" style="display: none; width: 100%; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; border-radius: 8px; padding: 8px; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 4px;">
+                    Restart now to apply
+                </button>
+            </div>
             <div class="wn-content" id="wn-content"></div>
             <div class="wn-footer">
                 <button class="wn-feedback-btn" id="wn-feedback-btn">
@@ -13607,14 +13647,16 @@
 
                 // Parse desc into bullet lines
                 let bulletsHtml = '';
+                let expandBtnHtml = '';
                 if (item.desc) {
                     const lines = item.desc.split(/\n/).map(l => l.replace(/^[-*]\s*/, '').trim()).filter(Boolean);
                     if (lines.length > 0) {
                         bulletsHtml = `<div class="wn-item-bullets">${lines.map(l => `<div class="wn-item-bullet"><span>${l}</span></div>`).join('')}</div>`;
+                        expandBtnHtml = `<button class="wn-item-expand-trigger" onclick="this.closest('.wn-item').classList.toggle('expanded'); this.textContent = this.closest('.wn-item').classList.contains('expanded') ? 'Read Less' : 'Read More'">Read More</button>`;
                     }
                 }
 
-                const readMoreHtml = item.url ? `<a class="wn-item-readmore" href="${item.url}" target="_blank" rel="noopener noreferrer">Read More <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : '';
+                const githubLinkHtml = item.url ? `<a class="wn-item-github-link" href="${item.url}" target="_blank" rel="noopener noreferrer" title="View commit on GitHub"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : '';
 
                 itemEl.innerHTML = `
                     <div class="wn-item-top">
@@ -13622,7 +13664,7 @@
                         <span class="wn-item-title">${item.title}</span>
                     </div>
                     ${bulletsHtml}
-                    ${(readMoreHtml || item.date) ? `<div class="wn-item-footer">${readMoreHtml}<span class="wn-item-date">${item.date || ''}</span></div>` : ''}
+                    ${(expandBtnHtml || item.date) ? `<div class="wn-item-footer">${expandBtnHtml || '<span></span>'}<div style="display: flex; align-items: center; gap: 8px;">${githubLinkHtml}<span class="wn-item-date">${item.date || ''}</span></div></div>` : ''}
                 `;
                 container.appendChild(itemEl);
             });
@@ -13682,8 +13724,93 @@
             window.__wnShowUpdateBtn = (show) => {
                 if (updateAvailableBtn) updateAvailableBtn.classList.toggle('visible', show);
             };
-            updateAvailableBtn?.addEventListener('click', () => {
-                if (typeof applyPendingUpdate === 'function') applyPendingUpdate();
+            updateAvailableBtn?.addEventListener('click', async () => {
+                // Hide green update button
+                updateAvailableBtn.classList.remove('visible');
+
+                // Show progress panel
+                const progressContainer = document.getElementById('wn-update-progress-container');
+                const progressStatus = document.getElementById('wn-progress-status');
+                const progressPercent = document.getElementById('wn-progress-percent');
+                const progressBar = document.getElementById('wn-progress-bar');
+                const progressLogs = document.getElementById('wn-progress-logs');
+                const restartBtn = document.getElementById('wn-update-restart-btn');
+
+                if (progressContainer) progressContainer.style.display = 'flex';
+                if (restartBtn) restartBtn.style.display = 'none';
+
+                if (progressBar) {
+                    progressBar.style.width = '0%';
+                    progressBar.style.background = 'linear-gradient(90deg, #16a34a, #22c55e)';
+                }
+                if (progressPercent) progressPercent.textContent = '0%';
+                if (progressLogs) progressLogs.innerHTML = '';
+
+                let percent = 0;
+                let isDone = false;
+
+                // Progress simulation timer
+                const timer = setInterval(() => {
+                    if (isDone) return;
+                    if (percent < 90) {
+                        percent += Math.floor(Math.random() * 8) + 2;
+                        if (percent > 90) percent = 90;
+                        if (progressBar) progressBar.style.width = `${percent}%`;
+                        if (progressPercent) progressPercent.textContent = `${percent}%`;
+                    }
+                }, 200);
+
+                const log = (msg) => {
+                    if (!progressLogs) return;
+                    const line = document.createElement('div');
+                    line.style.marginBottom = '2px';
+                    line.textContent = `[${new Date().toLocaleTimeString(undefined, {hour12:false})}] ${msg}`;
+                    progressLogs.appendChild(line);
+                    progressLogs.scrollTop = progressLogs.scrollHeight;
+                };
+
+                log('Starting manual update check...');
+                try {
+                    if (typeof updateOfflineCopy !== 'function') {
+                        throw new Error('Update utility is not available.');
+                    }
+                    await updateOfflineCopy({
+                        quiet: true,
+                        onStatus: (msg) => {
+                            log(msg);
+                            if (progressStatus) {
+                                if (msg.toLowerCase().includes('checking')) {
+                                    progressStatus.textContent = 'Checking server...';
+                                } else if (msg.toLowerCase().includes('found') || msg.toLowerCase().includes('refreshing')) {
+                                    progressStatus.textContent = 'Downloading...';
+                                } else if (msg.toLowerCase().includes('fetching')) {
+                                    progressStatus.textContent = 'Caching files...';
+                                }
+                            }
+                        }
+                    });
+
+                    isDone = true;
+                    clearInterval(timer);
+                    if (progressBar) progressBar.style.width = '100%';
+                    if (progressPercent) progressPercent.textContent = '100%';
+                    if (progressStatus) progressStatus.textContent = 'Update complete!';
+                    log('Offline copy updated successfully.');
+
+                    if (restartBtn) {
+                        restartBtn.style.display = 'flex';
+                        restartBtn.onclick = () => {
+                            if (typeof applyPendingUpdate === 'function') applyPendingUpdate();
+                        };
+                    }
+                } catch (e) {
+                    isDone = true;
+                    clearInterval(timer);
+                    if (progressStatus) progressStatus.textContent = 'Update failed';
+                    if (progressPercent) progressPercent.textContent = '';
+                    if (progressBar) progressBar.style.background = '#ef4444';
+                    log(`Error: ${e.message || e}`);
+                }
             });
 
             feedbackBtn?.addEventListener('click', () => {
