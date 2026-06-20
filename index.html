@@ -5124,7 +5124,7 @@
                             <span class="wn-mini-slider"></span>
                         </label>
                     </div>
-                    <span class="wn-version" id="wn-version-label">v1.2.0</span>
+                    <span class="wn-version" id="wn-version-label">v1.0.0</span>
                 </div>
             </div>
             <button class="wn-update-btn" id="wn-update-available-btn">
@@ -10421,6 +10421,9 @@
         let offlineServiceWorkerRegistration = null;
         let pendingUpdateWorker = null;
         let applyPendingUpdate = null;
+        // Tracks the version computed the last time we detected an update,
+        // so we know what to record as "installed" once it's actually applied.
+        let lastKnownAvailableVersion = null;
 
         window.syncSWAutoUpdatePreference = async () => {
             const enabled = ProfileManager.getItem('offline_auto_update') !== '0';
@@ -10646,6 +10649,12 @@
             }
 
             applyPendingUpdate = function() {
+                // The update is actually being applied now — record the version
+                // we last computed as the new "installed" version so the badge
+                // reflects it on next load, even with auto-update off.
+                if (lastKnownAvailableVersion) {
+                    try { ProfileManager.setItem('installed_version', lastKnownAvailableVersion); } catch (e) {}
+                }
                 if (pendingUpdateWorker) {
                     pendingUpdateWorker.postMessage({ type: 'SKIP_WAITING' });
                     // reload will be triggered by the controllerchange listener
@@ -10705,18 +10714,26 @@
                         reg.addEventListener('updatefound', () => {
                             const worker = reg.installing;
                             if (!worker) return;
-                            worker.addEventListener('statechange', () => {
+                            worker.addEventListener('statechange', async () => {
                                 if (worker.state === 'installed' && reg.active) {
+                                    const availableVersion = await getAvailableUpdateVersion();
+                                    if (availableVersion) lastKnownAvailableVersion = availableVersion;
+
                                     if (isAutoUpdateEnabled()) {
-                                        // Auto-update ON: activate immediately, controllerchange will reload
+                                        // Auto-update ON: activate immediately, controllerchange will reload.
+                                        // Record the version now since it's being applied right away.
+                                        if (availableVersion) {
+                                            try { ProfileManager.setItem('installed_version', availableVersion); } catch (e) {}
+                                        }
                                         worker.postMessage({ type: 'SKIP_WAITING' });
                                     } else {
-                                        // Auto-update OFF: store worker and show banner
+                                        // Auto-update OFF: store worker and show banner.
+                                        // Installed version stays as-is until the user applies the update.
                                         pendingUpdateWorker = worker;
                                         const now = new Date();
                                         const timeLabel = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
                                         const dateLabel = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-                                        showUpdateBanner(null, `${dateLabel}, ${timeLabel}`);
+                                        showUpdateBanner(availableVersion ? `v${availableVersion}` : null, `${dateLabel}, ${timeLabel}`);
                                         // Also show green button in What's New dropdown
                                         if (typeof window.__wnShowUpdateBtn === 'function') {
                                             window.__wnShowUpdateBtn(true);
@@ -10728,20 +10745,27 @@
 
                         // If there's already a waiting worker on load (e.g. tab was open)
                         if (reg.waiting && reg.active) {
-                            if (isAutoUpdateEnabled()) {
-                                // Auto-update ON: activate immediately
-                                reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-                            } else {
-                                pendingUpdateWorker = reg.waiting;
-                                const now = new Date();
-                                const timeLabel = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-                                const dateLabel = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-                                showUpdateBanner(null, `${dateLabel}, ${timeLabel}`);
-                                // Also show green button in What's New dropdown
-                                if (typeof window.__wnShowUpdateBtn === 'function') {
-                                    window.__wnShowUpdateBtn(true);
+                            getAvailableUpdateVersion().then(availableVersion => {
+                                if (availableVersion) lastKnownAvailableVersion = availableVersion;
+
+                                if (isAutoUpdateEnabled()) {
+                                    // Auto-update ON: activate immediately, record version now
+                                    if (availableVersion) {
+                                        try { ProfileManager.setItem('installed_version', availableVersion); } catch (e) {}
+                                    }
+                                    reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                                } else {
+                                    pendingUpdateWorker = reg.waiting;
+                                    const now = new Date();
+                                    const timeLabel = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+                                    const dateLabel = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                                    showUpdateBanner(availableVersion ? `v${availableVersion}` : null, `${dateLabel}, ${timeLabel}`);
+                                    // Also show green button in What's New dropdown
+                                    if (typeof window.__wnShowUpdateBtn === 'function') {
+                                        window.__wnShowUpdateBtn(true);
+                                    }
                                 }
-                            }
+                            });
                         }
                     })
                     .catch(err => {
@@ -13653,6 +13677,94 @@
             });
         })();
 
+        // ── Dynamic SemVer Auto-Increment ───────────────────────────
+        // v1.0.0 is anchored to BUILD_COMMIT_SHA_BASELINE — the commit
+        // where the project was first deployed to GitHub. Every commit
+        // made *after* that one is walked (oldest -> newest) through
+        // calculateVersionFromCommits() to compute the current/available
+        // version shown in the update banner & progress logs.
+        //
+        // IMPORTANT: after each future release, update
+        // BUILD_COMMIT_SHA_BASELINE to the SHA of the latest commit at that
+        // time (and bump BUILD_VERSION_BASELINE to match the version you
+        // shipped), so future increments count from the right point.
+        const BUILD_VERSION_BASELINE = "1.0.0";
+        const BUILD_COMMIT_SHA_BASELINE = "c8e270c592f3718c60c31e58ebf3979f28d4bb1b";
+
+        function calculateVersionFromCommits(commits, baselineSha = BUILD_COMMIT_SHA_BASELINE) {
+            const parts = BUILD_VERSION_BASELINE.split('.').map(Number);
+            let major = parts[0], minor = parts[1], patch = parts[2];
+
+            // Commits arrive newest-first from the GitHub API; process them
+            // oldest -> newest so bumps apply in the order they happened.
+            const chronCommits = [...commits].reverse();
+
+            let reachedBaseline = false;
+            for (const commit of chronCommits) {
+                // Only increment for commits that came AFTER the baseline
+                if (commit.sha === baselineSha) {
+                    reachedBaseline = true;
+                    continue;
+                }
+                if (!reachedBaseline && baselineSha) {
+                    // Haven't reached the baseline commit yet — it's older, skip it
+                    continue;
+                }
+
+                const t = (commit.type || '').toLowerCase();
+                if (t === 'feat' || t === 'feature') {
+                    major += 1;
+                    minor = 0;
+                    patch = 0;
+                } else if (t === 'fix') {
+                    patch += 1;
+                } else if (['style', 'refactor', 'chore', 'improve', 'perf'].includes(t)) {
+                    minor += 1;
+                    patch = 0;
+                } else {
+                    patch += 1;
+                }
+            }
+            return `${major}.${minor}.${patch}`;
+        }
+
+        // Lightweight, unfiltered commit fetch used only for version-number
+        // math (the "What's New" list below applies its own curation on top
+        // of a separate fetch, so noisy commits like "docs:" or merges don't
+        // get hidden from the SemVer count here).
+        async function fetchCommitsForVersioning(limit = 100) {
+            try {
+                const resp = await fetch(`https://api.github.com/repos/naitiktuxx/ThinkPage/commits?per_page=${limit}`, {
+                    signal: AbortSignal.timeout(6000)
+                });
+                if (!resp.ok) return [];
+                const commits = await resp.json();
+                return commits.map(c => {
+                    const rawTitle = (c.commit.message || '').split('\n')[0].trim();
+                    const typeMatch = rawTitle.match(/^(feat|fix|chore|refactor|style|docs|test|ci|improve|perf)\b/i);
+                    return {
+                        sha: c.sha,
+                        type: typeMatch ? typeMatch[1].toLowerCase() : 'other'
+                    };
+                });
+            } catch (e) {
+                console.warn('Failed to fetch commits for version calculation:', e);
+                return [];
+            }
+        }
+
+        // Returns the computed "available update" version string (e.g. "1.3.1"),
+        // or null if it couldn't be determined (offline, API error, etc.)
+        async function getAvailableUpdateVersion() {
+            try {
+                const commits = await fetchCommitsForVersioning();
+                if (commits.length === 0) return null;
+                return calculateVersionFromCommits(commits);
+            } catch (e) {
+                return null;
+            }
+        }
+
         const WHATS_NEW_MANUAL_UPDATES = [];
 
         async function fetchGitHubCommits(limit = 8) {
@@ -13794,6 +13906,19 @@
             const feedbackBtn = document.getElementById('wn-feedback-btn');
             if (!dropdown || !toggleBtn) return;
 
+            // The version badge shows the version that's actually applied on
+            // THIS device — i.e. the version as of the last update this
+            // browser accepted. It only changes when an update is actually
+            // applied (auto-update ON, or the user manually refreshes). If
+            // auto-update is OFF and an update is pending, this stays put —
+            // the live/available version is shown separately in the update
+            // banner instead, exactly like normal desktop software.
+            const versionLabelEl = document.getElementById('wn-version-label');
+            if (versionLabelEl) {
+                const installedVersion = ProfileManager.getItem('installed_version') || BUILD_VERSION_BASELINE;
+                versionLabelEl.textContent = `v${installedVersion}`;
+            }
+
             // Sync auto-update toggle state
             if (typeof window.syncAllAutoUpdateControls === 'function') {
                 window.syncAllAutoUpdateControls();
@@ -13873,6 +13998,14 @@
                     if (typeof updateOfflineCopy !== 'function') {
                         throw new Error('Update utility is not available.');
                     }
+
+                    getAvailableUpdateVersion().then(availableVersion => {
+                        if (availableVersion) {
+                            lastKnownAvailableVersion = availableVersion;
+                            log(`Available update version: v${availableVersion}`);
+                        }
+                    });
+
                     await updateOfflineCopy({
                         quiet: true,
                         onStatus: (msg) => {
