@@ -10331,6 +10331,24 @@
         let pendingUpdateWorker = null;
         let applyPendingUpdate = null;
 
+        window.syncAllAutoUpdateControls = () => {
+            const enabled = ProfileManager.getItem('offline_auto_update') !== '0';
+            const radios = document.querySelectorAll('input[name="offline_auto_update"]');
+            radios.forEach(radio => {
+                radio.checked = radio.value === (enabled ? '1' : '0');
+            });
+            const auToggle = document.getElementById('wn-auto-update-toggle');
+            if (auToggle) auToggle.checked = enabled;
+            const auLabel = document.getElementById('wn-au-state-label');
+            if (auLabel) {
+                auLabel.textContent = enabled ? 'On' : 'Off';
+                auLabel.style.color = enabled ? '#22c55e' : 'var(--text-muted)';
+            }
+            if (typeof window.__wnShowUpdateBtn === 'function') {
+                window.__wnShowUpdateBtn(Boolean(pendingUpdateWorker) && !enabled);
+            }
+        };
+
         function initOfflineAppSupport() {
             const installBtn = document.getElementById('offline-install-btn');
             const updateBtn = document.getElementById('offline-update-btn');
@@ -10364,6 +10382,10 @@
                 radio.addEventListener('change', event => {
                     if (event.target.checked) {
                         ProfileManager.setItem('offline_auto_update', event.target.value);
+                        window.syncAllAutoUpdateControls();
+                        if (event.target.value === '1' && pendingUpdateWorker) {
+                            if (typeof applyPendingUpdate === 'function') applyPendingUpdate();
+                        }
                     }
                 });
             });
@@ -13632,25 +13654,16 @@
             if (!dropdown || !toggleBtn) return;
 
             // Sync auto-update toggle state
-            const syncAutoUpdateToggle = () => {
-                const enabled = ProfileManager.getItem('offline_auto_update') !== '0';
-                if (auToggle) auToggle.checked = enabled;
-                if (auLabel) {
-                    auLabel.textContent = enabled ? 'On' : 'Off';
-                    auLabel.style.color = enabled ? '#22c55e' : 'var(--text-muted)';
-                }
-                if (typeof window.__wnShowUpdateBtn === 'function') {
-                    window.__wnShowUpdateBtn(Boolean(pendingUpdateWorker) && !enabled);
-                }
-            };
-            syncAutoUpdateToggle();
+            if (typeof window.syncAllAutoUpdateControls === 'function') {
+                window.syncAllAutoUpdateControls();
+            }
 
             auToggle?.addEventListener('change', () => {
                 const val = auToggle.checked ? '1' : '0';
                 ProfileManager.setItem('offline_auto_update', val);
-                // also sync the Customize Panel radios
-                document.querySelectorAll('input[name="offline_auto_update"]').forEach(r => { r.checked = r.value === val; });
-                syncAutoUpdateToggle();
+                if (typeof window.syncAllAutoUpdateControls === 'function') {
+                    window.syncAllAutoUpdateControls();
+                }
                 if (auToggle.checked && pendingUpdateWorker) {
                     if (typeof applyPendingUpdate === 'function') applyPendingUpdate();
                 }
@@ -13658,7 +13671,11 @@
 
             // Also sync when Customize Panel radios change
             document.querySelectorAll('input[name="offline_auto_update"]').forEach(r => {
-                r.addEventListener('change', () => syncAutoUpdateToggle());
+                r.addEventListener('change', () => {
+                    if (typeof window.syncAllAutoUpdateControls === 'function') {
+                        window.syncAllAutoUpdateControls();
+                    }
+                });
             });
 
             // Expose a function to show/hide the green Update Available button inside the dropdown
