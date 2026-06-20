@@ -12,7 +12,6 @@ const MAX_RUNTIME_ITEMS = 80;
 self.addEventListener('install', event => {
   event.waitUntil(
     cacheAppShell()
-      .then(() => self.skipWaiting())
   );
 });
 

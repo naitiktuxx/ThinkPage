@@ -10582,19 +10582,36 @@
             applyPendingUpdate = function() {
                 if (pendingUpdateWorker) {
                     pendingUpdateWorker.postMessage({ type: 'SKIP_WAITING' });
+                    // reload will be triggered by the controllerchange listener
+                } else {
+                    // No waiting worker — just reload
+                    window.location.reload();
                 }
-                window.location.reload();
             };
 
             updateBannerRefreshBtn?.addEventListener('click', () => applyPendingUpdate());
             updateBannerDismissBtn?.addEventListener('click', () => hideUpdateBanner());
 
             window.addEventListener('load', () => {
+                // ── Reload page when new SW takes control ──
+                let refreshingFromUpdate = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshingFromUpdate) return;
+                    refreshingFromUpdate = true;
+                    window.location.reload();
+                });
+
                 navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
                     .then(reg => {
                         offlineServiceWorkerRegistration = reg;
 
+                        // First-ever install: SW needs to skipWaiting so it can control the page
                         if (!navigator.serviceWorker.controller) {
+                            if (reg.installing) {
+                                reg.installing.postMessage({ type: 'SKIP_WAITING' });
+                            } else if (reg.waiting) {
+                                reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                            }
                             navigator.serviceWorker.ready.then(() => {
                                 if (typeof showToast === 'function') {
                                     showToast('Saved for offline use', 2500);
@@ -10622,11 +10639,8 @@
                             worker.addEventListener('statechange', () => {
                                 if (worker.state === 'installed' && navigator.serviceWorker.controller) {
                                     if (isAutoUpdateEnabled()) {
-                                        // Auto-update ON: activate immediately and reload
+                                        // Auto-update ON: activate immediately, controllerchange will reload
                                         worker.postMessage({ type: 'SKIP_WAITING' });
-                                        if (typeof showToast === 'function') {
-                                            showToast('Updated to latest version', 2500);
-                                        }
                                     } else {
                                         // Auto-update OFF: store worker and show banner
                                         pendingUpdateWorker = worker;
@@ -10634,6 +10648,10 @@
                                         const timeLabel = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
                                         const dateLabel = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
                                         showUpdateBanner(null, `${dateLabel}, ${timeLabel}`);
+                                        // Also show green button in What's New dropdown
+                                        if (typeof window.__wnShowUpdateBtn === 'function') {
+                                            window.__wnShowUpdateBtn(true);
+                                        }
                                     }
                                 }
                             });
@@ -10641,12 +10659,19 @@
 
                         // If there's already a waiting worker on load (e.g. tab was open)
                         if (reg.waiting && navigator.serviceWorker.controller) {
-                            if (!isAutoUpdateEnabled()) {
+                            if (isAutoUpdateEnabled()) {
+                                // Auto-update ON: activate immediately
+                                reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                            } else {
                                 pendingUpdateWorker = reg.waiting;
                                 const now = new Date();
                                 const timeLabel = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
                                 const dateLabel = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
                                 showUpdateBanner(null, `${dateLabel}, ${timeLabel}`);
+                                // Also show green button in What's New dropdown
+                                if (typeof window.__wnShowUpdateBtn === 'function') {
+                                    window.__wnShowUpdateBtn(true);
+                                }
                             }
                         }
                     })
