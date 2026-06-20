@@ -7,14 +7,6 @@ const APP_SHELL = [
   './manifest.webmanifest',
   './app-icon.svg'
 ];
-const RUNTIME_IMAGE_HOSTS = new Set([
-  'images.unsplash.com',
-  'apod.nasa.gov',
-  'www.nasa.gov',
-  'picsum.photos',
-  'fastly.picsum.photos',
-  'www.google.com'
-]);
 const MAX_RUNTIME_ITEMS = 80;
 
 self.addEventListener('install', event => {
@@ -132,7 +124,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  if (request.destination === 'image' && RUNTIME_IMAGE_HOSTS.has(url.hostname)) {
+  if (request.destination === 'image') {
     event.respondWith(handleRuntimeImage(request));
   }
 });

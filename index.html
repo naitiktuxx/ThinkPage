@@ -10930,6 +10930,38 @@
             return null;
         }
 
+        async function fetchImageAsBase64(url) {
+            if (!url) return null;
+            if (url.startsWith('data:')) return url;
+
+            const proxies = [
+                u => u,
+                u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+                u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`
+            ];
+
+            for (const proxyFn of proxies) {
+                try {
+                    const proxiedUrl = proxyFn(url);
+                    const resp = await fetch(proxiedUrl, { signal: AbortSignal.timeout(4000) });
+                    if (resp.ok) {
+                        const blob = await resp.blob();
+                        if (blob && blob.type && !blob.type.includes('html')) {
+                            return await new Promise((resolve, reject) => {
+                                const reader = new FileReader();
+                                reader.onloadend = () => resolve(reader.result);
+                                reader.onerror = reject;
+                                reader.readAsDataURL(blob);
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.warn(`Failed to fetch image: ${url}`, e);
+                }
+            }
+            return null;
+        }
+
         document.getElementById('modal-url').addEventListener('input', e => {
             clearTimeout(dbt); dbt = setTimeout(() => {
                 let u = e.target.value.trim(); if (!u) return;
@@ -10959,7 +10991,7 @@
                 } catch { }
             }, 400);
         });
-        document.getElementById('modal-done').onclick = () => {
+        document.getElementById('modal-done').onclick = async () => {
             let u = document.getElementById('modal-url').value.trim();
             const nm = document.getElementById('modal-name').value.trim();
             if (!u) return;
@@ -10972,6 +11004,30 @@
                 alert('Please enter a valid URL.');
                 return;
             }
+
+            const btnDone = document.getElementById('modal-done');
+            const origText = btnDone.textContent;
+            btnDone.textContent = 'Saving...';
+            btnDone.disabled = true;
+
+            let finalIcon = window.customIconBase64 || null;
+            try {
+                if (finalIcon) {
+                    if (!finalIcon.startsWith('data:')) {
+                        const b64 = await fetchImageAsBase64(finalIcon);
+                        if (b64) finalIcon = b64;
+                    }
+                } else {
+                    const favUrl = fav(u);
+                    const b64 = await fetchImageAsBase64(favUrl);
+                    if (b64) finalIcon = b64;
+                }
+            } catch (err) {
+                console.error("Failed to convert/fetch icon for offline use", err);
+            }
+
+            btnDone.textContent = origText;
+            btnDone.disabled = false;
             
             if (window.modalMode === 'app') {
                 const engine = window.editingAppEngine || getStoredSearchEngine();
@@ -10979,7 +11035,7 @@
                 const nextApp = { 
                     name: nm || host.replace('www.', ''), 
                     url: u,
-                    customIcon: window.customIconBase64 || null
+                    customIcon: finalIcon || null
                 };
                 if (window.editingAppIndex !== null && window.editingAppIndex !== undefined) {
                     apps[window.editingAppIndex] = nextApp;
@@ -11005,14 +11061,14 @@
                     ...existingShortcut, 
                     name: nm || host.replace('www.', ''), 
                     url: u,
-                    customIcon: window.customIconBase64 || null
+                    customIcon: finalIcon || null
                 };
                 if (typeof showToast === 'function') showToast('Shortcut edited');
             } else {
                 s.push({ 
                     name: nm || host.replace('www.', ''), 
                     url: u,
-                    customIcon: window.customIconBase64 || null
+                    customIcon: finalIcon || null
                 });
                 if (typeof showToast === 'function') showToast('Shortcut added');
             }
