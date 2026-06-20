@@ -5107,10 +5107,14 @@
                 </button>
             </div>
             <div class="wn-content" id="wn-content"></div>
-            <div class="wn-footer">
+            <div class="wn-footer" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                 <button class="wn-feedback-btn" id="wn-feedback-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                     Give Feedback
+                </button>
+                <button class="wn-feedback-btn" id="wn-test-update-btn" style="color: var(--accent); display: flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Test Update UI
                 </button>
             </div>
         </div>
@@ -13816,6 +13820,66 @@
 
             feedbackBtn?.addEventListener('click', () => {
                 window.open('https://github.com/naitiktuxx/ThinkPage/issues', '_blank', 'noopener');
+            });
+
+            const testUpdateBtn = document.getElementById('wn-test-update-btn');
+            testUpdateBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                // 1. Force auto-update to OFF for testing (to show the banner/button)
+                ProfileManager.setItem('offline_auto_update', '0');
+                if (typeof window.syncAllAutoUpdateControls === 'function') {
+                    window.syncAllAutoUpdateControls();
+                }
+
+                // 2. Set mock worker
+                pendingUpdateWorker = {
+                    postMessage: (msg) => {
+                        console.log('Mock worker received message:', msg);
+                        if (msg.type === 'SKIP_WAITING') {
+                            showToast('Mock update applied! Reloading...', 2500);
+                            setTimeout(() => location.reload(), 1500);
+                        }
+                    }
+                };
+
+                // 3. Show bottom banner
+                const now = new Date();
+                const timeLabel = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+                const dateLabel = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+                // Show update banner at bottom
+                const updateBanner = document.getElementById('update-notify-banner');
+                const updateBannerText = document.getElementById('update-notify-text');
+                if (updateBanner) {
+                    if (updateBannerText) {
+                        updateBannerText.innerHTML = `New update available &mdash; <button style="background:none;border:none;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;" id="update-notify-inline-btn">click to refresh</button>`;
+                        
+                        const meta = document.createElement('span');
+                        meta.className = 'un-version';
+                        meta.textContent = ` (${dateLabel}, ${timeLabel} Simulated)`;
+                        updateBannerText.appendChild(meta);
+
+                        const inlineBtn = document.getElementById('update-notify-inline-btn');
+                        if (inlineBtn) {
+                            inlineBtn.onclick = () => {
+                                // Simulate click on the green button in dropdown to show progress
+                                toggleBtn.click();
+                                setTimeout(() => {
+                                    if (updateAvailableBtn) updateAvailableBtn.click();
+                                }, 300);
+                            };
+                        }
+                    }
+                    updateBanner.classList.add('visible');
+                }
+
+                // 4. Force green update button to show inside dropdown
+                if (typeof window.__wnShowUpdateBtn === 'function') {
+                    window.__wnShowUpdateBtn(true);
+                }
+
+                showToast('Simulation triggered! Check dropdown and bottom banner.', 3000);
             });
 
             checkWhatsNewNotifications();
