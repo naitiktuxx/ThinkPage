@@ -11298,9 +11298,9 @@
                 expandBtn.setAttribute('aria-expanded', 'false');
             }
 
-            // Flip arrow when search bar is at bottom (position step 4)
+            // Flip arrow when search bar is at bottom (position step 1, 4, 5)
             const searchStep = ProfileManager.getItem('search_position_step') || '3';
-            const isBottomPos = searchStep === '4';
+            const isBottomPos = searchStep === '1' || searchStep === '4' || searchStep === '5';
             expandBtn.classList.toggle('bottom-pos', isBottomPos);
 
             // Shift expand button to the left side when search bar is at bottom-right (position step 5)
