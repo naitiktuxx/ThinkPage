@@ -14916,7 +14916,7 @@
         let SpeedTestModule = null;
         async function loadSpeedTestLibrary() {
             if (SpeedTestModule) return SpeedTestModule;
-            const { default: SpeedTest } = await import('https://cdn.jsdelivr.net/npm/@cloudflare/speedtest@latest/dist/index.mjs');
+            const { default: SpeedTest } = await import('https://cdn.jsdelivr.net/npm/@cloudflare/speedtest@latest/dist/speedtest.js');
             SpeedTestModule = SpeedTest;
             return SpeedTest;
         }
