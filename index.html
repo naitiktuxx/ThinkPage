@@ -3367,6 +3367,74 @@
             margin-bottom: 20px;
         }
 
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .modal-tip-btn {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            outline: none;
+            border-radius: 50%;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .modal-tip-btn:hover {
+            background: var(--btn-bg);
+            color: var(--text-secondary);
+        }
+
+        .tip-popover {
+            display: none;
+            position: absolute;
+            top: 36px;
+            right: 0;
+            width: 280px;
+            padding: 12px 14px;
+            background: var(--surface-1);
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            box-shadow: var(--shadow-strong);
+            z-index: 100;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            font-weight: normal;
+            text-align: left;
+        }
+
+        .tip-popover.open {
+            display: block;
+        }
+
+        .tip-popover::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 9px;
+            width: 10px;
+            height: 10px;
+            background: var(--surface-1);
+            border-left: 1px solid var(--panel-border);
+            border-top: 1px solid var(--panel-border);
+            transform: rotate(45deg);
+        }
+
         .modal label {
             display: block;
             font-size: 13px;
@@ -5094,6 +5162,154 @@
         .lens-queue-remove:hover {
             background: rgba(255, 50, 50, 0.9);
         }
+
+        /* SPEED TEST */
+        .speedtest-btn {
+            position: fixed;
+            bottom: var(--speedtest-btn-bottom, 64px);
+            top: var(--speedtest-btn-top, auto);
+            left: var(--cust-btn-left, auto);
+            right: var(--cust-btn-right, 16px);
+            background: var(--btn-bg);
+            border: 1px solid var(--border-lighter);
+            color: var(--text-secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background .2s, transform 0.2s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            user-select: none;
+            -webkit-user-select: none;
+            padding: 0;
+        }
+
+        .speedtest-btn:hover {
+            background: var(--btn-hover);
+            transform: scale(1.08);
+        }
+
+        .speedtest-btn:active {
+            transform: scale(0.95);
+        }
+
+        .speedtest-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        body.has-bg.bg-light .speedtest-btn {
+            text-shadow: var(--legibility-shadow);
+        }
+
+        body.glass-mode .speedtest-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            backdrop-filter: blur(40px) saturate(160%);
+            -webkit-backdrop-filter: blur(40px) saturate(160%);
+            box-shadow: inset 0 1px 0 var(--glass-inset), var(--glass-shadow);
+        }
+
+        body.animations-on .speedtest-btn {
+            transition: background .2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.3s ease, top 0.3s ease, left 0.3s ease, right 0.3s ease;
+        }
+
+        .speedtest-modal {
+            width: 480px;
+            max-width: 100%;
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+            background: var(--surface-1);
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .speedtest-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .speedtest-modal-header h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .speedtest-modal-header h3 svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+        }
+
+        .speedtest-iframe-wrap {
+            width: 100%;
+            height: 340px;
+            position: relative;
+            background: #000;
+        }
+
+        .speedtest-iframe-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .speedtest-modal-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 22px;
+            border-top: 1px solid var(--border-light);
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .speedtest-modal-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .speedtest-modal-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 720px) {
+            .speedtest-btn {
+                width: 38px;
+                height: 38px;
+            }
+
+            .speedtest-modal {
+                width: 100%;
+                border-radius: 16px;
+            }
+
+            .speedtest-iframe-wrap {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 720px) and (hover: none) and (pointer: coarse) {
+            .speedtest-btn {
+                min-width: 44px;
+                min-height: 44px;
+            }
+        }
     </style>
 </head>
 
@@ -5391,7 +5607,19 @@
 
     <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal">
-            <h3 id="modal-title">Add shortcut</h3>
+            <div class="modal-header">
+                <h3 id="modal-title">Add shortcut</h3>
+                <button type="button" id="modal-tip-btn" class="modal-tip-btn" title="Show icon tip">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </button>
+                <div id="modal-tip-popover" class="tip-popover">
+                    You can use the original Play Store or App Store icon here by pasting its image link. Open your app's App Store or Play Store page, right-click on the app icon, click "Copy image link" (or "Copy image address"), and paste it here to get the original icon if you don't like the website's default one.
+                </div>
+            </div>
             <label>Name</label>
             <input type="text" id="modal-name" placeholder="Site name" />
             <label>URL</label>
@@ -5642,6 +5870,18 @@
             </div>
         </div>
     </div>
+
+    <button class="speedtest-btn" id="speedtest-btn" title="Speed Test" aria-label="Speed Test">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/>
+            <path d="M12 12l4-4"/>
+            <path d="M7.5 16.5l.01 0"/>
+            <path d="M5.1 12l.01 0"/>
+            <path d="M7.5 7.5l.01 0"/>
+            <path d="M12 5.1l.01 0"/>
+            <path d="M16.5 7.5l.01 0"/>
+        </svg>
+    </button>
 
     <button class="customize-btn" id="customize-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -6574,6 +6814,29 @@
             }
         }
 
+        function getAppsHeaderTitle(engine = getStoredSearchEngine()) {
+            const specificKey = `apps_header_title_${engine}`;
+            const specificTitle = ProfileManager.getItem(specificKey);
+            if (specificTitle) return specificTitle;
+
+            const legacyTitle = ProfileManager.getItem('apps_header_title');
+            if (legacyTitle) {
+                try {
+                    ProfileManager.setItem(specificKey, legacyTitle);
+                    ProfileManager.removeItem('apps_header_title');
+                } catch (e) {}
+                return legacyTitle;
+            }
+
+            if (engine === 'bing') return 'Microsoft apps';
+            if (engine === 'duckduckgo') return 'Custom websites';
+            if (engine === 'custom') {
+                const customName = ProfileManager.getItem('custom_search_engine_name') || 'Custom';
+                return `${customName} apps`;
+            }
+            return 'Google apps';
+        }
+
         function renderApps() {
             const g = document.getElementById('apps-grid');
             const title = document.getElementById('apps-header-title');
@@ -6587,18 +6850,10 @@
             }
 
             const apps = loadDrawerApps(engine);
-            const customTitle = ProfileManager.getItem('apps_header_title');
-            if (customTitle) {
-                if (title) title.textContent = customTitle;
-            } else {
-                if (engine === 'bing') {
-                    if (title) title.textContent = 'Microsoft apps';
-                } else if (engine === 'duckduckgo') {
-                    if (title) title.textContent = 'Custom websites';
-                } else {
-                    if (title) title.textContent = 'Google apps';
-                }
-            }
+            const activeTitle = getAppsHeaderTitle(engine);
+            if (title) title.textContent = activeTitle;
+            const toggle = document.getElementById('apps-toggle');
+            if (toggle) toggle.title = activeTitle;
 
             apps.forEach((a, i) => g.appendChild(appTile(a, i)));
             const add = document.createElement('button');
@@ -6722,9 +6977,14 @@
         if (appsTitleEl) {
             appsTitleEl.addEventListener('blur', () => {
                 const text = appsTitleEl.textContent.trim();
+                const engine = getStoredSearchEngine();
+                const key = `apps_header_title_${engine}`;
                 if (text) {
-                    ProfileManager.setItem('apps_header_title', text);
+                    ProfileManager.setItem(key, text);
+                    const toggle = document.getElementById('apps-toggle');
+                    if (toggle) toggle.title = text;
                 } else {
+                    ProfileManager.removeItem(key);
                     ProfileManager.removeItem('apps_header_title');
                     renderApps();
                 }
@@ -6802,7 +7062,8 @@
                 document.getElementById('customize-panel'),
                 document.getElementById('lens-fallback-overlay'),
                 document.getElementById('permission-modal-overlay'),
-                document.getElementById('whats-new-modal-overlay')
+                document.getElementById('whats-new-modal-overlay'),
+                document.getElementById('speedtest-modal-overlay')
             ];
             return modals.find(m => m && m.classList.contains('open'));
         }
@@ -8879,6 +9140,7 @@
                     if (getStoredSearchEngine() === 'custom') {
                         updateCenterLogo();
                         updateSearchPlaceholder();
+                        renderApps();
                     }
                 });
             }
@@ -9461,6 +9723,7 @@
 
             const wpAttr = document.getElementById('wallpaper-attribution');
             const custBtn = document.getElementById('customize-btn');
+            const speedtestBtn = document.getElementById('speedtest-btn');
             
             const isNarrow = window.innerWidth < 1050;
 
@@ -9492,6 +9755,24 @@
                     custBtn.style.setProperty('--cust-btn-left', val === '5' ? '16px' : 'auto');
                     custBtn.style.setProperty('--cust-btn-right', val === '5' ? 'auto' : '16px');
                 }
+            }
+
+            if (speedtestBtn) {
+                let speedtestTop = 'auto';
+                let speedtestBottom = '64px';
+                if (custBtn && custBtn.style.getPropertyValue('--cust-btn-top') !== 'auto') {
+                    // Customize button is at the top!
+                    if (wpAttr && wpAttr.style.getPropertyValue('--wp-attr-top') !== 'auto') {
+                        // Wallpaper attribution is also at the top! Stack speedtest below it.
+                        speedtestTop = '92px';
+                    } else {
+                        // Stack speedtest directly below customize button
+                        speedtestTop = '52px';
+                    }
+                    speedtestBottom = 'auto';
+                }
+                speedtestBtn.style.setProperty('--speedtest-btn-bottom', speedtestBottom);
+                speedtestBtn.style.setProperty('--speedtest-btn-top', speedtestTop);
             }
 
             const suggestions = document.getElementById('suggestions');
@@ -11298,9 +11579,9 @@
                 expandBtn.setAttribute('aria-expanded', 'false');
             }
 
-            // Flip arrow when search bar is at bottom (position step 1, 4, 5)
+            // Flip arrow when search bar is at bottom (position step 4)
             const searchStep = ProfileManager.getItem('search_position_step') || '3';
-            const isBottomPos = searchStep === '1' || searchStep === '4' || searchStep === '5';
+            const isBottomPos = searchStep === '4';
             expandBtn.classList.toggle('bottom-pos', isBottomPos);
 
             // Shift expand button to the left side when search bar is at bottom-right (position step 5)
@@ -11398,6 +11679,7 @@
 
         function openModal(scData = null, index = null) {
             window.modalMode = 'shortcut';
+            document.getElementById('modal-tip-popover')?.classList.remove('open');
             const modalOverlay = document.getElementById('modal-overlay');
             modalOverlay.classList.add('open');
             runOpenAnimation(modalOverlay, 360);
@@ -11441,6 +11723,7 @@
         function openAppModal(appData = null, index = null, keepAppsTrayOpen = false) {
             window.modalMode = 'app';
             window.keepAppsTrayOpen = keepAppsTrayOpen;
+            document.getElementById('modal-tip-popover')?.classList.remove('open');
             if (!keepAppsTrayOpen) {
                 closeAppsDropdown();
             }
@@ -11677,8 +11960,28 @@
         document.getElementById('modal-cancel').onclick = () => {
             window.keepAppsTrayOpen = false;
             document.getElementById('modal-overlay').classList.remove('open');
+            document.getElementById('modal-tip-popover')?.classList.remove('open');
         };
-        document.getElementById('modal-overlay').onclick = e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); };
+        document.getElementById('modal-overlay').onclick = e => {
+            if (e.target === e.currentTarget) {
+                e.currentTarget.classList.remove('open');
+                document.getElementById('modal-tip-popover')?.classList.remove('open');
+            }
+        };
+
+        const tipBtn = document.getElementById('modal-tip-btn');
+        const tipPopover = document.getElementById('modal-tip-popover');
+        if (tipBtn && tipPopover) {
+            tipBtn.onclick = (e) => {
+                e.stopPropagation();
+                tipPopover.classList.toggle('open');
+            };
+            document.addEventListener('click', (e) => {
+                if (!tipPopover.contains(e.target) && e.target !== tipBtn && !tipBtn.contains(e.target)) {
+                    tipPopover.classList.remove('open');
+                }
+            });
+        }
         // ── AUTO-FETCH WEBSITE TITLE ─────────────────────────────────
         let _titleFetchId = 0;
         async function fetchWebsiteTitle(url) {
@@ -13611,6 +13914,12 @@
                                     lastActiveElement.focus();
                                     lastActiveElement = null;
                                 }
+
+                                // Clear speedtest iframe if speedtest modal was closed
+                                if (target.id === 'speedtest-modal-overlay') {
+                                    const wrap = document.getElementById('speedtest-iframe-wrap');
+                                    if (wrap) wrap.innerHTML = '';
+                                }
                             }
                         }
                     }
@@ -14195,10 +14504,41 @@
             }
         };
 
+        function initSpeedtestModal() {
+            const overlay = document.getElementById('speedtest-modal-overlay');
+            const closeBtn = document.getElementById('speedtest-modal-close');
+            const btn = document.getElementById('speedtest-btn');
+            const wrap = document.getElementById('speedtest-iframe-wrap');
+            if (!overlay || !btn || !wrap) return;
+
+            btn.addEventListener('click', () => {
+                wrap.innerHTML = '<iframe src="https://fast.com" allow="geolocation"></iframe>';
+                overlay.classList.add('open');
+                if (document.body.classList.contains('animations-on')) {
+                    overlay.classList.add('animate');
+                }
+                runOpenAnimation(overlay, 360);
+            });
+
+            const closeModal = () => {
+                overlay.classList.remove('open', 'animate');
+                wrap.innerHTML = '';
+            };
+
+            closeBtn?.addEventListener('click', closeModal);
+
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) {
+                    closeModal();
+                }
+            });
+        }
+
         // ── INIT ─────────────────────────────────────────────────────
         initPageKeyboard();
         initWhatsNewSystem();
         initWhatsNewModal();
+        initSpeedtestModal();
         initWhatsNewLimitControl();
         syncClearSearchButton();
         initAiAssistant();
@@ -14274,6 +14614,34 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
                     GitHub Commit
                 </a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="speedtest-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="speedtest-modal-title">
+        <div class="modal speedtest-modal">
+            <div class="speedtest-modal-header">
+                <h3 id="speedtest-modal-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/>
+                        <path d="M12 12l4-4"/>
+                        <path d="M7.5 16.5l.01 0"/>
+                        <path d="M5.1 12l.01 0"/>
+                        <path d="M7.5 7.5l.01 0"/>
+                        <path d="M12 5.1l.01 0"/>
+                        <path d="M16.5 7.5l.01 0"/>
+                    </svg>
+                    Speed Test
+                </h3>
+                <button class="icon-round-btn" id="speedtest-modal-close" title="Close" aria-label="Close speed test" style="width: 28px; height: 28px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="speedtest-iframe-wrap" id="speedtest-iframe-wrap">
+                <!-- iframe loaded on demand -->
+            </div>
+            <div class="speedtest-modal-footer">
+                <span>Powered by Netflix's Fast.com</span>
+                <a href="https://fast.com" target="_blank" rel="noopener noreferrer">Open in new tab ↗</a>
             </div>
         </div>
     </div>
