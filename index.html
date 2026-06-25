@@ -73,6 +73,7 @@
             --sc-menu-fg: rgba(232, 234, 237, 0.92);
             --modal-bg: #303134;
             --theme-color: #202124;
+            --text-primary: var(--text-main);
         }
 
         body.light-mode {
@@ -131,6 +132,7 @@
             --sc-menu-fg: #5f6368;
             --modal-bg: #ffffff;
             --theme-color: #ffffff;
+            --text-primary: var(--text-main);
         }
 
         /* Catppuccin Macchiato — https://github.com/catppuccin/catppuccin */
@@ -190,6 +192,7 @@
             --sc-menu-fg: rgba(202, 211, 245, 0.92);
             --modal-bg: #363a4f;
             --theme-color: #24273a;
+            --text-primary: var(--text-main);
         }
 
         body.catppuccin-mode {
@@ -5173,51 +5176,93 @@
             background: var(--btn-bg);
             border: 1px solid var(--border-lighter);
             color: var(--text-secondary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            padding: 8px 16px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+            justify-content: flex-start;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1;
             cursor: pointer;
-            transition: background .2s, transform 0.2s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s;
+            transition: background .2s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s, padding-right .2s;
             z-index: 100;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             user-select: none;
             -webkit-user-select: none;
-            padding: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
         }
 
         .speedtest-btn:hover {
             background: var(--btn-hover);
-            transform: scale(1.08);
+            border-color: var(--border-lighter);
         }
 
         .speedtest-btn:active {
-            transform: scale(0.95);
+            transform: none;
         }
 
         .speedtest-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
+            flex: 0 0 auto;
+        }
+
+        .speedtest-btn-label {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: clip;
+            min-width: 0;
+            transition: opacity 0.15s ease-in-out;
+        }
+
+        .speedtest-btn.running {
+            padding-left: 12px;
+            padding-right: 12px;
+            gap: 6px;
+        }
+
+        .speedtest-btn.running,
+        .speedtest-btn.done {
+        }
+
+        .speedtest-btn.running svg {
+        }
+
+        .speedtest-btn.running .speedtest-btn-label {
         }
 
         body.has-bg.bg-light .speedtest-btn {
-            text-shadow: var(--legibility-shadow);
+            background: rgba(255, 255, 255, 0.75);
+            border-color: rgba(0, 0, 0, 0.08);
+            color: #333;
+            text-shadow: none;
+        }
+
+        body.has-bg.bg-light .speedtest-btn:hover {
+            background: rgba(255, 255, 255, 0.85);
         }
 
         body.glass-mode .speedtest-btn {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-top: 1px solid var(--glass-border-top);
-            backdrop-filter: blur(40px) saturate(160%);
-            -webkit-backdrop-filter: blur(40px) saturate(160%);
-            box-shadow: inset 0 1px 0 var(--glass-inset), var(--glass-shadow);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inset);
         }
 
-        body.animations-on .speedtest-btn {
-            transition: background .2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.3s ease, top 0.3s ease, left 0.3s ease, right 0.3s ease;
+        body.glass-mode .speedtest-btn:hover {
+            background: var(--glass-bg-hover);
+            box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inset);
+        }
+
+        body.st-animations-on .speedtest-btn {
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), background .2s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s, padding-right .2s;
         }
 
         .speedtest-modal {
@@ -5231,12 +5276,18 @@
             box-shadow: var(--shadow-strong);
         }
 
+        #speedtest-modal-overlay.open {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
         .speedtest-modal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 18px 22px;
             border-bottom: 1px solid var(--border-light);
+            gap: 12px;
         }
 
         .speedtest-modal-header h3 {
@@ -5247,6 +5298,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex: 1;
+            min-width: 0;
         }
 
         .speedtest-modal-header h3 svg {
@@ -5255,17 +5308,71 @@
             color: var(--accent);
         }
 
+        #speedtest-modal-close {
+            background: var(--surface-2);
+            background: color-mix(in srgb, var(--surface-2) 78%, transparent);
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            backdrop-filter: blur(18px) saturate(150%);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            transition: background 0.15s, color 0.15s, transform 0.2s, border-color 0.15s;
+        }
+
+        #speedtest-modal-close:hover {
+            background: var(--btn-hover);
+            border-color: var(--panel-border);
+        }
+
+        body.glass-mode #speedtest-modal-close {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            color: var(--glass-text-muted);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: inset 0 1px 0 var(--glass-inset), 0 8px 22px rgba(0, 0, 0, 0.12);
+        }
+
+        body.glass-mode #speedtest-modal-close:hover {
+            background: var(--glass-bg-hover);
+            color: var(--glass-text);
+        }
+
+        body.close-left .speedtest-modal-header {
+            flex-direction: row-reverse;
+        }
+
+        body.close-left .speedtest-modal-header h3 {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
         .speedtest-iframe-wrap {
             width: 100%;
             height: 340px;
             position: relative;
-            background: #000;
+            background: var(--bg-main);
         }
 
         .speedtest-iframe-wrap iframe {
             width: 100%;
             height: 100%;
             border: none;
+            /* Invert white background to black, black text to white, keep red/green original using hue-rotate, then blend with theme bg */
+            filter: invert(1) hue-rotate(180deg);
+            mix-blend-mode: screen;
+            transition: filter 0.3s;
+        }
+
+        body.light-mode .speedtest-iframe-wrap iframe {
+            filter: none;
+            mix-blend-mode: normal;
+        }
+
+        body.catppuccin-mode .speedtest-iframe-wrap iframe {
+            filter: invert(1) hue-rotate(180deg);
+            mix-blend-mode: screen;
         }
 
         .speedtest-modal-footer {
@@ -5294,12 +5401,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: var(--surface-1);
+            background: transparent;
         }
 
         .st-main-display {
             margin-top: 10px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -5309,22 +5416,33 @@
         .st-speed-value-container {
             display: flex;
             align-items: baseline;
-            gap: 8px;
+            gap: 10px;
             position: relative;
         }
 
         .st-speed-number {
-            font-size: 110px;
-            font-weight: 200;
-            color: var(--text-primary);
+            font-size: 120px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
             line-height: 1;
             font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
-            letter-spacing: -2px;
-            transition: color 0.3s;
+            letter-spacing: -4px;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .st-speed-number.running {
-            color: var(--text-muted);
+            background: linear-gradient(135deg, var(--text-muted) 30%, var(--border-lighter) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        body.st-animations-on .st-speed-number.running {
             animation: st-pulse 1.5s infinite ease-in-out;
         }
 
@@ -5338,25 +5456,26 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            gap: 4px;
             position: relative;
         }
 
         .st-speed-unit {
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .st-progress-circle {
-            width: 24px;
-            height: 24px;
+            width: 16px;
+            height: 16px;
             border: 2px solid var(--border-light);
             border-top: 2px solid var(--accent);
             border-radius: 50%;
-            margin-top: 6px;
             display: none;
+            box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 40%, transparent);
         }
 
         .st-progress-circle.active {
@@ -5370,48 +5489,60 @@
         }
 
         .st-status-text {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
             margin-bottom: 28px;
-            background: var(--surface-2);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid var(--border-light);
+            background: var(--accent-soft);
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
             min-height: 18px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .st-metrics-grid {
             width: 100%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 16px;
             margin-bottom: 32px;
         }
 
         .st-metric-card {
-            background: var(--surface-2);
+            background: color-mix(in srgb, var(--surface-2) 65%, transparent);
             border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 12px 8px;
+            border-radius: 16px;
+            padding: 16px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             text-align: center;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .st-metric-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15), 0 0 12px color-mix(in srgb, var(--accent) 15%, transparent);
         }
 
         .st-metric-label {
-            font-size: 11px;
-            font-weight: 600;
+            font-size: 10px;
+            font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
         }
 
         .st-metric-val {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
             color: var(--text-primary);
         }
 
@@ -5423,107 +5554,316 @@
         }
 
         .st-btn-action {
-            padding: 10px 24px;
-            font-size: 13px;
-            font-weight: 600;
-            border-radius: 10px;
-            border: none;
+            padding: 12px 28px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 12px;
+            border: 1px solid transparent;
             cursor: pointer;
             outline: none;
-            transition: background 0.2s, transform 0.1s;
-        }
-
-        .st-btn-action {
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
             background: var(--accent);
             color: var(--accent-contrast, #fff);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent);
         }
 
         .st-btn-action:hover {
-            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 40%, transparent);
         }
 
         .st-btn-action:active {
-            transform: scale(0.98);
+            transform: translateY(0) scale(0.98);
         }
 
         .st-btn-action.secondary {
             background: var(--btn-bg);
             border: 1px solid var(--border-light);
             color: var(--text-secondary);
+            box-shadow: none;
         }
 
         .st-btn-action.secondary:hover {
             background: var(--btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #st-stop-btn {
+            background: rgba(255, 95, 109, 0.15);
+            border: 1px solid rgba(255, 95, 109, 0.35);
+            color: #ff7582;
+            box-shadow: 0 4px 12px rgba(255, 95, 109, 0.15);
+        }
+
+        #st-stop-btn:hover {
+            background: rgba(255, 95, 109, 0.25);
+            border-color: rgba(255, 95, 109, 0.6);
+            color: #ff8a95;
+            box-shadow: 0 6px 16px rgba(255, 95, 109, 0.25);
+            transform: translateY(-2px);
+        }
+
+        #st-stop-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Glass Mode additions for speed test */
+        body.glass-mode .speedtest-modal {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            backdrop-filter: blur(40px) saturate(160%);
+            -webkit-backdrop-filter: blur(40px) saturate(160%);
+            box-shadow: 0 10px 30px var(--glass-shadow), inset 0 1px 0 var(--glass-inset);
+        }
+
+        body.glass-mode .speedtest-modal-header {
+            border-bottom: 1px solid var(--glass-divider);
+        }
+
+        body.glass-mode .speedtest-modal-footer {
+            border-top: 1px solid var(--glass-divider);
+        }
+
+        body.glass-mode .st-metric-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            box-shadow: inset 0 1px 0 var(--glass-inset), 0 4px 12px var(--glass-shadow);
+        }
+
+        body.glass-mode .st-metric-card:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--accent);
+            border-top-color: var(--accent);
         }
 
         .speedtest-pill-display {
             position: fixed;
-            bottom: var(--speedtest-btn-bottom, 64px);
-            top: var(--speedtest-btn-top, auto);
-            background: var(--glass-bg, var(--surface-1));
-            border: 1px solid var(--glass-border, var(--border-light));
-            border-top: 1px solid var(--glass-border-top, var(--border-light));
+            bottom: calc(var(--speedtest-btn-bottom, 64px) + 46px);
+            top: auto;
+            background: rgba(68, 65, 84, 0.78);
+            border: 1px solid rgba(181, 187, 230, 0.34);
+            border-top: 1px solid rgba(235, 238, 255, 0.2);
             color: var(--text-secondary);
-            height: 40px;
-            padding: 0 16px;
+            min-height: 36px;
+            padding: 8px 16px;
             border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             font-size: 13px;
             font-weight: 500;
+            line-height: 1;
             z-index: 99;
-            backdrop-filter: blur(20px) saturate(160%);
-            -webkit-backdrop-filter: blur(20px) saturate(160%);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            transition: bottom 0.3s, top 0.3s, left 0.3s, right 0.3s, transform 0.2s, opacity 0.2s;
+            backdrop-filter: blur(46px) saturate(180%);
+            -webkit-backdrop-filter: blur(46px) saturate(180%);
+            box-shadow: 0 18px 42px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.12);
+            transition: bottom 0.3s, top 0.3s, left 0.3s, right 0.3s, transform 0.2s, opacity 0.2s, border-color 0.2s, box-shadow 0.2s;
             user-select: none;
             -webkit-user-select: none;
-            right: 64px;
-            left: auto;
+            left: var(--cust-btn-left, auto);
+            right: var(--cust-btn-right, 16px);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        body.st-animations-on .speedtest-pill-display {
+            animation: pill-show 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         body.light-mode .speedtest-pill-display {
-            background: rgba(255, 255, 255, 0.7);
-            border-color: rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.78);
+            border-color: rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.5);
         }
 
         body.glass-mode .speedtest-pill-display {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            background: rgba(68, 65, 84, 0.72);
+            border: 1px solid rgba(181, 187, 230, 0.34);
             border-top: 1px solid var(--glass-border-top);
+            backdrop-filter: blur(46px) saturate(180%);
+            -webkit-backdrop-filter: blur(46px) saturate(180%);
         }
 
         .speedtest-pill-display.left-pos {
-            left: 64px;
+            left: var(--speedtest-pill-left, 148px);
             right: auto;
         }
 
         .speedtest-pill-display.running {
-            animation: st-pulse 1.5s infinite ease-in-out;
+            cursor: pointer;
+            padding-left: 12px;
+            padding-right: 12px;
+            gap: 6px;
         }
 
-        .speedtest-pill-indicator {
+        body.st-animations-on .speedtest-pill-display.running {
+            animation: pill-show 0.4s cubic-bezier(0.16, 1, 0.3, 1), pill-pulse-glow 2s infinite ease-in-out;
+        }
+
+        .speedtest-pill-display.running::before {
+            content: '';
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--text-muted);
-            display: inline-block;
-        }
-
-        .speedtest-pill-indicator.running {
             background: var(--accent);
-            animation: st-pulse 1.0s infinite ease-in-out;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
-        .speedtest-pill-indicator.success {
-            background: #28a745;
+        body.st-animations-on .speedtest-pill-display.running::before {
+            animation: st-dot-pulse 1.2s infinite ease-in-out;
+        }
+
+        .speedtest-pill-display.stopped {
+            border-color: rgba(255, 95, 109, 0.4);
+            box-shadow: 0 18px 42px rgba(0,0,0,0.26), 0 0 12px color-mix(in srgb, #ff5f6d 25%, transparent);
+        }
+
+        .speedtest-pill-text {
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.1px;
+            white-space: nowrap;
+        }
+
+        .speedtest-pill-divider {
+            width: 1px;
+            height: 18px;
+            background: rgba(198, 203, 255, 0.28);
+            flex: 0 0 auto;
+        }
+
+        .speedtest-pill-status {
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-left: 2px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .speedtest-pill-stop {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            width: auto;
+            height: auto;
+            border-radius: 0;
+            border: 0;
+            transform: translateY(-50%);
+            background: transparent;
+            color: rgba(198, 200, 226, 0.98);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
+            box-shadow: none;
+            transition: color 0.16s;
+        }
+
+        .speedtest-pill-display.running .speedtest-pill-stop {
+            display: flex;
+        }
+
+        @keyframes pill-show {
+            0% {
+                opacity: 0;
+                transform: translateY(12px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes pill-pulse-glow {
+            0% {
+                box-shadow: 0 18px 42px rgba(0,0,0,0.26), 0 0 0 0px color-mix(in srgb, var(--accent) 30%, transparent);
+                border-color: rgba(181, 187, 230, 0.34);
+            }
+            50% {
+                box-shadow: 0 18px 42px rgba(0,0,0,0.26), 0 0 16px 2px color-mix(in srgb, var(--accent) 55%, transparent);
+                border-color: var(--accent);
+            }
+            100% {
+                box-shadow: 0 18px 42px rgba(0,0,0,0.26), 0 0 0 0px color-mix(in srgb, var(--accent) 30%, transparent);
+                border-color: rgba(181, 187, 230, 0.34);
+            }
+        }
+
+        @keyframes st-dot-pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.5;
+                box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent);
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+                box-shadow: 0 0 8px 2px color-mix(in srgb, var(--accent) 70%, transparent);
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+                box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent);
+            }
+        }
+
+        /* CUSTOMIZATION PANEL SPEED TEST SECTION */
+        .speedtest-config-card {
+            background: var(--btn-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .speedtest-pill-stop:hover {
+            background: transparent;
+            color: #ffffff;
+            transform: translateY(-50%);
+        }
+
+        .speedtest-pill-stop::before {
+            content: "";
+            width: 13px;
+            height: 13px;
+            border-radius: 3px;
+            background: currentColor;
+        }
+
+        .speedtest-pill-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 0 4px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.16s;
+        }
+
+        .speedtest-pill-close:hover {
+            color: var(--text-primary);
         }
 
         @media (max-width: 720px) {
             .speedtest-pill-display {
-                height: 38px;
-                padding: 0 12px;
+                min-height: 36px;
+                padding: 8px 12px;
                 font-size: 12px;
             }
             .st-speed-number {
@@ -5536,8 +5876,8 @@
 
         @media (max-width: 720px) {
             .speedtest-btn {
-                width: 38px;
-                height: 38px;
+                min-height: 36px;
+                padding: 8px 12px;
             }
 
             .speedtest-modal {
@@ -6119,7 +6459,7 @@
 
     <div class="speedtest-pill-display" id="speedtest-pill-display" style="display: none;"></div>
     <button class="speedtest-btn" id="speedtest-btn" title="Speed Test" aria-label="Speed Test">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg id="speedtest-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/>
             <path d="M12 12l4-4"/>
             <path d="M7.5 16.5l.01 0"/>
@@ -6128,6 +6468,7 @@
             <path d="M12 5.1l.01 0"/>
             <path d="M16.5 7.5l.01 0"/>
         </svg>
+        <span class="speedtest-btn-label" id="speedtest-btn-label">Speed test</span>
     </button>
 
     <button class="customize-btn" id="customize-btn">
@@ -6385,51 +6726,93 @@
                 </label>
             </div>
             
-            <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Speed test button</p>
-            <div class="segment-control" id="speedtest-visibility-segment">
-                <label class="segment-opt">
-                    <input type="radio" name="speedtest_visible" value="0">
-                    <span>Hide</span>
-                </label>
-                <label class="segment-opt">
-                    <input type="radio" name="speedtest_visible" value="1" checked>
-                    <span>Show</span>
-                </label>
-            </div>
-
-            <div id="speedtest-config-container" style="margin-top: 12px; border-top: 1px dashed var(--border-lighter); padding-top: 12px; display: block;">
-                <p class="cp-hint" style="margin-bottom:6px;">Provider</p>
-                <div class="segment-control" id="speedtest-provider-segment">
-                    <label class="segment-opt">
-                        <input type="radio" name="speedtest_provider" value="cloudflare" checked>
-                        <span>Cloudflare (Custom)</span>
-                    </label>
-                    <label class="segment-opt">
-                        <input type="radio" name="speedtest_provider" value="fast">
-                        <span>Fast.com (Iframe)</span>
-                    </label>
+        </div>
+        <div class="cp-section">
+            <h4>Speed test</h4>
+            <p class="cp-hint">Configure speed test integration and display style</p>
+            
+            <div class="speedtest-config-card">
+                <div class="config-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                    <span class="config-label">Speed test button</span>
+                    <div class="segment-control" id="speedtest-visibility-segment">
+                        <label class="segment-opt">
+                            <input type="radio" name="speedtest_visible" value="0">
+                            <span>Hide</span>
+                        </label>
+                        <label class="segment-opt">
+                            <input type="radio" name="speedtest_visible" value="1" checked>
+                            <span>Show</span>
+                        </label>
+                    </div>
                 </div>
 
-                <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Display Style</p>
-                <div class="segment-control" id="speedtest-style-segment">
-                    <label class="segment-opt">
-                        <input type="radio" name="speedtest_style" value="card" checked>
-                        <span>Card (Modal)</span>
-                    </label>
-                    <label class="segment-opt">
-                        <input type="radio" name="speedtest_style" value="pill">
-                        <span>Pill (Inline)</span>
-                    </label>
-                </div>
+                <div id="speedtest-config-container" style="display: flex; flex-direction: column; gap: 12px; border-top: 1px dashed var(--border-lighter); padding-top: 12px;">
+                    <div class="config-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                        <span class="config-label">Provider</span>
+                        <div class="segment-control" id="speedtest-provider-segment">
+                            <label class="segment-opt">
+                                <input type="radio" name="speedtest_provider" value="cloudflare" checked>
+                                <span>Cloudflare</span>
+                            </label>
+                            <label class="segment-opt">
+                                <input type="radio" name="speedtest_provider" value="fast">
+                                <span>Fast.com</span>
+                            </label>
+                        </div>
+                    </div>
 
-                <div id="speedtest-pill-options" style="display: none;">
-                    <div class="config-row" style="margin-top: 12px;">
-                        <span class="config-label">Pill Metrics</span>
-                        <select id="speedtest-metrics-select" class="cp-select" style="width: 140px; box-sizing: border-box;">
-                            <option value="both" selected>Both Speed (↓ / ↑)</option>
-                            <option value="down">Download Only (↓)</option>
-                            <option value="up">Upload Only (↑)</option>
-                        </select>
+                    <div class="config-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                        <span class="config-label">Display Style</span>
+                        <div class="segment-control" id="speedtest-style-segment">
+                            <label class="segment-opt">
+                                <input type="radio" name="speedtest_style" value="card">
+                                <span>Card (Modal)</span>
+                            </label>
+                            <label class="segment-opt">
+                                <input type="radio" name="speedtest_style" value="pill" checked>
+                                <span>Pill (Inline)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="config-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                        <span class="config-label">Speed unit</span>
+                        <div class="segment-control" id="speedtest-unit-segment">
+                            <label class="segment-opt">
+                                <input type="radio" name="speedtest_unit" value="mbps" checked>
+                                <span>Mbps</span>
+                            </label>
+                            <label class="segment-opt">
+                                <input type="radio" name="speedtest_unit" value="MBps">
+                                <span>MB/s</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="config-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                        <span class="config-label">Animations</span>
+                        <div class="segment-control" id="speedtest-animations-segment">
+                            <label class="segment-opt">
+                                <input type="radio" name="speedtest_animations" value="0">
+                                <span>Off</span>
+                            </label>
+                            <label class="segment-opt">
+                                <input type="radio" name="speedtest_animations" value="1" checked>
+                                <span>On</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="speedtest-pill-options" style="display: block;">
+                        <div class="config-row" style="justify-content: space-between; align-items: center;">
+                            <span class="config-label">Pill Metrics</span>
+                            <select id="speedtest-metrics-select" class="cp-select" style="width: 140px; box-sizing: border-box;">
+                                <option value="both" selected>Both Speed (↓ / ↑)</option>
+                                <option value="down">Download Only (↓)</option>
+                                <option value="up">Upload Only (↑)</option>
+                                <option value="mixed">Average Speed (⇅)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -6809,7 +7192,7 @@
                     <div class="st-speed-value-container">
                         <span class="st-speed-number" id="st-speed-number">0</span>
                         <div class="st-speed-unit-container">
-                            <span class="st-speed-unit">Mbps</span>
+                            <span class="st-speed-unit" id="st-speed-unit">Mbps</span>
                             <div class="st-progress-circle" id="st-progress-circle"></div>
                         </div>
                     </div>
@@ -6831,7 +7214,7 @@
                 </div>
                 <div class="st-actions-row">
                     <button type="button" class="st-btn-action" id="st-start-btn">Start Test</button>
-                    <button type="button" class="st-btn-action secondary" id="st-stop-btn" style="display: none;">Stop</button>
+                    <button type="button" class="st-btn-action secondary" id="st-stop-btn" style="display: none;">Stop Test</button>
                 </div>
             </div>
             <div class="speedtest-modal-footer" id="speedtest-modal-footer">
@@ -10174,10 +10557,7 @@
                 const pillDisplay = document.getElementById('speedtest-pill-display');
                 if (pillDisplay) {
                     pillDisplay.style.setProperty('--speedtest-btn-bottom', speedtestBottom);
-                    pillDisplay.style.setProperty('--speedtest-btn-top', speedtestTop);
-                    
-                    const isLeft = (custBtn && custBtn.style.getPropertyValue('--cust-btn-left') !== 'auto' && custBtn.style.getPropertyValue('--cust-btn-left') !== '');
-                    pillDisplay.classList.toggle('left-pos', isLeft);
+                    updateSpeedtestPillOffset?.();
                 }
             }
 
@@ -14914,11 +15294,47 @@
         };
 
         let SpeedTestModule = null;
+        let SpeedTestLoadPromise = null;
+        const SPEEDTEST_LIBRARY_URLS = [
+            'https://cdn.jsdelivr.net/npm/@cloudflare/speedtest/dist/speedtest.js',
+            'https://unpkg.com/@cloudflare/speedtest/dist/speedtest.js'
+        ];
+        const CLOUDFLARE_SPEEDTEST_MEASUREMENTS = [
+            { type: 'latency', numPackets: 1 },
+            { type: 'download', bytes: 100000, count: 2 },
+            { type: 'download', bytes: 1000000, count: 4 },
+            { type: 'upload', bytes: 100000, count: 2 },
+            { type: 'upload', bytes: 1000000, count: 4 },
+            { type: 'latency', numPackets: 10 }
+        ];
+
         async function loadSpeedTestLibrary() {
             if (SpeedTestModule) return SpeedTestModule;
-            const { default: SpeedTest } = await import('https://cdn.jsdelivr.net/npm/@cloudflare/speedtest@latest/dist/speedtest.js');
-            SpeedTestModule = SpeedTest;
-            return SpeedTest;
+            if (SpeedTestLoadPromise) return SpeedTestLoadPromise;
+
+            SpeedTestLoadPromise = (async () => {
+                let lastError = null;
+
+                for (const url of SPEEDTEST_LIBRARY_URLS) {
+                    try {
+                        const module = await import(url);
+                        const SpeedTest = module?.default || module?.SpeedTest;
+                        if (typeof SpeedTest !== 'function') {
+                            throw new Error('Cloudflare SpeedTest constructor was not found.');
+                        }
+                        SpeedTestModule = SpeedTest;
+                        return SpeedTest;
+                    } catch (error) {
+                        lastError = error;
+                        console.warn(`Failed to load Cloudflare speed test from ${url}:`, error);
+                    }
+                }
+
+                SpeedTestLoadPromise = null;
+                throw lastError || new Error('Cloudflare speed test library failed to load.');
+            })();
+
+            return SpeedTestLoadPromise;
         }
 
         function applySpeedtestButtonVisibility() {
@@ -14934,14 +15350,22 @@
             
             const configContainer = document.getElementById('speedtest-config-container');
             if (configContainer) {
-                configContainer.style.display = visible ? 'block' : 'none';
+                configContainer.style.display = visible ? 'flex' : 'none';
             }
+        }
+
+        function applySpeedtestAnimations() {
+            const on = ProfileManager.getItem('speedtest_animations') !== '0';
+            document.body.classList.toggle('st-animations-on', on);
+            document.body.classList.toggle('st-animations-off', !on);
         }
 
         function initSpeedtestControl() {
             const visibilityRadios = document.querySelectorAll('input[name="speedtest_visible"]');
             const providerRadios = document.querySelectorAll('input[name="speedtest_provider"]');
             const styleRadios = document.querySelectorAll('input[name="speedtest_style"]');
+            const unitRadios = document.querySelectorAll('input[name="speedtest_unit"]');
+            const animRadios = document.querySelectorAll('input[name="speedtest_animations"]');
             const metricsSelect = document.getElementById('speedtest-metrics-select');
 
             visibilityRadios.forEach(r => {
@@ -14968,7 +15392,7 @@
                                 pillStyleRadio.parentElement.style.cursor = 'not-allowed';
                             }
                         }
-                        const currentStyle = ProfileManager.getItem('speedtest_style') || 'card';
+                        const currentStyle = ProfileManager.getItem('speedtest_style') || 'pill';
                         if (currentStyle === 'pill') {
                             ProfileManager.setItem('speedtest_style', 'card');
                             if (cardStyleRadio) cardStyleRadio.checked = true;
@@ -15009,14 +15433,31 @@
                 });
             }
 
+            unitRadios.forEach(r => {
+                r.addEventListener('change', e => {
+                    if (!e.target.checked) return;
+                    ProfileManager.setItem('speedtest_unit', e.target.value);
+                    updateSpeedtestUnitLabels();
+                });
+            });
+
+            animRadios.forEach(r => {
+                r.addEventListener('change', e => {
+                    ProfileManager.setItem('speedtest_animations', e.target.value);
+                    applySpeedtestAnimations();
+                });
+            });
+
             syncSpeedtestCustomize();
         }
 
         function syncSpeedtestCustomize() {
             const visible = ProfileManager.getItem('speedtest_visible') !== '0';
             const provider = ProfileManager.getItem('speedtest_provider') || 'cloudflare';
-            const style = ProfileManager.getItem('speedtest_style') || 'card';
+            const style = ProfileManager.getItem('speedtest_style') || 'pill';
             const metrics = ProfileManager.getItem('speedtest_metrics') || 'both';
+            const unit = ProfileManager.getItem('speedtest_unit') === 'MBps' ? 'MBps' : 'mbps';
+            const stAnim = ProfileManager.getItem('speedtest_animations') !== '0';
 
             document.querySelectorAll('input[name="speedtest_visible"]').forEach(r => {
                 r.checked = r.value === (visible ? '1' : '0');
@@ -15058,28 +15499,364 @@
             const metricsSelect = document.getElementById('speedtest-metrics-select');
             if (metricsSelect) metricsSelect.value = metrics;
 
+            document.querySelectorAll('input[name="speedtest_unit"]').forEach(r => {
+                r.checked = r.value === unit;
+            });
+            updateSpeedtestUnitLabels();
+
+            document.querySelectorAll('input[name="speedtest_animations"]').forEach(r => {
+                r.checked = r.value === (stAnim ? '1' : '0');
+            });
+            applySpeedtestAnimations();
+
             applySpeedtestButtonVisibility();
             updateSearchPosition();
         }
 
         let activeSpeedTest = null;
         let speedTestRunning = false;
+        const SPEEDTEST_GAUGE_ICON = `
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/>
+            <path d="M12 12l4-4"/>
+            <path d="M7.5 16.5l.01 0"/>
+            <path d="M5.1 12l.01 0"/>
+            <path d="M7.5 7.5l.01 0"/>
+            <path d="M12 5.1l.01 0"/>
+            <path d="M16.5 7.5l.01 0"/>
+        `;
+        const SPEEDTEST_STOP_ICON = '<rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor" stroke="none"/>';
+
+        function setSpeedtestText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        }
+
+        function readSpeedtestResult(results, getterName) {
+            try {
+                if (!results || typeof results[getterName] !== 'function') return undefined;
+                const value = results[getterName]();
+                return Number.isFinite(value) ? value : undefined;
+            } catch {
+                return undefined;
+            }
+        }
+
+        function getSpeedtestUnitConfig() {
+            const unit = ProfileManager.getItem('speedtest_unit') === 'MBps' ? 'MBps' : 'mbps';
+            return unit === 'MBps'
+                ? { divisor: 8000000, label: 'MB/s' }
+                : { divisor: 1000000, label: 'Mbps' };
+        }
+
+        function formatSpeedValue(bitsPerSecond, fallback = '--') {
+            const { divisor } = getSpeedtestUnitConfig();
+            return Number.isFinite(bitsPerSecond) ? (bitsPerSecond / divisor).toFixed(1) : fallback;
+        }
+
+        function formatSpeedDisplay(bitsPerSecond, fallback = '--') {
+            const { label } = getSpeedtestUnitConfig();
+            return `${formatSpeedValue(bitsPerSecond, fallback)} ${label}`;
+        }
+
+        function updateSpeedtestUnitLabels() {
+            const { label } = getSpeedtestUnitConfig();
+            setSpeedtestText('st-speed-unit', label);
+            const uploadVal = document.getElementById('st-metric-upload');
+            if (uploadVal && uploadVal.textContent.trim().startsWith('-')) {
+                uploadVal.textContent = `- ${label}`;
+            }
+        }
+
+        function transitionButtonWidth(btn, changeFunc, state) {
+            if (!btn) {
+                changeFunc();
+                return;
+            }
+            const stAnim = ProfileManager.getItem('speedtest_animations') !== '0';
+            if (!stAnim) {
+                changeFunc();
+                return;
+            }
+            
+            // If already running and the target state is running, keep width locked
+            // to prevent constant width transitions / sizing jitters on every speed update
+            const wasRunning = btn.classList.contains('running');
+            if (wasRunning && state === 'running') {
+                changeFunc();
+                return;
+            }
+            
+            if (btn.stTimeout) clearTimeout(btn.stTimeout);
+            if (btn.stFadeTimeout) clearTimeout(btn.stFadeTimeout);
+
+            const label = document.getElementById('speedtest-btn-label');
+
+            const runWidthTransition = () => {
+                // 1. Get first width
+                const firstWidth = btn.getBoundingClientRect().width;
+                
+                // Temporarily disable transition for accurate auto-width measurement
+                const originalTransition = btn.style.transition;
+                btn.style.transition = 'none';
+                
+                // 2. Perform the DOM change (update classes and text)
+                changeFunc();
+                
+                // 3. Temporarily set width to auto to measure target width
+                btn.style.width = 'auto';
+                let lastWidth;
+                
+                if (state === 'running') {
+                    const metricsConfig = ProfileManager.getItem('speedtest_metrics') || 'both';
+                    const mockText = (metricsConfig === 'down') ? '↓ 88.8' : (metricsConfig === 'mixed' ? '⇅ 88.8' : (metricsConfig === 'up' ? '↑ 88.8' : '↓ 88.8 | ↑ 88.8'));
+                    if (label) label.textContent = mockText;
+                    lastWidth = btn.getBoundingClientRect().width;
+                    changeFunc(); // Restore starting value
+                    lastWidth = Math.ceil(lastWidth);
+                } else {
+                    lastWidth = btn.getBoundingClientRect().width;
+                }
+                
+                // 4. Set width back to first width
+                btn.style.width = `${firstWidth}px`;
+                
+                // 5. Force reflow
+                btn.offsetHeight; 
+                
+                // 6. Restore transition and set to target width (starts the width slide)
+                btn.style.transition = originalTransition;
+                btn.style.width = `${lastWidth}px`;
+                
+                // 7. Fade the text label back in
+                if (label) label.style.opacity = '1';
+                
+                // 8. Clear the inline width after transition completes ONLY if not running
+                if (state !== 'running') {
+                    btn.stTimeout = setTimeout(() => {
+                        btn.style.width = '';
+                    }, 400);
+                }
+            };
+
+            if (label) {
+                label.style.opacity = '0';
+                btn.stFadeTimeout = setTimeout(runWidthTransition, 150);
+            } else {
+                runWidthTransition();
+            }
+        }
+
+        function setSpeedtestButtonState(state = 'idle', text = null) {
+            const btn = document.getElementById('speedtest-btn');
+            if (!btn) return;
+            
+            transitionButtonWidth(btn, () => {
+                const label = document.getElementById('speedtest-btn-label');
+                const icon = document.getElementById('speedtest-btn-icon');
+                btn.classList.toggle('running', state === 'running');
+                btn.classList.toggle('done', state === 'done');
+                btn.classList.toggle('stopped', state === 'stopped');
+                btn.title = state === 'running' ? 'Stop Speed Test' : 'Speed Test';
+                btn.setAttribute('aria-label', state === 'running' ? 'Stop Speed Test' : 'Speed Test');
+                if (label) {
+                    if (text !== null) {
+                        label.textContent = text;
+                    } else if (state === 'stopped') {
+                        label.textContent = 'Test stopped';
+                    } else if (state === 'done') {
+                        label.textContent = 'Test again';
+                    } else {
+                        label.textContent = 'Speed test';
+                    }
+                }
+                if (icon) icon.innerHTML = state === 'running' ? SPEEDTEST_STOP_ICON : SPEEDTEST_GAUGE_ICON;
+            }, state);
+            
+            updateSpeedtestPillOffset();
+        }
+
+        function setSpeedtestInlineResult(state = 'running', text = '') {
+            const pillDisplay = document.getElementById('speedtest-pill-display');
+            if (pillDisplay) pillDisplay.style.display = 'none';
+            setSpeedtestButtonState(state, text || formatPillSpeedText(undefined, undefined, ProfileManager.getItem('speedtest_metrics') || 'both', false));
+        }
+
+        function updateSpeedtestPillOffset() {
+            const btn = document.getElementById('speedtest-btn');
+            const pill = document.getElementById('speedtest-pill-display');
+            if (!btn || !pill) return;
+            // Pill uses the same --speedtest-btn-bottom as the button, with +46px offset in CSS
+            // Just sync the bottom CSS var if it was set on the button
+            const btnBottom = btn.style.getPropertyValue('--speedtest-btn-bottom');
+            if (btnBottom) {
+                pill.style.setProperty('--speedtest-btn-bottom', btnBottom);
+            }
+        }
+
+        function setSpeedtestPillState(state = 'idle', text = '', status = '') {
+            const pill = document.getElementById('speedtest-pill-display');
+            if (!pill) return;
+            pill.classList.toggle('running', state === 'running');
+            pill.classList.toggle('stopped', state === 'stopped');
+            const statusHtml = status
+                ? `<span class="speedtest-pill-divider"></span><span class="speedtest-pill-status" id="st-pill-status">${status}</span>`
+                : '';
+            pill.innerHTML = `<span class="speedtest-pill-text" id="st-pill-text">${text}</span>${statusHtml}`;
+            updateSpeedtestPillOffset();
+        }
+
+        function formatPillSpeedText(dl, ul, metricsConfig, showUnit = true) {
+            const { label } = getSpeedtestUnitConfig();
+            const suffix = showUnit ? ` ${label}` : '';
+            if (metricsConfig === 'down') return `↓ ${formatSpeedValue(dl)}${suffix}`;
+            if (metricsConfig === 'up') return `↑ ${formatSpeedValue(ul)}${suffix}`;
+            if (metricsConfig === 'mixed') {
+                let val = undefined;
+                if (dl !== undefined && ul !== undefined) {
+                    val = (dl + ul) / 2;
+                } else if (dl !== undefined) {
+                    val = dl;
+                } else if (ul !== undefined) {
+                    val = ul;
+                }
+                return `⇅ ${formatSpeedValue(val)}${suffix}`;
+            }
+            return `↓ ${formatSpeedValue(dl)} | ↑ ${formatSpeedValue(ul)}${suffix}`;
+        }
+
+        function showSpeedtestResultPill(dl, ul, metricsConfig) {
+            const pill = document.getElementById('speedtest-pill-display');
+            if (!pill) return;
+            const text = formatPillSpeedText(dl, ul, metricsConfig, true);
+            pill.innerHTML = `
+                <span class="speedtest-pill-text" id="st-pill-text">${text}</span>
+                <span class="speedtest-pill-divider"></span>
+                <button class="speedtest-pill-close" id="st-pill-close" title="Close" aria-label="Close results">✕</button>
+            `;
+            pill.style.display = 'flex';
+            pill.classList.remove('running');
+            const closeBtn = pill.querySelector('#st-pill-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    pill.style.display = 'none';
+                });
+            }
+            updateSpeedtestPillOffset();
+        }
+
+        function resetSpeedtestActions() {
+            const startBtn = document.getElementById('st-start-btn');
+            const stopBtn = document.getElementById('st-stop-btn');
+            if (startBtn) startBtn.style.display = 'inline-block';
+            if (stopBtn) stopBtn.style.display = 'none';
+            const circle = document.getElementById('st-progress-circle');
+            if (circle) circle.classList.remove('active');
+        }
+
+        function startSpeedtestEngine(engine) {
+            if (typeof engine?.run === 'function') {
+                engine.run();
+            } else if (typeof engine?.play === 'function') {
+                engine.play();
+            } else if (typeof engine?.restart === 'function') {
+                engine.restart();
+            } else {
+                throw new Error('Cloudflare speed test start method was not found.');
+            }
+        }
+
+        function stopSpeedtestEngine(engine) {
+            if (!engine) return;
+            try {
+                if (typeof engine.pause === 'function') {
+                    engine.pause();
+                } else if (typeof engine.abort === 'function') {
+                    engine.abort();
+                } else if (typeof engine.stop === 'function') {
+                    engine.stop();
+                }
+            } catch (e) {
+                console.warn("Failed to stop speedtest:", e);
+            }
+        }
+
+        function updateCloudflareSpeedtestProgress({ type = 'latency', progress = 0 } = {}, isPillMode = false, metricsConfig = 'both') {
+            if (!speedTestRunning) return;
+
+            const pct = Math.max(0, Math.min(99, Math.round(progress * 100)));
+            const results = activeSpeedTest?.results;
+            const dl = readSpeedtestResult(results, 'getDownloadBandwidth');
+            const ul = readSpeedtestResult(results, 'getUploadBandwidth');
+            const latency = readSpeedtestResult(results, 'getUnloadedLatency');
+            const jitter = readSpeedtestResult(results, 'getUnloadedJitter');
+
+            if (isPillMode) {
+                setSpeedtestInlineResult('running', formatPillSpeedText(dl, ul, metricsConfig, false));
+                return;
+            }
+
+            // In card mode, show the pill above the button when both or mixed metrics are selected
+            if (metricsConfig === 'both' || metricsConfig === 'mixed') {
+                const pillDisplay = document.getElementById('speedtest-pill-display');
+                if (pillDisplay) {
+                    pillDisplay.style.display = 'flex';
+                    setSpeedtestPillState('running', formatPillSpeedText(dl, ul, metricsConfig, false));
+                }
+            }
+
+            const statusText = document.getElementById('st-status-text');
+            const speedNum = document.getElementById('st-speed-number');
+            const circle = document.getElementById('st-progress-circle');
+
+            if (statusText) {
+                if (type === 'latency') {
+                    statusText.textContent = `Measuring Latency (${pct}%)`;
+                } else if (type === 'download') {
+                    statusText.textContent = `Measuring Download (${pct}%)`;
+                } else if (type === 'upload') {
+                    statusText.textContent = `Measuring Upload (${pct}%)`;
+                } else {
+                    statusText.textContent = `Testing (${pct}%)`;
+                }
+            }
+
+            if (circle) circle.style.setProperty('--progress', `${pct}%`);
+
+            if (type === 'download' || (type === 'latency' && dl !== undefined)) {
+                if (dl !== undefined && speedNum) {
+                    speedNum.textContent = formatSpeedValue(dl, '0');
+                    speedNum.classList.add('running');
+                }
+            } else if (type === 'upload') {
+                if (dl !== undefined && speedNum) {
+                    speedNum.textContent = formatSpeedValue(dl, '0');
+                }
+                if (speedNum) speedNum.classList.remove('running');
+
+                if (ul !== undefined) {
+                    setSpeedtestText('st-metric-upload', formatSpeedDisplay(ul, '0'));
+                }
+            }
+
+            if (latency !== undefined) setSpeedtestText('st-metric-ping', `${Math.round(latency)} ms`);
+            if (jitter !== undefined) setSpeedtestText('st-metric-jitter', `${Math.round(jitter)} ms`);
+        }
 
         async function startCloudflareSpeedTest(isPillMode = false) {
             if (speedTestRunning) {
-                stopCloudflareSpeedTest();
+                stopCloudflareSpeedTest(false);
             }
 
             speedTestRunning = true;
+            if (!isPillMode) {
+                setSpeedtestButtonState('running');
+            }
+            updateSpeedtestUnitLabels();
             const metricsConfig = ProfileManager.getItem('speedtest_metrics') || 'both';
 
             if (isPillMode) {
-                const pill = document.getElementById('speedtest-pill-display');
-                if (pill) {
-                    pill.style.display = 'flex';
-                    pill.classList.add('running');
-                    pill.innerHTML = `<span class="speedtest-pill-indicator running" id="st-pill-indicator"></span><span id="st-pill-text">Connecting...</span>`;
-                }
+                setSpeedtestInlineResult('running', formatPillSpeedText(undefined, undefined, metricsConfig, false));
             } else {
                 const speedNum = document.getElementById('st-speed-number');
                 if (speedNum) {
@@ -15094,7 +15871,7 @@
                 const jitterVal = document.getElementById('st-metric-jitter');
                 if (jitterVal) jitterVal.textContent = '- ms';
                 const uploadVal = document.getElementById('st-metric-upload');
-                if (uploadVal) uploadVal.textContent = '- Mbps';
+                if (uploadVal) uploadVal.textContent = `- ${getSpeedtestUnitConfig().label}`;
 
                 const startBtn = document.getElementById('st-start-btn');
                 const stopBtn = document.getElementById('st-stop-btn');
@@ -15106,139 +15883,82 @@
                     circle.style.setProperty('--progress', '0%');
                     circle.classList.add('active');
                 }
+
+                // Show pill above button when both metrics selected, otherwise hide it
+                const pillDisplay = document.getElementById('speedtest-pill-display');
+                if (pillDisplay) {
+                    if (metricsConfig === 'both') {
+                        pillDisplay.style.display = 'flex';
+                        setSpeedtestPillState('running', formatPillSpeedText(undefined, undefined, metricsConfig, false));
+                    } else {
+                        pillDisplay.style.display = 'none';
+                    }
+                }
             }
 
             try {
                 const SpeedTest = await loadSpeedTestLibrary();
                 activeSpeedTest = new SpeedTest({
-                    autoStart: false
+                    autoStart: false,
+                    measurements: CLOUDFLARE_SPEEDTEST_MEASUREMENTS
                 });
+                let activePhaseType = 'latency';
+                let completedPhaseCount = 0;
 
                 activeSpeedTest.onProgress = (progress) => {
                     if (!speedTestRunning) return;
+                    updateCloudflareSpeedtestProgress({
+                        type: progress?.type || activePhaseType,
+                        progress: progress?.progress || 0
+                    }, isPillMode, metricsConfig);
+                };
 
-                    const type = progress.type;
-                    const pct = Math.round(progress.progress * 100);
+                activeSpeedTest.onPhaseChange = (phase) => {
+                    if (!speedTestRunning) return;
+                    activePhaseType = phase?.measurement?.type || phase?.type || activePhaseType;
+                    const progress = completedPhaseCount / CLOUDFLARE_SPEEDTEST_MEASUREMENTS.length;
+                    updateCloudflareSpeedtestProgress({ type: activePhaseType, progress }, isPillMode, metricsConfig);
+                };
 
-                    let dl = activeSpeedTest.results ? activeSpeedTest.results.getDownloadBandwidth() : undefined;
-                    let ul = activeSpeedTest.results ? activeSpeedTest.results.getUploadBandwidth() : undefined;
-                    let latency = activeSpeedTest.results ? activeSpeedTest.results.getUnloadedLatency() : undefined;
-                    let jitter = activeSpeedTest.results ? activeSpeedTest.results.getUnloadedJitter() : undefined;
-
-                    if (isPillMode) {
-                        const pillText = document.getElementById('st-pill-text');
-                        if (pillText) {
-                            if (type === 'latency') {
-                                pillText.textContent = `Ping...`;
-                            } else if (type === 'download') {
-                                const dlSpeed = dl ? (dl / 1000000).toFixed(1) : '--';
-                                pillText.textContent = `↓ ${dlSpeed} Mbps`;
-                            } else if (type === 'upload') {
-                                const dlSpeed = dl ? (dl / 1000000).toFixed(1) : '--';
-                                const ulSpeed = ul ? (ul / 1000000).toFixed(1) : '--';
-                                if (metricsConfig === 'down') {
-                                    pillText.textContent = `↓ ${dlSpeed} Mbps`;
-                                } else if (metricsConfig === 'up') {
-                                    pillText.textContent = `↑ ${ulSpeed} Mbps`;
-                                } else {
-                                    pillText.textContent = `↓ ${dlSpeed} | ↑ ${ulSpeed} Mbps`;
-                                }
-                            }
-                        }
-                    } else {
-                        const statusText = document.getElementById('st-status-text');
-                        const speedNum = document.getElementById('st-speed-number');
-                        const circle = document.getElementById('st-progress-circle');
-
-                        if (statusText) {
-                            if (type === 'latency') {
-                                statusText.textContent = `Measuring Latency (${pct}%)`;
-                            } else if (type === 'download') {
-                                statusText.textContent = `Measuring Download (${pct}%)`;
-                            } else if (type === 'upload') {
-                                statusText.textContent = `Measuring Upload (${pct}%)`;
-                            } else {
-                                statusText.textContent = `Testing (${pct}%)`;
-                            }
-                        }
-
-                        if (circle) {
-                            circle.style.setProperty('--progress', `${pct}%`);
-                        }
-
-                        if (type === 'download' || (type === 'latency' && dl !== undefined)) {
-                            if (dl !== undefined) {
-                                speedNum.textContent = (dl / 1000000).toFixed(1);
-                                speedNum.classList.add('running');
-                            }
-                        } else if (type === 'upload') {
-                            if (dl !== undefined) {
-                                speedNum.textContent = (dl / 1000000).toFixed(1);
-                            }
-                            speedNum.classList.remove('running');
-                            
-                            if (ul !== undefined) {
-                                document.getElementById('st-metric-upload').textContent = `${(ul / 1000000).toFixed(1)} Mbps`;
-                            }
-                        }
-
-                        if (latency !== undefined) {
-                            document.getElementById('st-metric-ping').textContent = `${Math.round(latency)} ms`;
-                        }
-                        if (jitter !== undefined) {
-                            document.getElementById('st-metric-jitter').textContent = `${Math.round(jitter)} ms`;
-                        }
-                    }
+                activeSpeedTest.onResultsChange = ({ type } = {}) => {
+                    if (!speedTestRunning) return;
+                    completedPhaseCount = Math.min(completedPhaseCount + 1, CLOUDFLARE_SPEEDTEST_MEASUREMENTS.length - 1);
+                    const progress = completedPhaseCount / CLOUDFLARE_SPEEDTEST_MEASUREMENTS.length;
+                    updateCloudflareSpeedtestProgress({ type: type || activePhaseType, progress }, isPillMode, metricsConfig);
                 };
 
                 activeSpeedTest.onFinish = (results) => {
                     speedTestRunning = false;
+                    setSpeedtestButtonState('done');
+                    showToast('Speed test completed');
 
-                    const dl = results.getDownloadBandwidth();
-                    const ul = results.getUploadBandwidth();
-                    const latency = results.getUnloadedLatency();
-                    const jitter = results.getUnloadedJitter();
+                    const dl = readSpeedtestResult(results, 'getDownloadBandwidth');
+                    const ul = readSpeedtestResult(results, 'getUploadBandwidth');
+                    const latency = readSpeedtestResult(results, 'getUnloadedLatency');
+                    const jitter = readSpeedtestResult(results, 'getUnloadedJitter');
 
-                    const dlMbps = dl ? (dl / 1000000).toFixed(1) : '0';
-                    const ulMbps = ul ? (ul / 1000000).toFixed(1) : '0';
+                    const dlValue = formatSpeedValue(dl, '0');
 
-                    if (isPillMode) {
-                        const pill = document.getElementById('speedtest-pill-display');
-                        const indicator = document.getElementById('st-pill-indicator');
-                        const pillText = document.getElementById('st-pill-text');
+                    // Show results in a closable pill directly above the button
+                    showSpeedtestResultPill(dl, ul, metricsConfig);
 
-                        if (pill) pill.classList.remove('running');
-                        if (indicator) indicator.className = 'speedtest-pill-indicator success';
-                        if (pillText) {
-                            if (metricsConfig === 'down') {
-                                pillText.textContent = `↓ ${dlMbps} Mbps`;
-                            } else if (metricsConfig === 'up') {
-                                pillText.textContent = `↑ ${ulMbps} Mbps`;
-                            } else {
-                                pillText.textContent = `↓ ${dlMbps} | ↑ ${ulMbps} Mbps`;
-                            }
-                        }
-                    } else {
+                    if (!isPillMode) {
                         const speedNum = document.getElementById('st-speed-number');
                         if (speedNum) {
-                            speedNum.textContent = dlMbps;
+                            speedNum.textContent = dlValue;
                             speedNum.classList.remove('running');
                         }
                         
-                        document.getElementById('st-status-text').textContent = 'Completed';
-                        document.getElementById('st-metric-ping').textContent = latency ? `${Math.round(latency)} ms` : '- ms';
-                        document.getElementById('st-metric-jitter').textContent = jitter ? `${Math.round(jitter)} ms` : '- ms';
-                        document.getElementById('st-metric-upload').textContent = ul ? `${ulMbps} Mbps` : '- Mbps';
+                        setSpeedtestText('st-status-text', 'Completed');
+                        setSpeedtestText('st-metric-ping', latency !== undefined ? `${Math.round(latency)} ms` : '- ms');
+                        setSpeedtestText('st-metric-jitter', jitter !== undefined ? `${Math.round(jitter)} ms` : '- ms');
+                        setSpeedtestText('st-metric-upload', ul !== undefined ? formatSpeedDisplay(ul, '0') : `- ${getSpeedtestUnitConfig().label}`);
 
-                        const startBtn = document.getElementById('st-start-btn');
-                        const stopBtn = document.getElementById('st-stop-btn');
-                        if (startBtn) startBtn.style.display = 'inline-block';
-                        if (stopBtn) stopBtn.style.display = 'none';
+                        resetSpeedtestActions();
 
                         const circle = document.getElementById('st-progress-circle');
                         if (circle) {
                             circle.style.setProperty('--progress', '100%');
-                            circle.classList.remove('active');
                         }
                     }
                 };
@@ -15246,63 +15966,45 @@
                 activeSpeedTest.onError = (err) => {
                     console.error("Cloudflare speed test error:", err);
                     speedTestRunning = false;
+                    setSpeedtestButtonState('idle');
 
                     if (isPillMode) {
-                        const pill = document.getElementById('speedtest-pill-display');
-                        const indicator = document.getElementById('st-pill-indicator');
-                        const pillText = document.getElementById('st-pill-text');
-
-                        if (pill) pill.classList.remove('running');
-                        if (indicator) indicator.className = 'speedtest-pill-indicator';
-                        if (pillText) pillText.textContent = 'Error';
+                        setSpeedtestInlineResult('stopped', 'Error');
                     } else {
-                        document.getElementById('st-status-text').textContent = 'Error: ' + err;
-                        const startBtn = document.getElementById('st-start-btn');
-                        const stopBtn = document.getElementById('st-stop-btn');
-                        if (startBtn) startBtn.style.display = 'inline-block';
-                        if (stopBtn) stopBtn.style.display = 'none';
+                        setSpeedtestText('st-status-text', 'Error: ' + (err?.message || err));
+                        resetSpeedtestActions();
                         const speedNum = document.getElementById('st-speed-number');
                         if (speedNum) speedNum.classList.remove('running');
-
-                        const circle = document.getElementById('st-progress-circle');
-                        if (circle) circle.classList.remove('active');
                     }
                 };
 
-                activeSpeedTest.run();
+                startSpeedtestEngine(activeSpeedTest);
 
             } catch (e) {
                 console.error("Failed to run Cloudflare speed test:", e);
                 speedTestRunning = false;
+                setSpeedtestButtonState('idle');
                 if (isPillMode) {
-                    const pillText = document.getElementById('st-pill-text');
-                    if (pillText) pillText.textContent = 'Error loading library';
+                    setSpeedtestInlineResult('stopped', 'Error loading test');
                 } else {
-                    document.getElementById('st-status-text').textContent = 'Error loading speed test library.';
-                    const startBtn = document.getElementById('st-start-btn');
-                    const stopBtn = document.getElementById('st-stop-btn');
-                    if (startBtn) startBtn.style.display = 'inline-block';
-                    if (stopBtn) stopBtn.style.display = 'none';
+                    setSpeedtestText('st-status-text', 'Error loading speed test library.');
+                    resetSpeedtestActions();
                 }
             }
         }
 
-        function stopCloudflareSpeedTest() {
+        function stopCloudflareSpeedTest(showStoppedState = false) {
             speedTestRunning = false;
+            setSpeedtestButtonState(showStoppedState ? 'stopped' : 'idle');
             if (activeSpeedTest) {
-                try {
-                    if (typeof activeSpeedTest.pause === 'function') {
-                        activeSpeedTest.pause();
-                    }
-                } catch (e) {
-                    console.warn("Failed to pause speedtest:", e);
-                }
+                stopSpeedtestEngine(activeSpeedTest);
                 activeSpeedTest = null;
             }
             
             const pill = document.getElementById('speedtest-pill-display');
             if (pill) {
-                pill.classList.remove('running');
+                pill.style.display = 'none';
+                pill.classList.remove('running', 'stopped');
             }
         }
 
@@ -15323,13 +16025,11 @@
 
             btn.addEventListener('click', () => {
                 const provider = ProfileManager.getItem('speedtest_provider') || 'cloudflare';
-                const style = ProfileManager.getItem('speedtest_style') || 'card';
+                const style = ProfileManager.getItem('speedtest_style') || 'pill';
 
                 if (style === 'pill') {
-                    const pillDisplay = document.getElementById('speedtest-pill-display');
                     if (speedTestRunning) {
                         stopCloudflareSpeedTest();
-                        if (pillDisplay) pillDisplay.style.display = 'none';
                     } else {
                         startCloudflareSpeedTest(true);
                     }
@@ -15366,7 +16066,7 @@
             const closeModal = () => {
                 overlay.classList.remove('open', 'animate');
                 wrap.innerHTML = '';
-                stopCloudflareSpeedTest();
+                stopCloudflareSpeedTest(false);
             };
 
             closeBtn?.addEventListener('click', closeModal);
@@ -15383,11 +16083,8 @@
 
             stopBtn?.addEventListener('click', () => {
                 stopCloudflareSpeedTest();
-                document.getElementById('st-status-text').textContent = 'Test Stopped';
-                if (startBtn) startBtn.style.display = 'inline-block';
-                if (stopBtn) stopBtn.style.display = 'none';
-                const circle = document.getElementById('st-progress-circle');
-                if (circle) circle.classList.remove('active');
+                setSpeedtestText('st-status-text', 'Test Stopped');
+                resetSpeedtestActions();
             });
         }
 
