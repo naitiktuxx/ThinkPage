@@ -30,5 +30,15 @@
       "js": ["content.js"],
       "run_at": "document_start"
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "thinkpage-bridge@naitiktuxx.github.io",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  }
 }
