@@ -75,6 +75,12 @@
             --modal-bg: #303134;
             --theme-color: #202124;
             --text-primary: var(--text-main);
+            /* Button animation easing */
+            --ease-spring: cubic-bezier(0.34, 1.3, 0.64, 1);
+            --ease-out-fast: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+            /* Customize panel width — used for the page-push effect */
+            --cp-width: 340px;
         }
 
         body.light-mode {
@@ -255,6 +261,11 @@
             gap: 4px;
             padding: 12px 16px;
             z-index: 100;
+            transition: right 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.panel-open .top-bar {
+            right: var(--cp-width);
         }
 
         .tb-link {
@@ -820,47 +831,191 @@
         }
 
         /* CUSTOMIZE PANEL */
-        .customize-btn {
+        .bottom-controls-container {
             position: fixed;
             bottom: var(--cust-btn-bottom, 16px);
             top: var(--cust-btn-top, auto);
             left: var(--cust-btn-left, auto);
             right: var(--cust-btn-right, 16px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+            pointer-events: none;
+            transition: bottom 0.32s var(--ease-out-fast), 
+                        top 0.32s var(--ease-out-fast), 
+                        left 0.32s var(--ease-out-fast), 
+                        right 0.32s var(--ease-out-fast);
+        }
+
+        /* When panel is open, push controls to the left of it */
+        body.panel-open .bottom-controls-container,
+        body.panel-open .speedtest-pill-display {
+            right: calc(var(--cust-btn-right, 16px) + var(--cp-width));
+        }
+
+        .bottom-controls-container button {
+            pointer-events: auto;
+        }
+
+        /* CUSTOMIZE BUTTON */
+        .customize-btn {
             background: var(--btn-bg);
             border: 1px solid var(--border-lighter);
             color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: 20px;
+            width: 36px;
+            height: 36px;
+            padding: 0 9px;
+            box-sizing: border-box;
+            border-radius: 18px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: flex-start;
+            gap: 0;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            transition: background .2s, border-color .2s, box-shadow .2s, backdrop-filter .2s, -webkit-backdrop-filter .2s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s;
-            z-index: 100;
+            /* Default (no animations): instant */
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s,
+                        width 0.28s var(--ease-spring),
+                        padding 0.28s var(--ease-spring);
             user-select: none;
             -webkit-user-select: none;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .customize-btn-text {
+            /* Width-driven reveal: no max-width animation, just opacity */
+            opacity: 0;
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: opacity 0.15s var(--ease-standard);
+            /* Slight delay so opacity starts after width begins */
+            transition-delay: 0s;
+            pointer-events: none;
+        }
+
+        .customize-btn:hover {
+            width: 114px;
+            padding: 0 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+            gap: 6px;
+        }
+
+        .customize-btn:hover .customize-btn-text {
+            opacity: 1;
+            transition-delay: 0.08s;
+        }
+
+        .customize-btn:active {
+            transform: scale(0.93);
+            transition: background 0.1s, border-color 0.1s, box-shadow 0.1s,
+                        width 0.28s var(--ease-spring), padding 0.28s var(--ease-spring),
+                        transform 0.1s var(--ease-standard);
+        }
+
+        /* When collapsing (mouse leaves), snap opacity out immediately */
+        .customize-btn:not(:hover) .customize-btn-text {
+            opacity: 0;
+            transition-delay: 0s;
+        }
+
+        /* Icon inside customize button */
+        .customize-btn > svg {
+            flex: 0 0 16px;
+            width: 16px;
+            height: 16px;
         }
 
         .customize-panel {
             position: fixed;
             top: 0;
-            right: -320px;
-            width: 320px;
+            right: 0;
+            width: var(--cp-width);
             height: 100%;
             background: var(--surface-1);
             border-left: 1px solid var(--border-light);
             z-index: 500;
-            transition: right .3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: var(--shadow-panel);
+            /* Rich depth shadow on the left edge */
+            box-shadow: -8px 0 32px rgba(0, 0, 0, 0.28), -1px 0 0 rgba(0, 0, 0, 0.08);
             overflow-y: auto;
+            transform: translateX(100%);
         }
 
         .customize-panel.open {
-            right: 0;
+            transform: translateX(0);
+        }
+
+        /* ── Page push: body content compresses leftward ── */
+        body {
+            transition: padding-right 0.32s cubic-bezier(0.4, 0, 0.2, 1), background-position 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.panel-open {
+            padding-right: var(--cp-width);
+        }
+
+        /* Slide custom wallpaper when side panel opens */
+        body.has-bg.panel-open {
+            background-position: calc(50% - (var(--cp-width) / 2)) center;
+        }
+
+        /* Slide catppuccin gradient background when side panel opens */
+        body.catppuccin-mode {
+            background-size: 115% 100%;
+            background-position: center center;
+            transition: padding-right 0.32s cubic-bezier(0.4, 0, 0.2, 1), background-position 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.catppuccin-mode.panel-open {
+            background-position: calc(50% - (var(--cp-width) / 2)) center;
+        }
+
+        /* ── Depth scrim: subtle dark veil over the page when panel is open ── */
+        body.panel-open::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            /* Only cover page area, not the panel */
+            right: var(--cp-width);
+            background: rgba(0, 0, 0, 0.06);
+            z-index: 498;
+            pointer-events: none;
+            animation: scrimFadeIn 0.32s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes scrimFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* ── Depth scale: main content subtly recedes ── */
+        .main {
+            transform-origin: center top;
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.panel-open .main {
+            transform: scale(0.93);
+        }
+
+        /* Light mode: softer shadow + scrim */
+        body.light-mode .customize-panel {
+            box-shadow: -4px 0 24px rgba(60, 64, 67, 0.18), -1px 0 0 rgba(60, 64, 67, 0.08);
+        }
+
+        body.light-mode.panel-open::before {
+            background: rgba(60, 64, 67, 0.04);
+        }
+
+        /* Catppuccin: deep navy shadow */
+        body.catppuccin-mode .customize-panel {
+            box-shadow: -8px 0 32px rgba(24, 25, 38, 0.45), -1px 0 0 rgba(183, 189, 248, 0.06);
         }
 
         .cp-header {
@@ -1791,11 +1946,39 @@
         }
 
         body.animations-on .customize-panel {
-            transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.36s var(--ease-out-fast);
+        }
+
+        /* Match body push timing to panel slide timing */
+        body.animations-on {
+            transition: padding-right 0.36s var(--ease-out-fast), background-position 0.36s var(--ease-out-fast);
+        }
+
+
+
+        body.animations-on .top-bar,
+        body.animations-on .bottom-controls-container,
+        body.animations-on .speedtest-pill-display {
+            transition: right 0.36s var(--ease-out-fast),
+                        bottom 0.36s var(--ease-out-fast),
+                        top 0.36s var(--ease-out-fast),
+                        left 0.36s var(--ease-out-fast);
+        }
+
+        body.animations-on .main {
+            transition: transform 0.36s var(--ease-out-fast);
         }
 
         body.animations-on .customize-btn {
-            transition: bottom 0.3s ease, right 0.3s ease;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.25s,
+                        backdrop-filter 0.2s, -webkit-backdrop-filter 0.2s,
+                        width 0.3s var(--ease-spring),
+                        padding 0.3s var(--ease-spring),
+                        transform 0.18s var(--ease-out-fast);
+        }
+
+        body.animations-on .customize-btn:active {
+            transform: scale(0.93);
         }
 
         /* Sliding selector pill animation for segment controls */
@@ -4305,15 +4488,39 @@
             .customize-panel {
                 width: 100vw;
                 max-width: 100vw;
-                right: -100vw;
+                /* On mobile: full-width overlay, no page push */
+                transform: translateX(100%);
                 padding-bottom: env(safe-area-inset-bottom);
                 overflow-y: auto;
                 overscroll-behavior: contain;
             }
 
             .customize-panel.open {
+                transform: translateX(0);
+            }
+
+            /* Disable ALL page-push effects on mobile — full-width overlay only */
+            body.panel-open {
+                padding-right: 0;
+            }
+
+            body.panel-open .top-bar {
                 right: 0;
             }
+
+            body.panel-open .bottom-controls-container,
+            body.panel-open .speedtest-pill-display {
+                right: var(--cust-btn-right, 16px);
+            }
+
+            body.panel-open .main {
+                transform: none;
+            }
+
+            body.panel-open::before {
+                display: none;
+            }
+
 
             .cp-section {
                 padding: 16px 18px;
@@ -4324,14 +4531,32 @@
                 font-size: 12px;
             }
 
-            .customize-btn {
+            .bottom-controls-container {
                 position: fixed !important;
                 bottom: max(14px, env(safe-area-inset-bottom)) !important;
                 top: auto !important;
                 left: auto !important;
                 right: max(14px, env(safe-area-inset-right)) !important;
-                min-height: 44px;
-                padding: 10px 16px;
+                gap: 8px !important;
+            }
+
+            .bottom-controls-container button {
+                width: 44px !important;
+                height: 44px !important;
+                padding: 0 13px !important;
+                border-radius: 22px !important;
+                justify-content: flex-start !important;
+            }
+
+            .bottom-controls-container button:hover {
+                width: 122px !important;
+                padding: 0 14px !important;
+            }
+
+            .bottom-controls-container button.running,
+            .bottom-controls-container button.done {
+                width: auto !important;
+                padding: 0 14px !important;
             }
 
             .modal-overlay {
@@ -5203,28 +5428,40 @@
             background: rgba(255, 50, 50, 0.9);
         }
 
-        /* SPEED TEST */
+        @keyframes iconPop {
+            0%   { transform: scale(0.6) rotate(-8deg); opacity: 0.4; }
+            60%  { transform: scale(1.18) rotate(2deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .icon-pop {
+            animation: iconPop 0.28s var(--ease-out-fast) forwards;
+        }
+
+        /* SPEED TEST BUTTON */
         .speedtest-btn {
-            position: fixed;
-            bottom: var(--speedtest-btn-bottom, 64px);
-            top: var(--speedtest-btn-top, auto);
-            left: var(--cust-btn-left, auto);
-            right: var(--cust-btn-right, 16px);
             background: var(--btn-bg);
             border: 1px solid var(--border-lighter);
             color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: 20px;
+            width: 36px;
+            height: 36px;
+            padding: 0 9px;
+            box-sizing: border-box;
+            border-radius: 18px;
             display: flex;
             align-items: center;
-            gap: 8px;
             justify-content: flex-start;
+            gap: 0;
             font-size: 13px;
             font-weight: 500;
             line-height: 1;
             cursor: pointer;
-            transition: background .2s, border-color .2s, box-shadow .2s, backdrop-filter .2s, -webkit-backdrop-filter .2s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s, padding-right .2s;
-            z-index: 100;
+            /* Expand with spring, collapse with fast ease-out */
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.25s,
+                        backdrop-filter 0.2s, -webkit-backdrop-filter 0.2s,
+                        width 0.28s var(--ease-spring),
+                        padding 0.28s var(--ease-spring),
+                        transform 0.18s var(--ease-out-fast);
             user-select: none;
             -webkit-user-select: none;
             overflow: hidden;
@@ -5235,10 +5472,14 @@
         .speedtest-btn:hover {
             background: var(--btn-hover);
             border-color: var(--border-lighter);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
         }
 
         .speedtest-btn:active {
-            transform: none;
+            transform: scale(0.93);
+            transition: background 0.1s, border-color 0.1s, box-shadow 0.1s,
+                        width 0.28s var(--ease-spring), padding 0.28s var(--ease-spring),
+                        transform 0.1s var(--ease-standard);
         }
 
         .speedtest-btn svg {
@@ -5252,26 +5493,54 @@
             overflow: hidden;
             text-overflow: clip;
             min-width: 0;
-            transition: opacity 0.15s ease-in-out;
+            /* No max-width animation — width is driven by the button's own width */
+            opacity: 0;
+            display: block;
+            transition: opacity 0.15s var(--ease-standard);
+            transition-delay: 0s;
+            pointer-events: none;
         }
 
-        .speedtest-btn.running {
-            padding-left: 12px;
-            padding-right: 12px;
+        .speedtest-btn:hover {
+            width: 122px;
+            padding: 0 12px;
             gap: 6px;
+        }
+
+        .speedtest-btn:hover .speedtest-btn-label {
+            opacity: 1;
+            transition-delay: 0.08s;
+        }
+
+        /* Collapsing: fade label out immediately */
+        .speedtest-btn:not(:hover):not(.running):not(.done):not(.stopped) .speedtest-btn-label {
+            opacity: 0;
+            transition-delay: 0s;
         }
 
         .speedtest-btn.running,
         .speedtest-btn.done {
+            width: auto;
+            padding: 0 12px;
+            gap: 6px;
         }
 
-        .speedtest-btn.running svg {
+        .speedtest-btn.running .speedtest-btn-label,
+        .speedtest-btn.done .speedtest-btn-label {
+            opacity: 1;
+            transition-delay: 0.06s;
         }
 
-        .speedtest-btn.running .speedtest-btn-label {
+        body.st-animations-on .speedtest-btn {
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.25s,
+                        backdrop-filter 0.2s, -webkit-backdrop-filter 0.2s,
+                        width 0.32s var(--ease-spring),
+                        padding 0.32s var(--ease-spring),
+                        transform 0.18s var(--ease-out-fast);
         }
 
-        body.has-bg.bg-light .speedtest-btn {
+        body.has-bg.bg-light .speedtest-btn,
+        body.has-bg.bg-light .speedtest-pill-display {
             background: rgba(255, 255, 255, 0.75);
             border-color: rgba(0, 0, 0, 0.08);
             color: #333;
@@ -5293,12 +5562,91 @@
 
         body.glass-mode .speedtest-btn:hover {
             background: var(--glass-bg-hover);
+            box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inset), 0 4px 18px rgba(0, 0, 0, 0.22);
+        }
+
+        body.glass-mode .customize-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inset);
         }
 
-        body.st-animations-on .speedtest-btn {
-            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), background .2s, bottom 0.3s, top 0.3s, left 0.3s, right 0.3s, padding-right .2s;
+        body.glass-mode .customize-btn:hover {
+            background: var(--glass-bg-hover);
+            box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inset), 0 4px 18px rgba(0, 0, 0, 0.22);
         }
+
+        /* ═══════════════════════════════════════════════════════
+           BLUR OFF  —  solid, theme-matched button backgrounds
+           Applies when glass-mode is disabled across all themes
+           ═══════════════════════════════════════════════════════ */
+
+        /* ── Shared selector shorthand ── */
+        .blur-off-btns-base {
+            transition: background 0.18s var(--ease-standard), border-color 0.18s var(--ease-standard), box-shadow 0.18s var(--ease-standard);
+        }
+
+        /* ── DEFAULT DARK THEME (no modifier class = default) ── */
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-btn,
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .customize-btn,
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .shortcuts-expand-btn,
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-pill-display {
+            background: #3c3d41;
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #e8eaed;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        }
+
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-btn:hover,
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .customize-btn:hover,
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .shortcuts-expand-btn:hover {
+            background: #4a4b50;
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+        }
+
+        /* ── LIGHT THEME ── */
+        body.light-mode:not(.glass-mode) .speedtest-btn,
+        body.light-mode:not(.glass-mode) .customize-btn,
+        body.light-mode:not(.glass-mode) .shortcuts-expand-btn,
+        body.light-mode:not(.glass-mode) .speedtest-pill-display {
+            background: #ffffff;
+            border-color: #dadce0;
+            color: #3c4043;
+            box-shadow: 0 1px 6px rgba(60, 64, 67, 0.14), 0 1px 2px rgba(60, 64, 67, 0.08);
+        }
+
+        body.light-mode:not(.glass-mode) .speedtest-btn:hover,
+        body.light-mode:not(.glass-mode) .customize-btn:hover,
+        body.light-mode:not(.glass-mode) .shortcuts-expand-btn:hover {
+            background: #f1f3f4;
+            border-color: #bdc1c6;
+            box-shadow: 0 2px 12px rgba(60, 64, 67, 0.2), 0 1px 4px rgba(60, 64, 67, 0.12);
+        }
+
+        /* ── CATPPUCCIN MACCHIATO THEME ── */
+        body.catppuccin-mode:not(.glass-mode) .speedtest-btn,
+        body.catppuccin-mode:not(.glass-mode) .customize-btn,
+        body.catppuccin-mode:not(.glass-mode) .shortcuts-expand-btn,
+        body.catppuccin-mode:not(.glass-mode) .speedtest-pill-display {
+            background: #363a4f;
+            border-color: rgba(183, 189, 248, 0.18);
+            color: #cad3f5;
+            box-shadow: 0 2px 10px rgba(24, 25, 38, 0.45);
+        }
+
+        body.catppuccin-mode:not(.glass-mode) .speedtest-btn:hover,
+        body.catppuccin-mode:not(.glass-mode) .customize-btn:hover,
+        body.catppuccin-mode:not(.glass-mode) .shortcuts-expand-btn:hover {
+            background: #494d64;
+            border-color: rgba(183, 189, 248, 0.3);
+            box-shadow: 0 4px 18px rgba(24, 25, 38, 0.55);
+        }
+
+
 
         .speedtest-modal {
             width: 480px;
@@ -5700,13 +6048,12 @@
             position: fixed;
             bottom: calc(var(--speedtest-btn-bottom, 64px) + 46px);
             top: auto;
-            background: rgba(68, 65, 84, 0.78);
-            border: 1px solid rgba(181, 187, 230, 0.34);
-            border-top: 1px solid rgba(235, 238, 255, 0.2);
+            background: var(--btn-bg);
+            border: 1px solid var(--border-lighter);
             color: var(--text-secondary);
-            min-height: 36px;
-            padding: 8px 16px;
-            border-radius: 20px;
+            height: 36px;
+            padding: 0 12px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -5714,9 +6061,7 @@
             font-weight: 500;
             line-height: 1;
             z-index: 99;
-            backdrop-filter: blur(46px) saturate(180%);
-            -webkit-backdrop-filter: blur(46px) saturate(180%);
-            box-shadow: 0 18px 42px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.12);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
             transition: bottom 0.3s, top 0.3s, left 0.3s, right 0.3s, transform 0.2s, opacity 0.2s, border-color 0.2s, box-shadow 0.2s;
             user-select: none;
             -webkit-user-select: none;
@@ -5724,6 +6069,7 @@
             right: var(--cust-btn-right, 16px);
             overflow: hidden;
             white-space: nowrap;
+            box-sizing: border-box;
         }
 
         body.st-animations-on .speedtest-pill-display {
@@ -5731,17 +6077,20 @@
         }
 
         body.light-mode .speedtest-pill-display {
-            background: rgba(255, 255, 255, 0.78);
-            border-color: rgba(0,0,0,0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.5);
+            background: #ffffff;
+            border-color: #dadce0;
+            color: #3c4043;
+            box-shadow: 0 1px 6px rgba(60, 64, 67, 0.14), 0 1px 2px rgba(60, 64, 67, 0.08);
         }
 
         body.glass-mode .speedtest-pill-display {
-            background: rgba(68, 65, 84, 0.72);
-            border: 1px solid rgba(181, 187, 230, 0.34);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             border-top: 1px solid var(--glass-border-top);
-            backdrop-filter: blur(46px) saturate(180%);
-            -webkit-backdrop-filter: blur(46px) saturate(180%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inset);
+            color: var(--text-secondary);
         }
 
         .speedtest-pill-display.left-pos {
@@ -5782,15 +6131,15 @@
         .speedtest-pill-text {
             color: var(--text-primary);
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             letter-spacing: 0.1px;
             white-space: nowrap;
         }
 
         .speedtest-pill-divider {
             width: 1px;
-            height: 18px;
-            background: rgba(198, 203, 255, 0.28);
+            height: 14px;
+            background: var(--border-light, rgba(198, 203, 255, 0.28));
             flex: 0 0 auto;
         }
 
@@ -5933,8 +6282,31 @@
 
         @media (max-width: 720px) {
             .speedtest-btn {
-                min-height: 36px;
-                padding: 8px 12px;
+                position: fixed !important;
+                bottom: var(--speedtest-btn-bottom, 64px) !important;
+                top: var(--speedtest-btn-top, auto) !important;
+                left: var(--cust-btn-left, auto) !important;
+                right: var(--cust-btn-right, 16px) !important;
+                width: 44px !important;
+                height: 44px !important;
+                padding: 0 !important;
+                border-radius: 50% !important;
+                justify-content: center !important;
+            }
+
+            .speedtest-btn:hover {
+                width: 122px !important;
+                border-radius: 22px !important;
+                padding: 0 14px !important;
+                justify-content: flex-start !important;
+            }
+
+            .speedtest-btn.running,
+            .speedtest-btn.done {
+                width: auto !important;
+                border-radius: 22px !important;
+                padding: 0 14px !important;
+                justify-content: flex-start !important;
             }
 
             .speedtest-modal {
@@ -5944,13 +6316,6 @@
 
             .speedtest-iframe-wrap {
                 height: 300px;
-            }
-        }
-
-        @media (max-width: 720px) and (hover: none) and (pointer: coarse) {
-            .speedtest-btn {
-                min-width: 44px;
-                min-height: 44px;
             }
         }
     </style>
@@ -6515,23 +6880,25 @@
     </div>
 
     <div class="speedtest-pill-display" id="speedtest-pill-display" style="display: none;"></div>
-    <button class="speedtest-btn" id="speedtest-btn" title="Speed Test" aria-label="Speed Test">
-        <svg id="speedtest-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/>
-            <path d="M12 12l4-4"/>
-            <path d="M7.5 16.5l.01 0"/>
-            <path d="M5.1 12l.01 0"/>
-            <path d="M7.5 7.5l.01 0"/>
-            <path d="M12 5.1l.01 0"/>
-            <path d="M16.5 7.5l.01 0"/>
-        </svg>
-        <span class="speedtest-btn-label" id="speedtest-btn-label">Speed test</span>
-    </button>
+    <div class="bottom-controls-container" id="bottom-controls-container">
+        <button class="speedtest-btn" id="speedtest-btn" title="Speed Test" aria-label="Speed Test">
+            <svg id="speedtest-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/>
+                <path d="M12 12l4-4"/>
+                <path d="M7.5 16.5l.01 0"/>
+                <path d="M5.1 12l.01 0"/>
+                <path d="M7.5 7.5l.01 0"/>
+                <path d="M12 5.1l.01 0"/>
+                <path d="M16.5 7.5l.01 0"/>
+            </svg>
+            <span class="speedtest-btn-label" id="speedtest-btn-label">Speed test</span>
+        </button>
 
-    <button class="customize-btn" id="customize-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        Customize
-    </button>
+        <button class="customize-btn" id="customize-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            <span class="customize-btn-text">Customize</span>
+        </button>
+    </div>
 
     <div class="customize-panel" id="customize-panel" role="dialog" aria-modal="true" aria-labelledby="customize-title">
         <div class="cp-header">
@@ -8108,13 +8475,19 @@
         const keyboardShortcutsOverlay = document.getElementById('keyboard-shortcuts-overlay');
         const keyboardShortcutsClose = document.getElementById('keyboard-shortcuts-close');
         
-        cpBtn.onclick = () => {
-            if (typeof syncCustomizationPanel === 'function') {
-                syncCustomizationPanel();
-            }
+        function openCustomizePanel() {
+            if (typeof syncCustomizationPanel === 'function') syncCustomizationPanel();
             cpPanel.classList.add('open');
-        };
-        cpClose.onclick = () => cpPanel.classList.remove('open');
+            document.body.classList.add('panel-open');
+        }
+
+        function closeCustomizePanel() {
+            cpPanel.classList.remove('open');
+            document.body.classList.remove('panel-open');
+        }
+
+        cpBtn.onclick = openCustomizePanel;
+        cpClose.onclick = closeCustomizePanel;
         keyboardShortcutsBtn?.addEventListener('click', e => {
             e.stopPropagation();
             openKeyboardShortcutsModal();
@@ -8131,7 +8504,7 @@
         });
         document.addEventListener('click', e => {
             if (!cpPanel.contains(e.target) && !cpBtn.contains(e.target)) {
-                cpPanel.classList.remove('open');
+                closeCustomizePanel();
             }
         });
 
@@ -8443,6 +8816,8 @@
                         const closeBtn = openModal.querySelector('.cp-close, .modal-close, button[id*="close"], button[id*="cancel"], .pd-modal-close, #modal-cancel, #p-modal-cancel, #mp-close-btn, #history-close-btn, #keyboard-shortcuts-close, #lens-fallback-cancel, #lens-fallback-close');
                         if (closeBtn) {
                             closeBtn.click();
+                        } else if (openModal.id === 'customize-panel') {
+                            closeCustomizePanel();
                         } else {
                             openModal.classList.remove('open');
                         }
@@ -10806,19 +11181,17 @@
             }
 
             const wpAttr = document.getElementById('wallpaper-attribution');
-            const custBtn = document.getElementById('customize-btn');
+            const bottomControls = document.getElementById('bottom-controls-container');
             const speedtestBtn = document.getElementById('speedtest-btn');
             
             const isNarrow = window.innerWidth < 1050;
 
             if (isNarrow && (val === '1' || val === '4' || val === '5')) {
                 // Stack both on the top-left on narrow screens to prevent overlapping the bottom search bar
-                if (custBtn) {
-                    custBtn.style.setProperty('--cust-btn-bottom', 'auto');
-                    custBtn.style.setProperty('--cust-btn-top', '12px');
-                    custBtn.style.setProperty('--cust-btn-left', '16px');
-                    custBtn.style.setProperty('--cust-btn-right', 'auto');
-                }
+                document.body.style.setProperty('--cust-btn-bottom', 'auto');
+                document.body.style.setProperty('--cust-btn-top', '12px');
+                document.body.style.setProperty('--cust-btn-left', '16px');
+                document.body.style.setProperty('--cust-btn-right', 'auto');
                 if (wpAttr) {
                     wpAttr.style.setProperty('--wp-attr-bottom', 'auto');
                     wpAttr.style.setProperty('--wp-attr-top', '52px'); // Stacked below customize button
@@ -10833,26 +11206,17 @@
                     wpAttr.style.setProperty('--wp-attr-left', val === '1' ? '12px' : '12px');
                     wpAttr.style.setProperty('--wp-attr-right', val === '1' ? 'auto' : 'auto');
                 }
-                if (custBtn) {
-                    custBtn.style.setProperty('--cust-btn-bottom', val === '5' ? 'auto' : '16px');
-                    custBtn.style.setProperty('--cust-btn-top', val === '5' ? '12px' : 'auto');
-                    custBtn.style.setProperty('--cust-btn-left', val === '5' ? '16px' : 'auto');
-                    custBtn.style.setProperty('--cust-btn-right', val === '5' ? 'auto' : '16px');
-                }
+                document.body.style.setProperty('--cust-btn-bottom', val === '5' ? 'auto' : '16px');
+                document.body.style.setProperty('--cust-btn-top', val === '5' ? '12px' : 'auto');
+                document.body.style.setProperty('--cust-btn-left', val === '5' ? '16px' : 'auto');
+                document.body.style.setProperty('--cust-btn-right', val === '5' ? 'auto' : '16px');
             }
 
             if (speedtestBtn) {
                 let speedtestTop = 'auto';
-                let speedtestBottom = '64px';
-                if (custBtn && custBtn.style.getPropertyValue('--cust-btn-top') !== 'auto') {
-                    // Customize button is at the top!
-                    if (wpAttr && wpAttr.style.getPropertyValue('--wp-attr-top') !== 'auto') {
-                        // Wallpaper attribution is also at the top! Stack speedtest below it.
-                        speedtestTop = '92px';
-                    } else {
-                        // Stack speedtest directly below customize button
-                        speedtestTop = '52px';
-                    }
+                let speedtestBottom = '16px';
+                if (document.body.style.getPropertyValue('--cust-btn-top') !== 'auto') {
+                    speedtestTop = '12px';
                     speedtestBottom = 'auto';
                 }
                 speedtestBtn.style.setProperty('--speedtest-btn-bottom', speedtestBottom);
@@ -10860,8 +11224,13 @@
                 
                 const pillDisplay = document.getElementById('speedtest-pill-display');
                 if (pillDisplay) {
-                    pillDisplay.style.setProperty('--speedtest-btn-bottom', speedtestBottom);
-                    updateSpeedtestPillOffset?.();
+                    if (speedtestTop !== 'auto') {
+                        pillDisplay.style.bottom = 'auto';
+                        pillDisplay.style.top = `calc(${speedtestTop} + 46px)`;
+                    } else {
+                        pillDisplay.style.bottom = `calc(${speedtestBottom} + 46px)`;
+                        pillDisplay.style.top = 'auto';
+                    }
                 }
             }
 
@@ -15661,7 +16030,14 @@
             }
         }
 
-        const WHATS_NEW_MANUAL_UPDATES = [];
+        const WHATS_NEW_MANUAL_UPDATES = [
+            {
+                type: 'improve',
+                title: 'Customize Panel & Speed Test Refinements',
+                desc: '- Customization side panel now pushes the main content left with depth scaling and a subtle scrim\n- Custom wallpapers and Catppuccin backgrounds now slide smoothly in sync with the side panel\n- Speed test result pill layout, size, and theme styles updated to perfectly match bottom control buttons\n- Optimized auto-minimize and label transitions on the Speed Test button to prevent layout jitters and flashes',
+                date: 'Jul 5, 2026'
+            }
+        ];
 
         async function fetchGitHubCommits(limit = 8) {
             try {
@@ -16425,8 +16801,10 @@
                 btn.style.transition = originalTransition;
                 btn.style.width = `${lastWidth}px`;
                 
-                // 7. Fade the text label back in
-                if (label) label.style.opacity = '1';
+                // 7. Fade the text label back in (only if not collapsing to idle)
+                if (label) {
+                    label.style.opacity = state === 'idle' ? '' : '1';
+                }
                 
                 // 8. Clear the inline width after transition completes ONLY if not running
                 if (state !== 'running') {
@@ -16438,7 +16816,8 @@
 
             if (label) {
                 label.style.opacity = '0';
-                btn.stFadeTimeout = setTimeout(runWidthTransition, 150);
+                // Small delay: let label fade, then slide width
+                btn.stFadeTimeout = setTimeout(runWidthTransition, 80);
             } else {
                 runWidthTransition();
             }
@@ -16447,6 +16826,16 @@
         function setSpeedtestButtonState(state = 'idle', text = null) {
             const btn = document.getElementById('speedtest-btn');
             if (!btn) return;
+            
+            // Clear any pending auto-minimise timeout
+            if (btn.stMinimiseTimeout) {
+                clearTimeout(btn.stMinimiseTimeout);
+                btn.stMinimiseTimeout = null;
+            }
+
+            // Track previous state to know if icon will change
+            const wasRunning = btn.classList.contains('running');
+            const iconWillChange = (state === 'running') !== wasRunning;
             
             transitionButtonWidth(btn, () => {
                 const label = document.getElementById('speedtest-btn-label');
@@ -16467,10 +16856,31 @@
                         label.textContent = 'Speed test';
                     }
                 }
-                if (icon) icon.innerHTML = state === 'running' ? SPEEDTEST_STOP_ICON : SPEEDTEST_GAUGE_ICON;
+                if (icon) {
+                    icon.innerHTML = state === 'running' ? SPEEDTEST_STOP_ICON : SPEEDTEST_GAUGE_ICON;
+                    // Trigger icon pop when icon visually changes
+                    if (iconWillChange) {
+                        icon.classList.remove('icon-pop');
+                        // Force reflow so re-adding the class restarts the animation
+                        icon.offsetWidth;
+                        icon.classList.add('icon-pop');
+                        icon.addEventListener('animationend', () => {
+                            icon.classList.remove('icon-pop');
+                        }, { once: true });
+                    }
+                }
             }, state);
             
             updateSpeedtestPillOffset();
+
+            // Auto-minimise 'done' state back to 'idle' after 2 seconds
+            if (state === 'done') {
+                btn.stMinimiseTimeout = setTimeout(() => {
+                    if (btn.classList.contains('done')) {
+                        setSpeedtestButtonState('idle');
+                    }
+                }, 2000);
+            }
         }
 
         function setSpeedtestInlineResult(state = 'running', text = '') {
@@ -16483,11 +16893,14 @@
             const btn = document.getElementById('speedtest-btn');
             const pill = document.getElementById('speedtest-pill-display');
             if (!btn || !pill) return;
-            // Pill uses the same --speedtest-btn-bottom as the button, with +46px offset in CSS
-            // Just sync the bottom CSS var if it was set on the button
             const btnBottom = btn.style.getPropertyValue('--speedtest-btn-bottom');
-            if (btnBottom) {
-                pill.style.setProperty('--speedtest-btn-bottom', btnBottom);
+            const btnTop = btn.style.getPropertyValue('--speedtest-btn-top');
+            if (btnBottom && btnBottom !== 'auto') {
+                pill.style.bottom = `calc(${btnBottom} + 46px)`;
+                pill.style.top = 'auto';
+            } else if (btnTop && btnTop !== 'auto') {
+                pill.style.bottom = 'auto';
+                pill.style.top = `calc(${btnTop} + 46px)`;
             }
         }
 
