@@ -849,8 +849,7 @@
         }
 
         /* When panel is open, push controls to the left of it */
-        body.panel-open .bottom-controls-container,
-        body.panel-open .speedtest-pill-display {
+        body.panel-open .bottom-controls-container {
             right: calc(var(--cust-btn-right, 16px) + var(--cp-width));
         }
 
@@ -1957,8 +1956,7 @@
 
 
         body.animations-on .top-bar,
-        body.animations-on .bottom-controls-container,
-        body.animations-on .speedtest-pill-display {
+        body.animations-on .bottom-controls-container {
             transition: right 0.36s var(--ease-out-fast),
                         bottom 0.36s var(--ease-out-fast),
                         top 0.36s var(--ease-out-fast),
@@ -4508,8 +4506,7 @@
                 right: 0;
             }
 
-            body.panel-open .bottom-controls-container,
-            body.panel-open .speedtest-pill-display {
+            body.panel-open .bottom-controls-container {
                 right: var(--cust-btn-right, 16px);
             }
 
@@ -6045,14 +6042,12 @@
         }
 
         .speedtest-pill-display {
-            position: fixed;
-            bottom: calc(var(--speedtest-btn-bottom, 64px) + 46px);
-            top: auto;
+            position: relative;
             background: var(--btn-bg);
-            border: 1px solid var(--border-lighter);
+            border: 0px solid transparent;
             color: var(--text-secondary);
             height: 36px;
-            padding: 0 12px;
+            padding: 0;
             border-radius: 18px;
             display: flex;
             align-items: center;
@@ -6062,18 +6057,74 @@
             line-height: 1;
             z-index: 99;
             box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-            transition: bottom 0.3s, top 0.3s, left 0.3s, right 0.3s, transform 0.2s, opacity 0.2s, border-color 0.2s, box-shadow 0.2s;
             user-select: none;
             -webkit-user-select: none;
-            left: var(--cust-btn-left, auto);
-            right: var(--cust-btn-right, 16px);
             overflow: hidden;
             white-space: nowrap;
             box-sizing: border-box;
+            
+            /* Hidden state by default */
+            max-width: 0;
+            opacity: 0;
+            margin-right: -10px;
+            pointer-events: none;
+            
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
 
+        body.animations-on .speedtest-pill-display,
         body.st-animations-on .speedtest-pill-display {
-            animation: pill-show 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: max-width 0.32s var(--ease-spring),
+                        padding 0.32s var(--ease-spring),
+                        opacity 0.2s ease,
+                        border-width 0.32s var(--ease-spring),
+                        margin-right 0.32s var(--ease-spring),
+                        background 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .speedtest-pill-display.visible {
+            max-width: 220px;
+            opacity: 1;
+            padding: 0 12px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: var(--border-lighter);
+            margin-right: 0;
+            pointer-events: auto;
+        }
+
+        /* Floating Layout Overrides */
+        .speedtest-pill-display.layout-floating {
+            position: absolute;
+            margin-right: 0;
+            bottom: 46px;
+            top: auto;
+            right: 0;
+            left: auto;
+            transform: translateY(10px) scale(0.95);
+        }
+
+        body.controls-at-top .speedtest-pill-display.layout-floating {
+            top: 46px;
+            bottom: auto;
+            left: 0;
+            right: auto;
+            transform: translateY(-10px) scale(0.95);
+        }
+
+        body.animations-on .speedtest-pill-display.layout-floating,
+        body.st-animations-on .speedtest-pill-display.layout-floating {
+            transition: max-width 0.32s var(--ease-spring),
+                        padding 0.32s var(--ease-spring),
+                        opacity 0.2s ease,
+                        border-width 0.32s var(--ease-spring),
+                        transform 0.32s var(--ease-spring),
+                        background 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .speedtest-pill-display.layout-floating.visible {
+            margin-right: 0;
+            transform: translateY(0) scale(1);
         }
 
         body.light-mode .speedtest-pill-display {
@@ -6085,28 +6136,17 @@
 
         body.glass-mode .speedtest-pill-display {
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid var(--glass-border-top);
+            border-style: solid;
+            border-color: var(--glass-border);
+            border-top-color: var(--glass-border-top);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-inset);
             color: var(--text-secondary);
         }
 
-        .speedtest-pill-display.left-pos {
-            left: var(--speedtest-pill-left, 148px);
-            right: auto;
-        }
-
         .speedtest-pill-display.running {
             cursor: pointer;
-            padding-left: 12px;
-            padding-right: 12px;
-            gap: 6px;
-        }
-
-        body.st-animations-on .speedtest-pill-display.running {
-            animation: pill-show 0.4s cubic-bezier(0.16, 1, 0.3, 1), pill-pulse-glow 2s infinite ease-in-out;
         }
 
         .speedtest-pill-display.running::before {
@@ -6879,8 +6919,8 @@
         </div>
     </div>
 
-    <div class="speedtest-pill-display" id="speedtest-pill-display" style="display: none;"></div>
     <div class="bottom-controls-container" id="bottom-controls-container">
+        <div class="speedtest-pill-display" id="speedtest-pill-display"></div>
         <button class="speedtest-btn" id="speedtest-btn" title="Speed Test" aria-label="Speed Test">
             <svg id="speedtest-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0"/>
@@ -7237,6 +7277,13 @@
                     </div>
 
                     <div id="speedtest-pill-options" style="display: block;">
+                        <div class="config-row" style="justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span class="config-label">Pill Layout</span>
+                            <select id="speedtest-layout-select" class="cp-select" style="width: 140px; box-sizing: border-box;">
+                                <option value="inline" selected>Inline (Next to button)</option>
+                                <option value="floating">Floating (Above button)</option>
+                            </select>
+                        </div>
                         <div class="config-row" style="justify-content: space-between; align-items: center;">
                             <span class="config-label">Pill Metrics</span>
                             <select id="speedtest-metrics-select" class="cp-select" style="width: 140px; box-sizing: border-box;">
@@ -11215,23 +11262,14 @@
             if (speedtestBtn) {
                 let speedtestTop = 'auto';
                 let speedtestBottom = '16px';
-                if (document.body.style.getPropertyValue('--cust-btn-top') !== 'auto') {
+                const isTop = document.body.style.getPropertyValue('--cust-btn-top') !== 'auto';
+                document.body.classList.toggle('controls-at-top', isTop);
+                if (isTop) {
                     speedtestTop = '12px';
                     speedtestBottom = 'auto';
                 }
                 speedtestBtn.style.setProperty('--speedtest-btn-bottom', speedtestBottom);
                 speedtestBtn.style.setProperty('--speedtest-btn-top', speedtestTop);
-                
-                const pillDisplay = document.getElementById('speedtest-pill-display');
-                if (pillDisplay) {
-                    if (speedtestTop !== 'auto') {
-                        pillDisplay.style.bottom = 'auto';
-                        pillDisplay.style.top = `calc(${speedtestTop} + 46px)`;
-                    } else {
-                        pillDisplay.style.bottom = `calc(${speedtestBottom} + 46px)`;
-                        pillDisplay.style.top = 'auto';
-                    }
-                }
             }
 
             const suggestions = document.getElementById('suggestions');
@@ -16032,6 +16070,12 @@
 
         const WHATS_NEW_MANUAL_UPDATES = [
             {
+                type: 'feature',
+                title: 'Speed Test Result Pill Layout Customization',
+                desc: 'Added a dropdown to choose between the new Inline layout (sliding out next to the button) and the classic Floating layout (above the controls).',
+                date: 'Jul 10, 2026'
+            },
+            {
                 type: 'improve',
                 title: 'Customize Panel & Speed Test Refinements',
                 desc: '- Customization side panel now pushes the main content left with depth scaling and a subtle scrim\n- Custom wallpapers and Catppuccin backgrounds now slide smoothly in sync with the side panel\n- Speed test result pill layout, size, and theme styles updated to perfectly match bottom control buttons\n- Optimized auto-minimize and label transitions on the Speed Test button to prevent layout jitters and flashes',
@@ -16518,8 +16562,13 @@
             if (btn) {
                 btn.style.display = visible ? 'flex' : 'none';
             }
-            if (!visible && pillDisplay) {
-                pillDisplay.style.display = 'none';
+            if (pillDisplay) {
+                if (!visible) {
+                    pillDisplay.classList.remove('visible');
+                    pillDisplay.style.display = 'none';
+                } else {
+                    pillDisplay.style.display = '';
+                }
             }
             
             const configContainer = document.getElementById('speedtest-config-container');
@@ -16532,6 +16581,14 @@
             const on = ProfileManager.getItem('speedtest_animations') !== '0';
             document.body.classList.toggle('st-animations-on', on);
             document.body.classList.toggle('st-animations-off', !on);
+        }
+
+        function applySpeedtestPillLayout() {
+            const layout = ProfileManager.getItem('speedtest_layout') || 'inline';
+            const pill = document.getElementById('speedtest-pill-display');
+            if (pill) {
+                pill.classList.toggle('layout-floating', layout === 'floating');
+            }
         }
 
         function initSpeedtestControl() {
@@ -16572,7 +16629,7 @@
                             if (cardStyleRadio) cardStyleRadio.checked = true;
                             if (pillOptions) pillOptions.style.display = 'none';
                             const pillDisplay = document.getElementById('speedtest-pill-display');
-                            if (pillDisplay) pillDisplay.style.display = 'none';
+                            if (pillDisplay) pillDisplay.classList.remove('visible');
                         }
                     } else {
                         if (pillStyleRadio) {
@@ -16596,10 +16653,18 @@
                     }
                     const pillDisplay = document.getElementById('speedtest-pill-display');
                     if (val === 'card' && pillDisplay) {
-                        pillDisplay.style.display = 'none';
+                        pillDisplay.classList.remove('visible');
                     }
                 });
             });
+
+            const layoutSelect = document.getElementById('speedtest-layout-select');
+            if (layoutSelect) {
+                layoutSelect.addEventListener('change', e => {
+                    ProfileManager.setItem('speedtest_layout', e.target.value);
+                    applySpeedtestPillLayout();
+                });
+            }
 
             if (metricsSelect) {
                 metricsSelect.addEventListener('change', e => {
@@ -16624,11 +16689,11 @@
 
             syncSpeedtestCustomize();
         }
-
         function syncSpeedtestCustomize() {
             const visible = ProfileManager.getItem('speedtest_visible') !== '0';
             const provider = ProfileManager.getItem('speedtest_provider') || 'cloudflare';
             const style = ProfileManager.getItem('speedtest_style') || 'pill';
+            const layout = ProfileManager.getItem('speedtest_layout') || 'inline';
             const metrics = ProfileManager.getItem('speedtest_metrics') || 'both';
             const unit = ProfileManager.getItem('speedtest_unit') === 'MBps' ? 'MBps' : 'mbps';
             const stAnim = ProfileManager.getItem('speedtest_animations') !== '0';
@@ -16669,6 +16734,10 @@
                 });
                 if (pillOptions) pillOptions.style.display = style === 'pill' ? 'block' : 'none';
             }
+
+            const layoutSelect = document.getElementById('speedtest-layout-select');
+            if (layoutSelect) layoutSelect.value = layout;
+            applySpeedtestPillLayout();
 
             const metricsSelect = document.getElementById('speedtest-metrics-select');
             if (metricsSelect) metricsSelect.value = metrics;
@@ -16885,23 +16954,12 @@
 
         function setSpeedtestInlineResult(state = 'running', text = '') {
             const pillDisplay = document.getElementById('speedtest-pill-display');
-            if (pillDisplay) pillDisplay.style.display = 'none';
+            if (pillDisplay) pillDisplay.classList.remove('visible');
             setSpeedtestButtonState(state, text || formatPillSpeedText(undefined, undefined, ProfileManager.getItem('speedtest_metrics') || 'both', false));
         }
 
         function updateSpeedtestPillOffset() {
-            const btn = document.getElementById('speedtest-btn');
-            const pill = document.getElementById('speedtest-pill-display');
-            if (!btn || !pill) return;
-            const btnBottom = btn.style.getPropertyValue('--speedtest-btn-bottom');
-            const btnTop = btn.style.getPropertyValue('--speedtest-btn-top');
-            if (btnBottom && btnBottom !== 'auto') {
-                pill.style.bottom = `calc(${btnBottom} + 46px)`;
-                pill.style.top = 'auto';
-            } else if (btnTop && btnTop !== 'auto') {
-                pill.style.bottom = 'auto';
-                pill.style.top = `calc(${btnTop} + 46px)`;
-            }
+            // Deprecated: Layout is handled natively by Flexbox flow inside the bottom controls container.
         }
 
         function setSpeedtestPillState(state = 'idle', text = '', status = '') {
@@ -16909,11 +16967,11 @@
             if (!pill) return;
             pill.classList.toggle('running', state === 'running');
             pill.classList.toggle('stopped', state === 'stopped');
+            pill.classList.add('visible');
             const statusHtml = status
                 ? `<span class="speedtest-pill-divider"></span><span class="speedtest-pill-status" id="st-pill-status">${status}</span>`
                 : '';
             pill.innerHTML = `<span class="speedtest-pill-text" id="st-pill-text">${text}</span>${statusHtml}`;
-            updateSpeedtestPillOffset();
         }
 
         function formatPillSpeedText(dl, ul, metricsConfig, showUnit = true) {
@@ -16944,16 +17002,15 @@
                 <span class="speedtest-pill-divider"></span>
                 <button class="speedtest-pill-close" id="st-pill-close" title="Close" aria-label="Close results">✕</button>
             `;
-            pill.style.display = 'flex';
+            pill.classList.add('visible');
             pill.classList.remove('running');
             const closeBtn = pill.querySelector('#st-pill-close');
             if (closeBtn) {
                 closeBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    pill.style.display = 'none';
+                    pill.classList.remove('visible');
                 });
             }
-            updateSpeedtestPillOffset();
         }
 
         function resetSpeedtestActions() {
@@ -17011,7 +17068,7 @@
             if (metricsConfig === 'both' || metricsConfig === 'mixed') {
                 const pillDisplay = document.getElementById('speedtest-pill-display');
                 if (pillDisplay) {
-                    pillDisplay.style.display = 'flex';
+                    pillDisplay.classList.add('visible');
                     setSpeedtestPillState('running', formatPillSpeedText(dl, ul, metricsConfig, false));
                 }
             }
@@ -17099,10 +17156,10 @@
                 const pillDisplay = document.getElementById('speedtest-pill-display');
                 if (pillDisplay) {
                     if (metricsConfig === 'both') {
-                        pillDisplay.style.display = 'flex';
+                        pillDisplay.classList.add('visible');
                         setSpeedtestPillState('running', formatPillSpeedText(undefined, undefined, metricsConfig, false));
                     } else {
-                        pillDisplay.style.display = 'none';
+                        pillDisplay.classList.remove('visible');
                     }
                 }
             }
