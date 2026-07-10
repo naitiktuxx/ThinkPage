@@ -8533,7 +8533,13 @@
             document.body.classList.remove('panel-open');
         }
 
-        cpBtn.onclick = openCustomizePanel;
+        cpBtn.onclick = () => {
+            if (cpPanel.classList.contains('open')) {
+                closeCustomizePanel();
+            } else {
+                openCustomizePanel();
+            }
+        };
         cpClose.onclick = closeCustomizePanel;
         keyboardShortcutsBtn?.addEventListener('click', e => {
             e.stopPropagation();
