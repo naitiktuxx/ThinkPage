@@ -19,50 +19,61 @@
 
         :root {
             --bg-main: #202124;
-            --bg-elevated: #292a2d;
-            --bg-muted: #303134;
+            --bg-elevated: color-mix(in srgb, white 4%, var(--bg-main));
+            --bg-muted: color-mix(in srgb, white 8%, var(--bg-main));
             --text-main: #fff;
             --text-secondary: #e8eaed;
             --text-muted: #9aa0a6;
             --text-shadow: rgba(0, 0, 0, 0.45);
-            --panel-bg: rgba(44, 45, 48, 0.97);
-            --dock-bg: rgba(28, 29, 31, 0.97);
-            --search-bg: #303134;
-            --search-hover: #3c4043;
-            --search-focus: #303134;
-            --search-border: rgba(255, 255, 255, .12);
+
+            /* Tinted panels and menus using color-mix */
+            --panel-bg: color-mix(in srgb, var(--accent) 6%, var(--bg-elevated));
+            --dock-bg: color-mix(in srgb, var(--accent) 8%, var(--bg-main));
+            --search-bg: color-mix(in srgb, var(--accent) 5%, var(--bg-main));
+            --search-hover: color-mix(in srgb, var(--accent) 10%, var(--bg-main));
+            --search-focus: color-mix(in srgb, var(--accent) 4%, var(--bg-main));
+            --search-border: color-mix(in srgb, var(--accent) 15%, rgba(255, 255, 255, .12));
+
             --icon-bg: var(--bg-muted);
             --icon-hover: rgba(255, 255, 255, .08);
-            --border-light: rgba(255, 255, 255, .1);
-            --border-lighter: rgba(255, 255, 255, .15);
-            --divider-color: rgba(255, 255, 255, .18);
+
+            /* Tinted borders and dividers */
+            --border-light: color-mix(in srgb, var(--accent) 10%, rgba(255, 255, 255, .1));
+            --border-lighter: color-mix(in srgb, var(--accent) 15%, rgba(255, 255, 255, .15));
+            --divider-color: color-mix(in srgb, var(--accent) 18%, rgba(255, 255, 255, .18));
+            --panel-border: color-mix(in srgb, var(--accent) 14%, rgba(255, 255, 255, .1));
+
             --accent: #8ab4f8;
             --accent-contrast: #202124;
-            --accent-soft: rgba(138, 180, 248, .12);
+            --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
             --btn-bg: rgba(255, 255, 255, .1);
             --btn-hover: rgba(255, 255, 255, .15);
-            --surface-1: #2c2d30;
-            --surface-2: #303134;
-            --surface-3: #202124;
-            --panel-border: rgba(255, 255, 255, .1);
+
+            --surface-1: color-mix(in srgb, var(--accent) 4%, var(--bg-elevated));
+            --surface-2: color-mix(in srgb, var(--accent) 6%, var(--bg-muted));
+            --surface-3: color-mix(in srgb, var(--accent) 2%, var(--bg-main));
+
             --overlay-bg: rgba(0, 0, 0, .55);
             --shadow-soft: 0 8px 32px rgba(0, 0, 0, .4);
             --shadow-strong: 0 16px 48px rgba(0, 0, 0, .55);
             --shadow-search: 0 2px 10px rgba(0, 0, 0, .35);
             --shadow-search-focus: 0 2px 14px rgba(0, 0, 0, .45);
             --shadow-panel: -4px 0 24px rgba(0, 0, 0, .45);
-            --glass-bg: rgba(32, 33, 36, 0.55);
-            --glass-bg-hover: rgba(48, 49, 52, 0.62);
-            --glass-bg-focus: rgba(60, 64, 67, 0.68);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-border-top: rgba(255, 255, 255, 0.18);
-            --glass-inset: rgba(255, 255, 255, 0.06);
+
+            /* Tinted glassmorphism elements */
+            --glass-bg: color-mix(in srgb, var(--accent) 6%, rgba(32, 33, 36, 0.55));
+            --glass-bg-hover: color-mix(in srgb, var(--accent) 10%, rgba(48, 49, 52, 0.62));
+            --glass-bg-focus: color-mix(in srgb, var(--accent) 12%, rgba(60, 64, 67, 0.68));
+            --glass-border: color-mix(in srgb, var(--accent) 14%, rgba(255, 255, 255, 0.1));
+            --glass-border-top: color-mix(in srgb, var(--accent) 24%, rgba(255, 255, 255, 0.18));
+            --glass-inset: color-mix(in srgb, var(--accent) 8%, rgba(255, 255, 255, 0.06));
             --glass-shadow: rgba(0, 0, 0, 0.35);
             --glass-overlay: rgba(0, 0, 0, 0.5);
             --glass-text: #e8eaed;
             --glass-text-muted: rgba(232, 234, 237, 0.65);
-            --glass-divider: rgba(255, 255, 255, 0.2);
-            --glass-icon-hover: rgba(255, 255, 255, 0.12);
+            --glass-divider: color-mix(in srgb, var(--accent) 18%, rgba(255, 255, 255, 0.2));
+            --glass-icon-hover: color-mix(in srgb, var(--accent) 15%, rgba(255, 255, 255, 0.12));
+
             --logo-fill-1: rgba(255, 255, 255, .88);
             --logo-fill-2: rgba(255, 255, 255, .72);
             --logo-fill-3: rgba(255, 255, 255, .6);
@@ -72,7 +83,7 @@
             --sc-menu-bg: rgba(232, 234, 237, 0.14);
             --sc-menu-bg-hover: rgba(232, 234, 237, 0.24);
             --sc-menu-fg: rgba(232, 234, 237, 0.92);
-            --modal-bg: #303134;
+            --modal-bg: color-mix(in srgb, var(--accent) 8%, var(--bg-muted));
             --theme-color: #202124;
             --text-primary: var(--text-main);
             /* Button animation easing */
@@ -85,50 +96,61 @@
 
         body.light-mode {
             --bg-main: #ffffff;
-            --bg-elevated: #f1f3f4;
-            --bg-muted: #e8eaed;
+            --bg-elevated: color-mix(in srgb, black 3%, var(--bg-main));
+            --bg-muted: color-mix(in srgb, black 6%, var(--bg-main));
             --text-main: #202124;
             --text-secondary: #3c4043;
             --text-muted: #5f6368;
             --text-shadow: none;
-            --panel-bg: rgba(245, 246, 247, 0.98);
-            --dock-bg: rgba(232, 234, 237, 0.98);
+
+            /* Tinted panels and menus in light mode */
+            --panel-bg: color-mix(in srgb, var(--accent) 4%, var(--bg-elevated));
+            --dock-bg: color-mix(in srgb, var(--accent) 6%, var(--bg-muted));
             --search-bg: #ffffff;
-            --search-hover: #f8f9fa;
+            --search-hover: color-mix(in srgb, var(--accent) 4%, #f1f3f4);
             --search-focus: #ffffff;
-            --search-border: #dadce0;
+            --search-border: color-mix(in srgb, var(--accent) 15%, #dadce0);
+
             --icon-bg: var(--bg-elevated);
             --icon-hover: rgba(60, 64, 67, .06);
-            --border-light: #e8eaed;
-            --border-lighter: #dadce0;
-            --divider-color: #dadce0;
+
+            /* Tinted borders and dividers in light mode */
+            --border-light: color-mix(in srgb, var(--accent) 8%, #e8eaed);
+            --border-lighter: color-mix(in srgb, var(--accent) 12%, #dadce0);
+            --divider-color: color-mix(in srgb, var(--accent) 15%, #dadce0);
+            --panel-border: color-mix(in srgb, var(--accent) 10%, #e8eaed);
+
             --accent: #1a73e8;
             --accent-contrast: #ffffff;
-            --accent-soft: rgba(26, 115, 232, .08);
+            --accent-soft: color-mix(in srgb, var(--accent) 8%, transparent);
             --btn-bg: rgba(60, 64, 67, .06);
             --btn-hover: rgba(60, 64, 67, .1);
-            --surface-1: #f8f9fa;
-            --surface-2: #f1f3f4;
-            --surface-3: #f8f9fa;
-            --panel-border: #e8eaed;
+
+            --surface-1: color-mix(in srgb, var(--accent) 3%, var(--bg-elevated));
+            --surface-2: color-mix(in srgb, var(--accent) 5%, var(--bg-muted));
+            --surface-3: color-mix(in srgb, var(--accent) 2%, var(--bg-elevated));
+
             --overlay-bg: rgba(32, 33, 36, .32);
             --shadow-soft: 0 4px 16px rgba(60, 64, 67, .12);
             --shadow-strong: 0 12px 40px rgba(60, 64, 67, .18);
             --shadow-search: 0 1px 6px rgba(60, 64, 67, .12);
             --shadow-search-focus: 0 2px 12px rgba(60, 64, 67, .16);
             --shadow-panel: -4px 0 24px rgba(60, 64, 67, .14);
-            --glass-bg: rgba(255, 255, 255, 0.72);
-            --glass-bg-hover: rgba(255, 255, 255, 0.82);
-            --glass-bg-focus: rgba(255, 255, 255, 0.88);
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --glass-border-top: rgba(255, 255, 255, 0.95);
-            --glass-inset: rgba(255, 255, 255, 0.85);
+
+            /* Tinted glassmorphism elements in light mode */
+            --glass-bg: color-mix(in srgb, var(--accent) 6%, rgba(255, 255, 255, 0.72));
+            --glass-bg-hover: color-mix(in srgb, var(--accent) 8%, rgba(255, 255, 255, 0.82));
+            --glass-bg-focus: color-mix(in srgb, var(--accent) 10%, rgba(255, 255, 255, 0.88));
+            --glass-border: color-mix(in srgb, var(--accent) 8%, rgba(0, 0, 0, 0.08));
+            --glass-border-top: color-mix(in srgb, var(--accent) 15%, rgba(255, 255, 255, 0.95));
+            --glass-inset: color-mix(in srgb, var(--accent) 6%, rgba(255, 255, 255, 0.85));
             --glass-shadow: rgba(60, 64, 67, 0.12);
             --glass-overlay: rgba(255, 255, 255, 0.55);
             --glass-text: #202124;
             --glass-text-muted: #5f6368;
-            --glass-divider: #dadce0;
-            --glass-icon-hover: rgba(60, 64, 67, 0.08);
+            --glass-divider: color-mix(in srgb, var(--accent) 12%, #dadce0);
+            --glass-icon-hover: color-mix(in srgb, var(--accent) 8%, rgba(60, 64, 67, 0.08));
+
             --logo-fill-1: #4285f4;
             --logo-fill-2: #ea4335;
             --logo-fill-3: #fbbc05;
@@ -138,8 +160,8 @@
             --sc-menu-bg: rgba(60, 64, 67, 0.08);
             --sc-menu-bg-hover: rgba(60, 64, 67, 0.14);
             --sc-menu-fg: #5f6368;
-            --modal-bg: #ffffff;
-            --theme-color: #ffffff;
+            --modal-bg: color-mix(in srgb, var(--accent) 4%, #ffffff);
+            --theme-color: var(--bg-main);
             --text-primary: var(--text-main);
         }
 
@@ -842,9 +864,9 @@
             gap: 10px;
             z-index: 100;
             pointer-events: none;
-            transition: bottom 0.32s var(--ease-out-fast), 
-                        top 0.32s var(--ease-out-fast), 
-                        left 0.32s var(--ease-out-fast), 
+            transition: bottom 0.32s var(--ease-out-fast),
+                        top 0.32s var(--ease-out-fast),
+                        left 0.32s var(--ease-out-fast),
                         right 0.32s var(--ease-out-fast);
         }
 
@@ -952,7 +974,7 @@
 
         /* ── Page push: body content compresses leftward ── */
         body {
-            transition: padding-right 0.32s cubic-bezier(0.4, 0, 0.2, 1), background-position 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: padding-right 0.32s cubic-bezier(0.4, 0, 0.2, 1), padding-left 0.32s cubic-bezier(0.4, 0, 0.2, 1), background-position 0.32s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.panel-open {
@@ -968,7 +990,7 @@
         body.catppuccin-mode {
             background-size: 115% 100%;
             background-position: center center;
-            transition: padding-right 0.32s cubic-bezier(0.4, 0, 0.2, 1), background-position 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: padding-right 0.32s cubic-bezier(0.4, 0, 0.2, 1), padding-left 0.32s cubic-bezier(0.4, 0, 0.2, 1), background-position 0.32s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.catppuccin-mode.panel-open {
@@ -1125,6 +1147,121 @@
             accent-color: var(--accent);
             width: 16px;
             height: 16px;
+        }
+
+        /* ── Chrome-style theme mode toggle ── */
+        .theme-mode-toggle {
+            display: flex;
+            background: var(--bg-muted);
+            border-radius: 20px;
+            padding: 3px;
+            gap: 2px;
+            margin-bottom: 16px;
+        }
+
+        .theme-mode-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 12.5px;
+            font-weight: 500;
+            padding: 6px 8px;
+            border-radius: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: background 0.18s, color 0.18s;
+            white-space: nowrap;
+        }
+
+        .theme-mode-btn svg {
+            flex-shrink: 0;
+        }
+
+        .theme-mode-btn.active {
+            background: var(--surface-1);
+            color: var(--text-secondary);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+        }
+
+        body.light-mode .theme-mode-toggle {
+            background: #e8eaed;
+        }
+
+        body.light-mode .theme-mode-btn.active {
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(60,64,67,0.18);
+        }
+
+        /* ── Color swatch grid ── */
+        .color-swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .color-swatch {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s, border-color 0.15s;
+            overflow: hidden;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.08);
+        }
+
+        .color-swatch.selected {
+            border-color: var(--text-secondary);
+            box-shadow: 0 0 0 3px var(--bg-main), 0 0 0 5px var(--text-secondary);
+        }
+
+        .color-swatch .swatch-check {
+            display: none;
+            position: absolute;
+            inset: 0;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.22);
+        }
+
+        .color-swatch.selected .swatch-check {
+            display: flex;
+        }
+
+        .color-swatch .swatch-check svg {
+            color: #fff;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+        }
+
+        /* Two-tone swatch: top half accent color, bottom half dark bg */
+        .color-swatch .swatch-inner {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .color-swatch .swatch-top {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 50%;
+        }
+
+        .color-swatch .swatch-bottom {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 50%;
         }
 
         .theme-label-cat {
@@ -1998,8 +2135,8 @@
         }
 
         body.animations-on .switch-slider:before {
-            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
-                        width 0.22s cubic-bezier(0.4, 0, 0.2, 1), 
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+                        width 0.22s cubic-bezier(0.4, 0, 0.2, 1),
                         background-color 0.28s;
         }
 
@@ -2033,7 +2170,7 @@
             border: 1px solid var(--panel-border);
             border-radius: 16px;
             padding: 12px 18px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
                         inset 0 1px 0 rgba(255, 255, 255, 0.1),
                         0 0 0 1px rgba(0, 0, 0, 0.05);
             z-index: 9999;
@@ -2706,6 +2843,17 @@
         }
 
 
+        .sug-header {
+            padding: 10px 20px 6px 20px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+            text-transform: none;
+            opacity: 0.85;
+            user-select: none;
+        }
+
         .suggestions {
             position: absolute;
             top: var(--sug-top, calc(100% + 6px));
@@ -2930,6 +3078,11 @@
             line-height: 1.4;
             text-transform: uppercase;
             letter-spacing: 0.3px;
+        }
+
+        .cp-hint .experimental-tag {
+            margin-left: 8px;
+            vertical-align: middle;
         }
 
         .config-action-btn {
@@ -3243,11 +3396,11 @@
         }
 
         body.animations-on .shortcuts-area {
-            transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                        bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                        left 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                        right 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+            transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        left 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        right 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
                         margin-top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -5589,6 +5742,7 @@
         /* ── DEFAULT DARK THEME (no modifier class = default) ── */
         body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-btn,
         body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .customize-btn,
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .google-ai-side-tab,
         body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .shortcuts-expand-btn,
         body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-pill-display {
             background: #3c3d41;
@@ -5599,6 +5753,7 @@
 
         body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-btn:hover,
         body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .customize-btn:hover,
+        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .google-ai-side-tab:hover,
         body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .shortcuts-expand-btn:hover {
             background: #4a4b50;
             border-color: rgba(255, 255, 255, 0.2);
@@ -5608,6 +5763,7 @@
         /* ── LIGHT THEME ── */
         body.light-mode:not(.glass-mode) .speedtest-btn,
         body.light-mode:not(.glass-mode) .customize-btn,
+        body.light-mode:not(.glass-mode) .google-ai-side-tab,
         body.light-mode:not(.glass-mode) .shortcuts-expand-btn,
         body.light-mode:not(.glass-mode) .speedtest-pill-display {
             background: #ffffff;
@@ -5618,6 +5774,7 @@
 
         body.light-mode:not(.glass-mode) .speedtest-btn:hover,
         body.light-mode:not(.glass-mode) .customize-btn:hover,
+        body.light-mode:not(.glass-mode) .google-ai-side-tab:hover,
         body.light-mode:not(.glass-mode) .shortcuts-expand-btn:hover {
             background: #f1f3f4;
             border-color: #bdc1c6;
@@ -5627,6 +5784,7 @@
         /* ── CATPPUCCIN MACCHIATO THEME ── */
         body.catppuccin-mode:not(.glass-mode) .speedtest-btn,
         body.catppuccin-mode:not(.glass-mode) .customize-btn,
+        body.catppuccin-mode:not(.glass-mode) .google-ai-side-tab,
         body.catppuccin-mode:not(.glass-mode) .shortcuts-expand-btn,
         body.catppuccin-mode:not(.glass-mode) .speedtest-pill-display {
             background: #363a4f;
@@ -5637,6 +5795,7 @@
 
         body.catppuccin-mode:not(.glass-mode) .speedtest-btn:hover,
         body.catppuccin-mode:not(.glass-mode) .customize-btn:hover,
+        body.catppuccin-mode:not(.glass-mode) .google-ai-side-tab:hover,
         body.catppuccin-mode:not(.glass-mode) .shortcuts-expand-btn:hover {
             background: #494d64;
             border-color: rgba(183, 189, 248, 0.3);
@@ -6062,13 +6221,13 @@
             overflow: hidden;
             white-space: nowrap;
             box-sizing: border-box;
-            
+
             /* Hidden state by default */
             max-width: 0;
             opacity: 0;
             margin-right: -10px;
             pointer-events: none;
-            
+
             transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
 
@@ -6358,12 +6517,600 @@
                 height: 300px;
             }
         }
+
+        .google-ai-side-tab {
+            position: fixed;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 420;
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid var(--border-lighter);
+            border-radius: 999px;
+            background: var(--surface-1);
+            color: var(--text-secondary);
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.18s var(--ease-standard),
+                        border-color 0.18s var(--ease-standard),
+                        box-shadow 0.18s var(--ease-standard),
+                        opacity 0.18s var(--ease-standard);
+        }
+
+        body.mini-browser-enabled .google-ai-side-tab {
+            display: flex;
+        }
+
+        .google-ai-side-tab:hover {
+            transform: translateY(-50%) translateX(4px);
+            background: var(--surface-2);
+            border-color: var(--border-lighter);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.42);
+        }
+
+        body.glass-mode .google-ai-side-tab {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            color: var(--glass-text);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: 0 10px 30px var(--glass-shadow), inset 0 1px 0 var(--glass-inset);
+        }
+
+        body.glass-mode .google-ai-side-tab:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border);
+            border-top-color: var(--glass-border-top);
+            box-shadow: 0 10px 32px var(--glass-shadow), inset 0 1px 0 var(--glass-inset), 0 4px 18px rgba(0, 0, 0, 0.22);
+        }
+
+        body.google-ai-panel-open .google-ai-side-tab {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-50%) translateX(-12px);
+        }
+
+        .google-ai-side-tab svg,
+        .google-ai-drawer-logo svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            color: #8ab4f8;
+        }
+
+        .google-ai-drawer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--google-ai-panel-width, var(--cp-width));
+            max-width: 100vw;
+            height: 100dvh;
+            z-index: 500;
+            background: var(--surface-1);
+            color: var(--text-secondary);
+            border-right: 1px solid var(--border-light);
+            box-shadow: 8px 0 32px rgba(0, 0, 0, 0.28), 1px 0 0 rgba(0, 0, 0, 0.08);
+            transform: translateX(-100%);
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .google-ai-drawer.open {
+            transform: translateX(0);
+        }
+
+        .google-ai-drawer-backdrop {
+            display: none;
+        }
+
+        .google-ai-drawer-backdrop.open {
+            display: none;
+        }
+
+        .google-ai-drawer-header {
+            height: 56px;
+            padding: 0 12px 0 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-light);
+            flex-shrink: 0;
+        }
+
+        body.glass-mode .google-ai-drawer {
+            background: var(--glass-bg);
+            border-right: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            color: var(--glass-text);
+            backdrop-filter: blur(28px) saturate(165%);
+            -webkit-backdrop-filter: blur(28px) saturate(165%);
+            box-shadow: 0 10px 30px var(--glass-shadow), inset 0 1px 0 var(--glass-inset), 8px 0 32px rgba(0, 0, 0, 0.28);
+            --text-main: var(--glass-text);
+            --text-secondary: var(--glass-text);
+            --text-muted: var(--glass-text-muted);
+            --panel-border: var(--glass-border);
+            --border-light: var(--glass-divider);
+            --btn-bg: var(--glass-icon-hover);
+            --btn-hover: var(--glass-icon-hover);
+        }
+
+        body.glass-mode .google-ai-drawer-header {
+            border-bottom-color: var(--glass-divider);
+        }
+
+        .google-ai-drawer-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .google-ai-drawer-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .google-ai-account-toggle {
+            height: 34px;
+            padding: 0 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border-light);
+            background: var(--btn-bg);
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+        }
+
+        .google-ai-account-toggle:hover {
+            background: var(--btn-hover);
+            color: var(--text-secondary);
+        }
+
+        .google-ai-account-toggle input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .google-ai-account-toggle-track {
+            width: 28px;
+            height: 16px;
+            border-radius: 999px;
+            background: var(--text-muted);
+            position: relative;
+            flex-shrink: 0;
+            transition: background 0.18s;
+        }
+
+        .google-ai-account-toggle-track::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            left: 2px;
+            top: 2px;
+            background: var(--bg-main);
+            transition: transform 0.18s;
+        }
+
+        .google-ai-account-toggle input:checked + .google-ai-account-toggle-track {
+            background: var(--accent);
+        }
+
+        .google-ai-account-toggle input:checked + .google-ai-account-toggle-track::after {
+            transform: translateX(12px);
+            background: var(--accent-contrast);
+        }
+
+        .google-ai-account-toggle-text {
+            font-size: 12px;
+            font-weight: 650;
+            white-space: nowrap;
+        }
+
+        .google-ai-drawer-icon-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .google-ai-drawer-icon-btn:hover {
+            background: var(--btn-hover);
+            color: var(--text-secondary);
+        }
+
+        body.glass-mode .google-ai-drawer-icon-btn {
+            color: var(--glass-text-muted);
+        }
+
+        body.glass-mode .google-ai-drawer-icon-btn:hover {
+            background: var(--glass-icon-hover);
+            color: var(--glass-text);
+        }
+
+        body.glass-mode .google-ai-account-toggle {
+            background: var(--glass-icon-hover);
+            border-color: var(--glass-border);
+            color: var(--glass-text-muted);
+        }
+
+        body.glass-mode .google-ai-account-toggle:hover {
+            background: var(--glass-bg-hover);
+            color: var(--glass-text);
+        }
+
+        .mini-browser-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--surface-1);
+            flex-shrink: 0;
+        }
+
+        .mini-browser-url {
+            min-width: 0;
+            flex: 1;
+            height: 36px;
+            border: 1px solid var(--border-light);
+            border-radius: 999px;
+            background: var(--bg-main);
+            color: var(--text-secondary);
+            padding: 0 13px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .mini-browser-url:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-soft);
+        }
+
+        .mini-browser-go {
+            height: 36px;
+            padding: 0 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border-light);
+            background: var(--btn-bg);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 650;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .mini-browser-go:hover {
+            background: var(--btn-hover);
+            border-color: var(--border-lighter);
+        }
+
+        body.glass-mode .mini-browser-nav {
+            background: color-mix(in srgb, var(--glass-bg) 82%, transparent);
+            border-bottom-color: var(--glass-divider);
+        }
+
+        body.glass-mode .mini-browser-url {
+            background: color-mix(in srgb, var(--glass-bg-focus) 68%, transparent);
+            border-color: var(--glass-border);
+            color: var(--glass-text);
+        }
+
+        body.glass-mode .mini-browser-go {
+            background: var(--glass-icon-hover);
+            border-color: var(--glass-border);
+            color: var(--glass-text);
+        }
+
+        .google-ai-drawer-body {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .google-ai-drawer-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: var(--bg-main);
+            flex: 1;
+            filter: invert(1) hue-rotate(180deg);
+            mix-blend-mode: screen;
+            transition: filter 0.3s;
+        }
+
+        body.light-mode .google-ai-drawer-frame {
+            filter: none;
+            mix-blend-mode: normal;
+        }
+
+        body.catppuccin-mode .google-ai-drawer-frame {
+            filter: invert(1) hue-rotate(180deg);
+            mix-blend-mode: screen;
+        }
+
+        .google-ai-frame-fallback {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: var(--surface-1);
+            color: var(--text-secondary);
+        }
+
+        .google-ai-frame-fallback.visible {
+            display: flex;
+        }
+
+        .google-ai-fallback-card {
+            width: min(100%, 320px);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 18px;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            background: var(--surface-2);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .google-ai-fallback-card h4 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .google-ai-fallback-card p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .google-ai-fallback-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .google-ai-fallback-btn {
+            border: 1px solid var(--border-light);
+            border-radius: 999px;
+            background: var(--btn-bg);
+            color: var(--text-secondary);
+            min-height: 36px;
+            padding: 0 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, transform 0.15s;
+        }
+
+        .google-ai-fallback-btn:hover {
+            background: var(--btn-hover);
+            border-color: var(--border-lighter);
+            transform: translateY(-1px);
+        }
+
+        .google-ai-fallback-btn.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--accent-contrast);
+        }
+
+        body.glass-mode .google-ai-frame-fallback {
+            background: color-mix(in srgb, var(--glass-bg) 88%, transparent);
+            backdrop-filter: blur(22px) saturate(150%);
+            -webkit-backdrop-filter: blur(22px) saturate(150%);
+        }
+
+        body.glass-mode .google-ai-fallback-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-border-top);
+            box-shadow: 0 10px 30px var(--glass-shadow), inset 0 1px 0 var(--glass-inset);
+        }
+
+        body.glass-mode .google-ai-fallback-card h4 {
+            color: var(--glass-text);
+        }
+
+        body.glass-mode .google-ai-fallback-card p {
+            color: var(--glass-text-muted);
+        }
+
+        body.glass-mode .google-ai-fallback-btn:not(.primary) {
+            background: var(--glass-icon-hover);
+            border-color: var(--glass-border);
+            color: var(--glass-text);
+        }
+
+        body.google-ai-panel-open {
+            padding-left: var(--google-ai-panel-width, var(--cp-width));
+        }
+
+        body.has-bg.google-ai-panel-open {
+            background-position: calc(50% + (var(--google-ai-panel-width, var(--cp-width)) / 2)) center;
+        }
+
+        body.catppuccin-mode.google-ai-panel-open {
+            background-position: calc(50% + (var(--google-ai-panel-width, var(--cp-width)) / 2)) center;
+        }
+
+        body.google-ai-panel-open::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            left: var(--google-ai-panel-width, var(--cp-width));
+            background: rgba(0, 0, 0, 0.06);
+            z-index: 498;
+            pointer-events: none;
+            animation: scrimFadeIn 0.32s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        body.light-mode.google-ai-panel-open::before {
+            background: rgba(60, 64, 67, 0.04);
+        }
+
+        body.google-ai-panel-open .main {
+            transform: scale(0.93);
+        }
+
+        body.google-ai-panel-open .bottom-controls-container {
+            left: calc(var(--cust-btn-left, 16px) + var(--google-ai-panel-width, var(--cp-width)));
+        }
+
+        @media (max-width: 720px) {
+            .google-ai-side-tab {
+                left: 10px;
+                top: auto;
+                bottom: max(16px, env(safe-area-inset-bottom));
+                transform: none;
+                width: 44px;
+                padding: 0;
+                justify-content: center;
+            }
+
+            .google-ai-side-tab:hover {
+                transform: translateY(-2px);
+            }
+
+            .google-ai-side-tab span {
+                display: none;
+            }
+
+            .google-ai-drawer {
+                width: 100vw;
+                max-width: 100vw;
+            }
+
+            body.google-ai-panel-open {
+                padding-left: 0;
+            }
+
+            body.google-ai-panel-open .main {
+                transform: none;
+            }
+
+            body.google-ai-panel-open::before {
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     <a id="wallpaper-attribution" class="wallpaper-attribution" target="_blank" rel="noopener noreferrer" style="display: none;"></a>
+
+    <button type="button" class="google-ai-side-tab" id="google-ai-side-tab" title="Mini browser" aria-controls="google-ai-drawer" aria-expanded="false">
+        <svg fill="currentColor" fill-rule="evenodd" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9.921 4.196H6.328A2.705 2.705 0 003.623 6.9v11.362a2.705 2.705 0 002.705 2.705h11.363a2.705 2.705 0 002.705-2.705v-4.756l1.623-1.113v5.87a4.329 4.329 0 01-4.328 4.328H6.328A4.329 4.329 0 012 18.263V6.901a4.328 4.328 0 014.328-4.329h4.545l-.952 1.624z"></path>
+            <path d="M17.82 0c.145 0 .268.104.299.246a7 7 0 001.9 3.484 7 7 0 003.485 1.901c.142.031.246.154.246.3a.308.308 0 01-.246.298A7 7 0 0020.02 8.13a7 7 0 00-1.912 3.535.297.297 0 01-.288.238.297.297 0 01-.288-.238A7 7 0 0015.62 8.13a7 7 0 00-3.535-1.912.297.297 0 01-.238-.288c0-.14.1-.26.238-.288A7 7 0 0015.62 3.73 7.001 7.001 0 0017.521.246.308.308 0 0117.82 0z"></path>
+        </svg>
+        <span>Browser</span>
+    </button>
+
+    <div class="google-ai-drawer-backdrop" id="google-ai-drawer-backdrop"></div>
+    <aside class="google-ai-drawer" id="google-ai-drawer" aria-label="Mini browser" aria-hidden="true">
+        <div class="google-ai-drawer-header">
+            <div class="google-ai-drawer-title">
+                <span class="google-ai-drawer-logo" aria-hidden="true">
+                    <svg fill="currentColor" fill-rule="evenodd" viewBox="0 0 24 24">
+                        <path d="M9.921 4.196H6.328A2.705 2.705 0 003.623 6.9v11.362a2.705 2.705 0 002.705 2.705h11.363a2.705 2.705 0 002.705-2.705v-4.756l1.623-1.113v5.87a4.329 4.329 0 01-4.328 4.328H6.328A4.329 4.329 0 012 18.263V6.901a4.328 4.328 0 014.328-4.329h4.545l-.952 1.624z"></path>
+                        <path d="M17.82 0c.145 0 .268.104.299.246a7 7 0 001.9 3.484 7 7 0 003.485 1.901c.142.031.246.154.246.3a.308.308 0 01-.246.298A7 7 0 0020.02 8.13a7 7 0 00-1.912 3.535.297.297 0 01-.288.238.297.297 0 01-.288-.238A7 7 0 0015.62 8.13a7 7 0 00-3.535-1.912.297.297 0 01-.238-.288c0-.14.1-.26.238-.288A7 7 0 0015.62 3.73 7.001 7.001 0 0017.521.246.308.308 0 0117.82 0z"></path>
+                    </svg>
+                </span>
+                <span>Mini Browser</span>
+            </div>
+            <div class="google-ai-drawer-actions">
+                <label class="google-ai-account-toggle" title="Use Google pages without account inside the mini browser">
+                    <input type="checkbox" id="google-ai-no-account-toggle" checked>
+                    <span class="google-ai-account-toggle-track"></span>
+                    <span class="google-ai-account-toggle-text">No account</span>
+                </label>
+                <button type="button" class="google-ai-drawer-icon-btn" id="google-ai-drawer-reload" title="Reload page" aria-label="Reload page">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button type="button" class="google-ai-drawer-icon-btn" id="mini-browser-set-default" title="Set current page as default" aria-label="Set current page as default">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button type="button" class="google-ai-drawer-icon-btn" id="google-ai-drawer-close" title="Close" aria-label="Close AI Mode drawer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="google-ai-drawer-body">
+            <form class="mini-browser-nav" id="mini-browser-form">
+                <input class="mini-browser-url" id="mini-browser-url" type="text" autocomplete="off" spellcheck="false" placeholder="Search or enter website">
+                <button class="mini-browser-go" type="submit">Go</button>
+            </form>
+            <iframe class="google-ai-drawer-frame" id="google-ai-drawer-frame" title="Mini browser" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="clipboard-read; clipboard-write; microphone; camera; identity-credentials-get"></iframe>
+            <div class="google-ai-frame-fallback" id="google-ai-frame-fallback" aria-live="polite">
+                <div class="google-ai-fallback-card">
+                    <h4>This site blocks mini-browser loading</h4>
+                    <p>Some websites refuse embedded browsing. Try another address or reload the current page inside the slider.</p>
+                    <div class="google-ai-fallback-actions">
+                        <button type="button" class="google-ai-fallback-btn primary" id="google-ai-fallback-retry">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M21 12a9 9 0 1 1-2.64-6.36M21 4v6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Retry</span>
+                        </button>
+                        <button type="button" class="google-ai-fallback-btn" id="mini-browser-default-load">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M3 12h18M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span>Default</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
 
     <div class="top-bar">
         <a class="tb-link" id="primary-service-link" href="https://mail.google.com" target="_blank" rel="noopener noreferrer">Gmail</a>
@@ -6458,31 +7205,31 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 </button>
             </div>
-            
+
             <div class="pd-divider"></div>
-            
+
             <div class="pd-section-title">Profiles</div>
             <div class="pd-switch-list" id="pd-profiles-list"></div>
-            
+
             <div class="pd-divider"></div>
-            
+
             <div class="pd-action-row" id="pd-add-profile-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 <span>Add profile</span>
             </div>
-            
+
             <div class="pd-action-row" id="pd-manage-profiles-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                 <span>Manage profiles</span>
             </div>
-            
+
             <div class="pd-action-row" id="pd-history-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <span>Search history</span>
             </div>
-            
+
             <div class="pd-divider" id="pd-portal-divider-sec"></div>
-            
+
             <div class="pd-section-title" id="pd-portal-title-sec">Account Portals</div>
             <a href="https://myaccount.google.com" target="_blank" rel="noopener noreferrer" class="pd-action-row pd-portal-link" id="pd-portal-google" style="text-decoration: none;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -6502,9 +7249,9 @@
                 </svg>
                 <span>DuckDuckGo Settings</span>
             </a>
-            
+
             <div class="pd-divider" id="pd-portal-divider-bottom-sec"></div>
-            
+
             <div class="pd-footer-row">
                 <button type="button" class="pd-footer-link" id="pd-export-btn" title="Backup all profile settings & history">Export Data</button>
                 <button type="button" class="pd-footer-link" id="pd-import-btn" title="Restore settings from backup file">Import Data</button>
@@ -6579,7 +7326,7 @@
             </button>
             <h3 id="lens-fallback-title">Search by image</h3>
             <p class="lens-fallback-warning" id="lens-fallback-warning"></p>
-            
+
             <!-- Content Wrapper -->
             <div class="lens-content-wrapper">
                 <!-- URL Input Section -->
@@ -6686,12 +7433,12 @@
                         </label>
                     </div>
                 </div>
-                
+
                 <!-- Link input -->
                 <div id="modal-icon-url-row" style="display: flex; align-items: center; gap: 8px; width: 100%;">
                     <input type="text" id="modal-icon-url" placeholder="Paste icon URL (e.g. https://...)" style="flex: 1; margin: 0; padding: 8px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; background: var(--surface-3); color: var(--text-main);" />
                 </div>
-                
+
                 <!-- Upload row -->
                 <div id="modal-icon-upload-row" style="display: none; align-items: center; gap: 8px; width: 100%;">
                     <button type="button" class="btn-cancel" id="btn-upload-icon" style="flex: 1; padding: 8px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; cursor: pointer; background: var(--surface-3); color: var(--text-main); font-weight: 500;">Choose File</button>
@@ -6717,22 +7464,22 @@
     <div class="modal-overlay" id="profile-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="p-modal-title">
         <div class="modal">
             <h3 id="p-modal-title">Add Profile</h3>
-            
+
             <label>Profile Name</label>
             <input type="text" id="p-modal-name" placeholder="E.g., Personal, Work, Study" maxlength="20" />
-            
+
             <label>Profile Avatar</label>
             <div class="profile-preview-row" style="margin-bottom: 12px; display: flex; align-items: center; gap: 12px;">
                 <div class="profile-preview" id="p-modal-avatar-preview" style="width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: var(--accent-contrast); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; overflow: hidden;">👤</div>
                 <input class="profile-emoji-input" id="p-modal-emoji-input" type="text" maxlength="4" placeholder="Emoji or character" style="flex: 1; padding: 8px 12px; background: var(--surface-3); border: 1px solid var(--panel-border); border-radius: 8px; font-size: 14px; color: var(--text-main);" />
             </div>
-            
+
             <div class="profile-actions" style="margin-bottom: 16px; display: flex; gap: 8px;">
                 <input type="file" id="p-modal-image-upload" accept="image/*" style="display:none;" />
                 <button class="upload-btn" id="p-modal-image-btn" type="button" style="flex: 1; padding: 8px 12px; background: var(--accent); color: var(--accent-contrast); border: none; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 13px;">Choose Photo</button>
                 <button class="upload-btn secondary" id="p-modal-reset-btn" type="button" style="flex: 1; padding: 8px 12px; background: var(--btn-bg); color: var(--text-secondary); border: 1px solid var(--panel-border); border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 13px;">Reset</button>
             </div>
-            
+
             <div class="modal-actions">
                 <button class="btn-cancel" id="p-modal-cancel">Cancel</button>
                 <button class="btn-done" id="p-modal-done">Save</button>
@@ -6751,7 +7498,7 @@
                     </svg>
                 </button>
             </div>
-            
+
             <div class="manage-profiles-list" id="mp-list"></div>
         </div>
     </div>
@@ -6767,10 +7514,10 @@
                     </svg>
                 </button>
             </div>
-            
+
             <div style="margin: 16px 0; display: flex; flex-direction: column; gap: 12px;">
                 <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 4px;">Choose the data components you want to import from your backup file:</p>
-                
+
                 <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--panel-border); transition: background 0.2s;">
                     <input type="checkbox" id="import-sel-profiles" checked style="width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;" />
                     <div style="flex: 1;">
@@ -6811,7 +7558,7 @@
                     </div>
                 </label>
             </div>
-            
+
             <div class="modal-actions" style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
                 <button class="btn-cancel" id="import-sel-cancel">Cancel</button>
                 <button class="btn-done" id="import-sel-confirm" style="background: var(--accent); color: var(--accent-contrast);">Import Selected</button>
@@ -6842,7 +7589,7 @@
                     Import History
                 </button>
             </div>
-            
+
             <!-- Pane 1: View History -->
             <div id="history-view-pane">
                 <div class="history-modal-controls" style="display: flex; gap: 8px; margin-bottom: 16px; align-items: center;">
@@ -6855,7 +7602,7 @@
                         Clear All
                     </button>
                 </div>
-                
+
                 <div class="history-scroll-area" id="history-scroll-area" style="max-height: 320px; overflow-y: auto; padding-right: 4px; margin-bottom: 16px; border-radius: 8px;">
                     <div id="history-empty-state" class="history-empty-state" style="text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 14px;">
                         No search history found
@@ -6873,7 +7620,7 @@
                     <input type="file" id="history-file-picker" accept=".json,.csv" style="display: none;" />
                     <button class="upload-btn" onclick="document.getElementById('history-file-picker').click()" style="margin: 0 auto; display: inline-block;">Choose File</button>
                 </div>
-                
+
                 <div style="background: var(--surface-2); border-radius: 8px; padding: 12px 16px;">
                     <h5 style="margin: 0 0 6px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
@@ -6885,7 +7632,7 @@
                     </ul>
                 </div>
             </div>
-            
+
             <div class="history-modal-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--panel-border); padding-top: 12px;">
                 <label class="bg-radio" style="font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-secondary);">
                     <input type="checkbox" id="history-save-toggle" checked />
@@ -6949,7 +7696,7 @@
                 </svg>
             </button>
         </div>
-        
+
         <div class="cp-section">
             <h4>Search</h4>
             <p class="cp-hint">Where web searches open</p>
@@ -7198,12 +7945,12 @@
                     <span>On</span>
                 </label>
             </div>
-            
+
         </div>
         <div class="cp-section">
             <h4>Speed test</h4>
             <p class="cp-hint">Configure speed test integration and display style</p>
-            
+
             <div class="speedtest-config-card">
                 <div class="config-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
                     <span class="config-label">Speed test button</span>
@@ -7322,7 +8069,7 @@
                         </label>
                     </div>
                 </div>
-                
+
                 <details class="cp-details" id="shortcuts-advanced-details">
                     <summary>
                         <span>Advanced</span>
@@ -7388,24 +8135,33 @@
         </div>
         <div class="cp-section">
             <h4>Appearance</h4>
-            <p class="cp-hint">Theme</p>
-            <div class="bg-options" id="theme-options">
-                <label class="bg-radio">
-                    <input type="radio" name="theme_type" value="dark">
-                    <span>Dark</span>
-                </label>
-                <label class="bg-radio">
-                    <input type="radio" name="theme_type" value="light">
-                    <span>Light</span>
-                </label>
-                <label class="bg-radio">
-                    <input type="radio" name="theme_type" value="catppuccin">
-                    <span class="theme-label-cat">Catppuccin</span>
-                </label>
-                <label class="bg-radio">
-                    <input type="radio" name="theme_type" value="auto" checked>
-                    <span>Auto</span>
-                </label>
+            <p class="cp-hint">Theme mode <span class="experimental-tag">Light experimental</span></p>
+            <!-- Chrome-style mode toggle -->
+            <div class="theme-mode-toggle" id="theme-mode-toggle">
+                <button class="theme-mode-btn" id="tmbtn-light" data-mode="light" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                    Light
+                </button>
+                <button class="theme-mode-btn" id="tmbtn-dark" data-mode="dark" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    Dark
+                </button>
+                <button class="theme-mode-btn" id="tmbtn-device" data-mode="auto" type="button">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+                    Device
+                </button>
+            </div>
+            <p class="cp-hint" style="margin-bottom:10px;">Color</p>
+            <!-- Chrome-style color swatch grid -->
+            <div class="color-swatch-grid" id="color-swatch-grid">
+                <!-- Swatches injected by JS -->
+            </div>
+            <!-- hidden radio inputs kept for legacy JS compatibility -->
+            <div style="display:none;" id="theme-options">
+                <input type="radio" name="theme_type" value="dark">
+                <input type="radio" name="theme_type" value="light">
+                <input type="radio" name="theme_type" value="catppuccin">
+                <input type="radio" name="theme_type" value="auto" checked>
             </div>
             <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Liquid glass effect</p>
             <div class="segment-control" id="glass-segment">
@@ -7427,6 +8183,14 @@
                 <label class="segment-opt">
                     <input type="radio" name="animations_enabled" value="1" checked>
                     <span>On</span>
+                </label>
+            </div>
+            <div class="config-row" style="margin-top: 12px;">
+                <span class="config-label">Mini browser slider</span>
+                <span class="experimental-tag">Experimental</span>
+                <label class="switch-toggle">
+                    <input type="checkbox" id="mini-browser-enabled-toggle" />
+                    <span class="switch-slider"></span>
                 </label>
             </div>
             <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Close button position</p>
@@ -7478,7 +8242,7 @@
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
                     </button>
                 </div>
-                
+
                 <p class="cp-hint" style="margin-bottom:6px;">Refresh Interval</p>
                 <div class="segment-control" id="bg-refresh-segment">
                     <label class="segment-opt">
@@ -7791,7 +8555,7 @@
             const toggle = document.getElementById('browser-history-toggle');
             const row = document.getElementById('browser-history-row');
             const hint = document.getElementById('browser-history-hint');
-            
+
             if (!toggle || !row || !hint) return;
 
             if (connected) {
@@ -8054,7 +8818,7 @@
                         }
                     }
                     if (val !== null) return val;
-                    
+
                     if (activeId === 'default') {
                         let globalVal = localStorage.getItem(key);
                         if (globalVal === null) {
@@ -8239,24 +9003,24 @@
                         e.dataTransfer.setData('text/html', el.innerHTML);
                         window.draggedAppIndex = index;
                     });
-                    
+
                     el.addEventListener('dragend', () => {
                         el.classList.remove('dragging');
                         document.querySelectorAll('.app-item').forEach(a => a.classList.remove('drag-over'));
                         window.draggedAppIndex = undefined;
                     });
-                    
+
                     el.addEventListener('dragover', (e) => {
                         if (window.draggedAppIndex === undefined) return;
                         e.preventDefault();
                         e.dataTransfer.dropEffect = 'move';
                         el.classList.add('drag-over');
                     });
-                    
+
                     el.addEventListener('dragleave', () => {
                         el.classList.remove('drag-over');
                     });
-                    
+
                     el.addEventListener('drop', (e) => {
                         e.preventDefault();
                         if (window.draggedAppIndex !== undefined && window.draggedAppIndex !== index) {
@@ -8281,7 +9045,7 @@
                     e.stopPropagation();
                     window.currentAppIndex = Number(menuBtn.dataset.i);
                     window.currentAppEngine = getStoredSearchEngine();
-                    
+
                     const dd = document.getElementById('app-dropdown');
                     const rect = menuBtn.getBoundingClientRect();
                     dd.style.left = Math.min(rect.left, window.innerWidth - 200) + 'px';
@@ -8340,9 +9104,9 @@
             const title = document.getElementById('apps-header-title');
             const engine = getStoredSearchEngine();
             const editToggle = document.getElementById('apps-edit-toggle');
-            
+
             g.innerHTML = '';
-            
+
             if (editToggle) {
                 editToggle.style.display = 'flex';
             }
@@ -8360,7 +9124,7 @@
             add.innerHTML = `<div class="app-icon-box add-app-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span>Add website</span>`;
             add.onclick = () => openAppModal(null, null, editToggle?.classList.contains('active'));
             g.appendChild(add);
-            
+
             if (editToggle && editToggle.classList.contains('active')) {
                 g.querySelectorAll('.app-item').forEach(item => {
                     item.classList.add('edit-mode');
@@ -8521,9 +9285,19 @@
         const keyboardShortcutsBtn = document.getElementById('keyboard-shortcuts-btn');
         const keyboardShortcutsOverlay = document.getElementById('keyboard-shortcuts-overlay');
         const keyboardShortcutsClose = document.getElementById('keyboard-shortcuts-close');
-        
+
         function openCustomizePanel() {
             if (typeof syncCustomizationPanel === 'function') syncCustomizationPanel();
+            const googleAiDrawer = document.getElementById('google-ai-drawer');
+            const googleAiTab = document.getElementById('google-ai-side-tab');
+            const googleAiBackdrop = document.getElementById('google-ai-drawer-backdrop');
+            if (googleAiDrawer?.classList.contains('open')) {
+                googleAiDrawer.classList.remove('open');
+                googleAiBackdrop?.classList.remove('open');
+                googleAiDrawer.setAttribute('aria-hidden', 'true');
+                googleAiTab?.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('google-ai-panel-open');
+            }
             cpPanel.classList.add('open');
             document.body.classList.add('panel-open');
         }
@@ -8556,6 +9330,7 @@
             }
         });
         document.addEventListener('click', e => {
+            if (!document.body.contains(e.target)) return;
             if (!cpPanel.contains(e.target) && !cpBtn.contains(e.target)) {
                 closeCustomizePanel();
             }
@@ -9000,86 +9775,303 @@
         const customUploadInput = document.getElementById('custom-bg-upload');
         const uploadStatus = document.getElementById('upload-status');
 
-        
+
         const themeRadios = document.querySelectorAll('input[name="theme_type"]');
-        function isCatppuccinActive() {
-            return document.body.classList.contains('catppuccin-mode');
-        }
 
-        function shouldUseWallpaperAccent() {
-            if (isCatppuccinActive()) return false;
-            const theme = ProfileManager.getItem('theme') || 'auto';
-            if (theme === 'catppuccin') return false;
-            const bg = ProfileManager.getItem('bg_type') || 'default';
-            return bg === 'random' || bg === 'custom';
-        }
+        // ── Chrome-style color swatches ──────────────────────────────────────
+        const COLOR_SWATCHES = [
+            { id: 'blue',       label: 'Blue',       accent: '#8ab4f8', lightAccent: '#1a73e8', top: '#8ab4f8', bottom: '#1c2038', darkBg: '#1c2038', lightBg: '#eef2ff' },
+            { id: 'slate',      label: 'Slate',      accent: '#aecbfa', lightAccent: '#1558d4', top: '#aecbfa', bottom: '#1c2034', darkBg: '#1c2034', lightBg: '#f0f3ff' },
+            { id: 'sky',        label: 'Sky',        accent: '#78c8f8', lightAccent: '#0b6ea8', top: '#78c8f8', bottom: '#142030', darkBg: '#142030', lightBg: '#eef7ff' },
+            { id: 'steel',      label: 'Steel',      accent: '#9baec8', lightAccent: '#4a6785', top: '#9baec8', bottom: '#1a1e28', darkBg: '#1a1e28', lightBg: '#f4f6fa' },
+            { id: 'teal',       label: 'Teal',       accent: '#52d6b8', lightAccent: '#007a6b', top: '#52d6b8', bottom: '#122820', darkBg: '#122820', lightBg: '#eefaf7' },
+            { id: 'green',      label: 'Green',      accent: '#81c995', lightAccent: '#1e7e34', top: '#81c995', bottom: '#142018', darkBg: '#142018', lightBg: '#eef8f0' },
+            { id: 'lime',       label: 'Lime',       accent: '#b3e06a', lightAccent: '#558b2f', top: '#b3e06a', bottom: '#1a2212', darkBg: '#1a2212', lightBg: '#f4faed' },
+            { id: 'sage',       label: 'Sage',       accent: '#a8c5a0', lightAccent: '#4a7c59', top: '#a8c5a0', bottom: '#182018', darkBg: '#182018', lightBg: '#f2f8f0' },
+            { id: 'gold',       label: 'Gold',       accent: '#e8b84b', lightAccent: '#9d6c00', top: '#e8b84b', bottom: '#201c0c', darkBg: '#201c0c', lightBg: '#fdf8ed' },
+            { id: 'orange',     label: 'Orange',     accent: '#f5a623', lightAccent: '#d56e00', top: '#f5a623', bottom: '#1e1608', darkBg: '#1e1608', lightBg: '#fff7ed' },
+            { id: 'brown',      label: 'Brown',      accent: '#c4975a', lightAccent: '#8b5e2a', top: '#c4975a', bottom: '#1c180c', darkBg: '#1c180c', lightBg: '#faf5ee' },
+            { id: 'rose',       label: 'Rose',       accent: '#f28b82', lightAccent: '#c0392b', top: '#f28b82', bottom: '#201416', darkBg: '#201416', lightBg: '#fff3f2' },
+            { id: 'mauve',      label: 'Mauve',      accent: '#d4a0e8', lightAccent: '#8e44ad', top: '#d4a0e8', bottom: '#1c1820', darkBg: '#1c1820', lightBg: '#faf4fd' },
+            { id: 'purple',     label: 'Purple',     accent: '#b39ddb', lightAccent: '#5c35c5', top: '#b39ddb', bottom: '#18162a', darkBg: '#18162a', lightBg: '#f6f2fc' },
+            { id: 'catppuccin', label: 'Catppuccin', accent: '#b7bdf8', lightAccent: '#1e66f5', top: '#b7bdf8', bottom: '#24273a', darkBg: '#24273a', lightBg: '#eff1f5', special: 'catppuccin' },
+            { id: 'pink',       label: 'Pink',       accent: '#f4a7c3', lightAccent: '#d63384', top: '#f4a7c3', bottom: '#201418', darkBg: '#201418', lightBg: '#fff3f7' }
+        ];
 
-        function clearAccentOverride() {
-            document.documentElement.style.removeProperty('--accent');
-            document.documentElement.style.removeProperty('--accent-soft');
-        }
+        // Legacy swatch ID migration (old '-dark' suffix → new clean IDs)
+        const SWATCH_ID_MIGRATION = {
+            'blue-dark':'blue','slate-dark':'slate','sky-dark':'sky','steel-dark':'steel',
+            'teal-dark':'teal','green-dark':'green','lime-dark':'lime','sage-dark':'sage',
+            'gold-dark':'gold','orange-dark':'orange','brown-dark':'brown','rose-dark':'rose',
+            'mauve-dark':'mauve','purple-dark':'purple','pink-dark':'pink'
+        };
+        function migrateSwatchId(id) { return SWATCH_ID_MIGRATION[id] || id; }
 
-        function updateBrowserChrome() {
-            const meta = document.getElementById('meta-theme-color');
-            // Read from body (where theme classes like catppuccin-mode set variables)
-            const bodyStyle = getComputedStyle(document.body);
-            const bg = bodyStyle.getPropertyValue('--theme-color').trim()
-                || bodyStyle.getPropertyValue('--bg-main').trim()
-                || '#202124';
-            if (meta) meta.setAttribute('content', bg);
-            const scheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-            document.documentElement.style.colorScheme = scheme;
-            const cs = document.querySelector('meta[name="color-scheme"]');
-            if (cs) cs.setAttribute('content', scheme);
-        }
-
-        function syncThemeAccent() {
-            if (!shouldUseWallpaperAccent()) clearAccentOverride();
-            updateBrowserChrome();
-        }
+        // ── Helpers ───────────────────────────────────────────────────────────
 
         function getSystemThemeMode() {
             if (!window.matchMedia) return 'dark';
             return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
         }
 
-        function applyTheme() {
-            const theme = ProfileManager.getItem('theme') || 'auto';
-            themeRadios.forEach(r => { if (r.value === theme) r.checked = true; });
-            document.body.classList.remove('light-mode', 'catppuccin-mode');
-            if (theme === 'light') {
-                document.body.classList.add('light-mode');
-            } else if (theme === 'catppuccin') {
+        function updateBrowserChrome() {
+            const meta = document.getElementById('meta-theme-color');
+            const tc = document.documentElement.style.getPropertyValue('--theme-color').trim()
+                || getComputedStyle(document.body).getPropertyValue('--bg-main').trim()
+                || '#202124';
+            if (meta) meta.setAttribute('content', tc);
+            const scheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            document.documentElement.style.colorScheme = scheme;
+            const cs = document.querySelector('meta[name="color-scheme"]');
+            if (cs) cs.setAttribute('content', scheme);
+        }
+
+        // ── Swatch colour application ─────────────────────────────────────────
+        //   Applies every CSS variable defined in the swatch's dark/light palette.
+        //   Catppuccin also gets its signature gradient background-image.
+
+        function applySwatchColors(sw) {
+            const root = document.documentElement;
+
+            // Remove any inline variable overrides so that default CSS variables
+            // or body.catppuccin-mode CSS variables can take effect.
+            root.style.removeProperty('--accent');
+            root.style.removeProperty('--accent-soft');
+            root.style.removeProperty('--accent-contrast');
+            root.style.removeProperty('--theme-color');
+            root.style.removeProperty('--bg-main');
+            root.style.removeProperty('--bg-elevated');
+            root.style.removeProperty('--bg-muted');
+            root.style.removeProperty('--surface-1');
+            root.style.removeProperty('--surface-2');
+            root.style.removeProperty('--surface-3');
+            root.style.removeProperty('--search-bg');
+            root.style.removeProperty('--search-hover');
+            root.style.removeProperty('--search-focus');
+            root.style.removeProperty('--search-border');
+            root.style.removeProperty('--panel-bg');
+            root.style.removeProperty('--dock-bg');
+            root.style.removeProperty('--modal-bg');
+            root.style.removeProperty('--border-light');
+            root.style.removeProperty('--border-lighter');
+            root.style.removeProperty('--divider-color');
+            root.style.removeProperty('--panel-border');
+            root.style.removeProperty('--glass-bg');
+            root.style.removeProperty('--glass-border');
+            root.style.removeProperty('--glass-border-top');
+            root.style.removeProperty('--glass-inset');
+            root.style.removeProperty('--glass-divider');
+            root.style.removeProperty('--glass-icon-hover');
+
+            const isLight = document.body.classList.contains('light-mode');
+
+            if (sw.special === 'catppuccin') {
                 document.body.classList.add('catppuccin-mode');
-            } else if (theme === 'auto') {
-                if (getSystemThemeMode() === 'light') {
-                    document.body.classList.add('light-mode');
+
+                const catBg = isLight ? '#eff1f5' : '#24273a';
+                const catAccent = isLight ? '#1e66f5' : '#b7bdf8';
+                const catAccentSoft = isLight ? 'rgba(30,102,245,.12)' : 'rgba(183,189,248,.14)';
+
+                root.style.setProperty('--bg-main', catBg);
+                root.style.setProperty('--accent', catAccent);
+                root.style.setProperty('--accent-soft', catAccentSoft);
+                root.style.setProperty('--accent-contrast', isLight ? '#ffffff' : '#24273a');
+                root.style.setProperty('--theme-color', isLight ? '#eff1f5' : '#24273a');
+
+                const hasWallpaper = document.body.classList.contains('has-bg');
+                if (!hasWallpaper) {
+                    document.body.style.backgroundImage = isLight
+                        ? 'linear-gradient(165deg,#e0e3ef 0%,#eff1f5 45%,#d8dce8 100%)'
+                        : 'linear-gradient(165deg,#1e2030 0%,#24273a 45%,#181926 100%)';
+                    document.body.style.backgroundAttachment = 'fixed';
+                }
+            } else {
+                document.body.classList.remove('catppuccin-mode');
+
+                const hasWallpaper = document.body.classList.contains('has-bg');
+                if (!hasWallpaper) {
+                    document.body.style.backgroundImage = '';
+                    document.body.style.backgroundAttachment = '';
+                }
+
+                if (!shouldUseWallpaperAccent()) {
+                    const bgVal = isLight ? sw.lightBg : sw.darkBg;
+                    const accentVal = isLight ? sw.lightAccent : sw.accent;
+                    const accentSoftVal = isLight
+                        ? `color-mix(in srgb, ${accentVal} 8%, transparent)`
+                        : `color-mix(in srgb, ${accentVal} 12%, transparent)`;
+
+                    root.style.setProperty('--bg-main', bgVal);
+                    root.style.setProperty('--accent', accentVal);
+                    root.style.setProperty('--accent-soft', accentSoftVal);
+                    root.style.setProperty('--accent-contrast', isLight ? '#ffffff' : '#202124');
+                    root.style.setProperty('--theme-color', bgVal);
                 }
             }
-            syncThemeAccent();
         }
-        themeRadios.forEach(r => {
-            r.addEventListener('change', e => {
-                ProfileManager.setItem('theme', e.target.value);
+
+        // Legacy helpers kept for compatibility with wallpaper / resetBg code
+        function clearAccentOverride() {
+            ['--accent','--accent-soft','--accent-contrast'].forEach(v =>
+                document.documentElement.style.removeProperty(v));
+        }
+        function isCatppuccinActive() {
+            return migrateSwatchId(ProfileManager.getItem('accent_color') || 'blue') === 'catppuccin';
+        }
+        function shouldUseWallpaperAccent() {
+            if (isCatppuccinActive()) return false;
+            const bg = ProfileManager.getItem('bg_type') || 'default';
+            return bg === 'random' || bg === 'custom';
+        }
+        function syncThemeAccent() {
+            const id = migrateSwatchId(ProfileManager.getItem('accent_color') || 'blue');
+            const sw = COLOR_SWATCHES.find(s => s.id === id) || COLOR_SWATCHES[0];
+            applySwatchColors(sw);
+            updateBrowserChrome();
+        }
+        // alias used by wallpaper code
+        function restoreAccentFromStorage() { syncThemeAccent(); }
+
+        // ── Mode toggle UI ────────────────────────────────────────────────────
+
+        function syncModeToggleBtns(mode) {
+            document.querySelectorAll('.theme-mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+        }
+
+        // ── Swatch grid ───────────────────────────────────────────────────────
+
+        function buildColorSwatches() {
+            const grid = document.getElementById('color-swatch-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const rawId  = ProfileManager.getItem('accent_color') || 'blue';
+            const activeId = migrateSwatchId(rawId);
+            const isLight = document.body.classList.contains('light-mode');
+
+            COLOR_SWATCHES.forEach(sw => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'color-swatch' + (sw.id === activeId ? ' selected' : '');
+                btn.dataset.swatchId = sw.id;
+                btn.title = sw.label;
+                btn.setAttribute('aria-label', sw.label);
+
+                let topBg = sw.top;
+                let bottomBg = sw.bottom;
+                if (isLight) {
+                    topBg = sw.lightAccent || sw.accent;
+                    bottomBg = sw.special === 'catppuccin' ? '#eff1f5' : '#ffffff';
+                }
+
+                btn.innerHTML = `
+                    <div class="swatch-inner">
+                        <div class="swatch-top"    style="background:${topBg};"></div>
+                        <div class="swatch-bottom" style="background:${bottomBg};"></div>
+                    </div>
+                    <div class="swatch-check">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="3"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>`;
+                btn.addEventListener('click', () => applyAccentColor(sw.id));
+                grid.appendChild(btn);
+            });
+        }
+
+        function syncSwatchSelection(activeId) {
+            document.querySelectorAll('.color-swatch').forEach(el => {
+                el.classList.toggle('selected', el.dataset.swatchId === activeId);
+            });
+        }
+
+        // ── Swatch click handler ──────────────────────────────────────────────
+
+        function applyAccentColor(swatchId) {
+            const sw = COLOR_SWATCHES.find(s => s.id === swatchId) || COLOR_SWATCHES[0];
+            ProfileManager.setItem('accent_color', sw.id);
+
+            // Remove any legacy catppuccin-mode body class
+            document.body.classList.remove('catppuccin-mode');
+
+            syncSwatchSelection(sw.id);
+            applySwatchColors(sw);
+
+            // Rebuild swatches so their bottom halves update if color mode changes
+            buildColorSwatches();
+            updateBrowserChrome();
+        }
+
+        // ── Mode toggle button handlers ───────────────────────────────────────
+
+        document.querySelectorAll('.theme-mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mode = btn.dataset.mode; // 'light' | 'dark' | 'auto'
+                ProfileManager.setItem('theme', mode);
                 applyTheme();
             });
         });
 
+        // ── Full theme application (page load / radio change) ─────────────────
+
+        function applyTheme() {
+            let theme = ProfileManager.getItem('theme') || 'auto';
+
+            // Migrate: if someone had theme='catppuccin' stored, convert to dark + catppuccin swatch
+            if (theme === 'catppuccin') {
+                theme = 'dark';
+                ProfileManager.setItem('theme', 'dark');
+                const stored = migrateSwatchId(ProfileManager.getItem('accent_color') || '');
+                if (!stored || stored === 'blue') ProfileManager.setItem('accent_color', 'catppuccin');
+            }
+
+            themeRadios.forEach(r => { if (r.value === theme) r.checked = true; });
+            syncModeToggleBtns(theme);
+
+            document.body.classList.remove('light-mode', 'catppuccin-mode');
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+            } else if (theme === 'auto' && getSystemThemeMode() === 'light') {
+                document.body.classList.add('light-mode');
+            }
+
+            syncThemeAccent();
+            buildColorSwatches();
+        }
+
+        // Legacy hidden-radio support
+        themeRadios.forEach(r => {
+            r.addEventListener('change', e => {
+                const val = e.target.value;
+                if (val === 'catppuccin') {
+                    ProfileManager.setItem('theme', 'dark');
+                    ProfileManager.setItem('accent_color', 'catppuccin');
+                } else {
+                    ProfileManager.setItem('theme', val);
+                }
+                applyTheme();
+            });
+        });
+
+        // ── Init ──────────────────────────────────────────────────────────────
+
+        buildColorSwatches();
+
         function initSystemThemeSync() {
             if (!window.matchMedia) return;
-            const systemThemeQuery = window.matchMedia('(prefers-color-scheme: light)');
-            const syncIfAuto = () => {
-                if (ProfileManager.getItem('theme') === 'auto') applyTheme();
-            };
-            if (typeof systemThemeQuery.addEventListener === 'function') {
-                systemThemeQuery.addEventListener('change', syncIfAuto);
-            } else if (typeof systemThemeQuery.addListener === 'function') {
-                systemThemeQuery.addListener(syncIfAuto);
-            }
+            const q = window.matchMedia('(prefers-color-scheme: light)');
+            const syncIfAuto = () => { if (ProfileManager.getItem('theme') === 'auto') applyTheme(); };
+            if (typeof q.addEventListener === 'function') q.addEventListener('change', syncIfAuto);
+            else if (typeof q.addListener === 'function') q.addListener(syncIfAuto);
         }
 
         initSystemThemeSync();
         applyTheme();
+
 
         function getAverageColor(imgEl) {
             try {
@@ -9581,7 +10573,7 @@
                     let h = img.height;
                     const max = 1920;
                     if (w > max || h > max) {
-                        if (w > h) { h *= max / w; w = max; } 
+                        if (w > h) { h *= max / w; w = max; }
                         else { w *= max / h; h = max; }
                     }
                     canvas.width = w; canvas.height = h;
@@ -9780,7 +10772,7 @@
                 document.head.appendChild(link);
             }
             link.type = 'image/svg+xml';
-            
+
             if (engine === 'custom') {
                 const type = ProfileManager.getItem('custom_search_engine_icon_type') || 'url';
                 let iconSrc = '';
@@ -9960,7 +10952,7 @@
             const googleTab = document.querySelector('.lens-segment-tab[data-engine="google"]');
             const bingTab = document.querySelector('.lens-segment-tab[data-engine="bing"]');
             const duckduckgoTab = document.querySelector('.lens-segment-tab[data-engine="duckduckgo"]');
-            
+
             if (googleTab) googleTab.style.display = '';
             if (bingTab) {
                 if (currentEngine === 'google') {
@@ -10126,9 +11118,9 @@
             const modalCard = document.getElementById('lens-fallback-modal-card');
             const dropzone = document.getElementById('lens-dropzone');
             const pasteBtn = document.getElementById('lens-paste-btn');
- 
+
             if (!lensBtn || !fileInput) return;
- 
+
             let searchingTimeout = null;
             let lensImageFilesQueue = [];
 
@@ -10214,7 +11206,7 @@
                     if (preferredEngine === 'google') {
                         lensBtn.classList.add('searching');
                         if (typeof showToast === 'function') showToast(`Searching ${lensImageFilesQueue.length} images in new tabs…`, 5000);
-                        
+
                         lensImageFilesQueue.forEach((file, idx) => {
                             setTimeout(() => {
                                 submitSingleImageSearch(file, '_blank');
@@ -10238,14 +11230,14 @@
                 clearLensQueue();
                 closeLensFallbackModal();
             }
- 
+
             // Problem 1: Always open the modal on click (never skip)
             lensBtn.addEventListener('click', e => {
                 e.stopPropagation();
                 if (lensBtn.classList.contains('searching')) return;
                 openLensFallbackModal();
             });
- 
+
             // Wire Segmented engine selector tabs to purely change state and active highlight
             segmentTabs.forEach(tab => {
                 tab.addEventListener('click', () => {
@@ -10254,7 +11246,7 @@
                     highlightPreferredEngine(engineId);
                 });
             });
- 
+
             // URL Submit button and Enter key listeners
             urlSubmit?.addEventListener('click', submitLensUrlSearch);
             urlInput?.addEventListener('keydown', e => {
@@ -10263,7 +11255,7 @@
                     submitLensUrlSearch();
                 }
             });
- 
+
             fallbackCancel?.addEventListener('click', () => {
                 clearLensQueue();
                 closeLensFallbackModal();
@@ -10272,14 +11264,14 @@
                 clearLensQueue();
                 closeLensFallbackModal();
             });
- 
+
             fallbackOverlay?.addEventListener('click', e => {
                 if (e.target === fallbackOverlay) {
                     clearLensQueue();
                     closeLensFallbackModal();
                 }
             });
- 
+
             // Dropzone click handler
             if (dropzone) {
                 dropzone.addEventListener('click', () => {
@@ -10316,7 +11308,7 @@
                         }
                     }, false);
                 });
- 
+
                 ['dragleave', 'drop'].forEach(eventName => {
                     modalCard.addEventListener(eventName, e => {
                         e.preventDefault();
@@ -10324,7 +11316,7 @@
                         dropzone.classList.remove('drag-hover');
                     }, false);
                 });
- 
+
                 modalCard.addEventListener('drop', e => {
                     const preferredEngine = ProfileManager.getItem('lens_preferred_engine') || 'google';
                     if (preferredEngine === 'bing' || preferredEngine === 'duckduckgo') {
@@ -10335,7 +11327,7 @@
                     const dt = e.dataTransfer;
                     const droppedFiles = Array.from(dt.files || []).filter(file => file.type.startsWith('image/'));
                     if (droppedFiles.length === 0) return;
- 
+
                     addImagesToQueue(droppedFiles);
                 });
             }
@@ -10413,7 +11405,7 @@
                     }
                 }
             });
- 
+
             // Refactored File Input change listener and window unload
             fileInput.addEventListener('change', () => {
                 if (fileInput.files && fileInput.files.length > 0) {
@@ -10423,7 +11415,7 @@
                     lensBtn.classList.remove('searching');
                 }, 10000);
             });
- 
+
             window.addEventListener('beforeunload', () => {
                 lensBtn.classList.remove('searching');
                 if (searchingTimeout) clearTimeout(searchingTimeout);
@@ -10458,7 +11450,7 @@
         function getCenterLogoCustom() {
             const name = ProfileManager.getItem('custom_search_engine_name') || 'Custom';
             const fontFamily = ProfileManager.getItem('custom_search_engine_font') || 'system-ui';
-            
+
             const type = ProfileManager.getItem('custom_search_engine_icon_type') || 'url';
             let iconSrc = '';
             if (type === 'upload') {
@@ -10466,7 +11458,7 @@
             } else {
                 iconSrc = ProfileManager.getItem('custom_search_engine_icon_url') || '';
             }
-            
+
             let iconHtml = '';
             if (iconSrc) {
                 iconHtml = `<img src="${iconSrc}" style="width: 64px; height: 64px; object-fit: contain; border-radius: 8px;" alt="Logo Icon">`;
@@ -10635,6 +11627,189 @@
             });
         }
 
+        const MINI_BROWSER_DEFAULT_URL = 'https://www.google.com/search?udm=50&igu=1';
+        let miniBrowserCurrentUrl = '';
+
+        function setGoogleAiFallbackVisible(visible) {
+            document.getElementById('google-ai-frame-fallback')?.classList.toggle('visible', visible);
+        }
+
+        function getMiniBrowserDefaultUrl() {
+            try { return ProfileManager.getItem('mini_browser_default_url') || MINI_BROWSER_DEFAULT_URL; }
+            catch { return MINI_BROWSER_DEFAULT_URL; }
+        }
+
+        function setMiniBrowserDefaultUrl(url) {
+            try { ProfileManager.setItem('mini_browser_default_url', url); } catch { }
+        }
+
+        function isGoogleMiniBrowserUrl(url) {
+            try {
+                const parsed = new URL(url);
+                return /(^|\.)google\./i.test(parsed.hostname);
+            } catch { return false; }
+        }
+
+        function isNoAccountMiniBrowserOn() {
+            const toggle = document.getElementById('google-ai-no-account-toggle');
+            return toggle ? toggle.checked : true;
+        }
+
+        function applyMiniBrowserNoAccount(url) {
+            if (!isNoAccountMiniBrowserOn() || !isGoogleMiniBrowserUrl(url)) return url;
+            try {
+                const parsed = new URL(url);
+                parsed.searchParams.set('igu', '1');
+                return parsed.toString();
+            } catch { return url; }
+        }
+
+        function normalizeMiniBrowserUrl(value) {
+            const raw = (value || '').trim();
+            if (!raw) return applyMiniBrowserNoAccount(getMiniBrowserDefaultUrl());
+            if (/^https?:\/\//i.test(raw)) return applyMiniBrowserNoAccount(raw);
+            if (/^[\w.-]+(:\d+)?(\/|$)/i.test(raw) && (raw.includes('.') || raw.startsWith('localhost') || raw.includes(':'))) {
+                return applyMiniBrowserNoAccount(`https://${raw}`);
+            }
+            const url = new URL('https://www.google.com/search');
+            url.searchParams.set('q', raw);
+            return applyMiniBrowserNoAccount(url.toString());
+        }
+
+        function loadMiniBrowserUrl(value) {
+            const frame = document.getElementById('google-ai-drawer-frame');
+            const input = document.getElementById('mini-browser-url');
+            if (!frame) return;
+            const url = normalizeMiniBrowserUrl(value);
+            miniBrowserCurrentUrl = url;
+            if (input) input.value = url;
+            setGoogleAiFallbackVisible(false);
+            if (frame.src !== url) frame.src = url;
+        }
+
+        function reloadMiniBrowserPanel() {
+            const frame = document.getElementById('google-ai-drawer-frame');
+            if (!frame) return;
+            setGoogleAiFallbackVisible(false);
+            if (frame.src) frame.src = frame.src;
+            else loadMiniBrowserUrl(getMiniBrowserDefaultUrl());
+        }
+
+        function setCurrentMiniBrowserAsDefault() {
+            const input = document.getElementById('mini-browser-url');
+            const url = normalizeMiniBrowserUrl(input?.value || miniBrowserCurrentUrl || getMiniBrowserDefaultUrl());
+            setMiniBrowserDefaultUrl(url);
+            loadMiniBrowserUrl(url);
+        }
+
+        function isMiniBrowserEnabled() {
+            try { return ProfileManager.getItem('mini_browser_enabled') === '1'; }
+            catch { return false; }
+        }
+
+        function closeMiniBrowserDrawer() {
+            const drawer = document.getElementById('google-ai-drawer');
+            const backdrop = document.getElementById('google-ai-drawer-backdrop');
+            const tab = document.getElementById('google-ai-side-tab');
+            drawer?.classList.remove('open');
+            backdrop?.classList.remove('open');
+            drawer?.setAttribute('aria-hidden', 'true');
+            tab?.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('google-ai-panel-open');
+        }
+
+        function applyMiniBrowserFeatureState() {
+            const enabled = isMiniBrowserEnabled();
+            document.body.classList.toggle('mini-browser-enabled', enabled);
+            document.querySelectorAll('#mini-browser-enabled-toggle').forEach(toggle => {
+                toggle.checked = enabled;
+            });
+            if (!enabled) closeMiniBrowserDrawer();
+        }
+
+        function initMiniBrowserFeatureToggle() {
+            document.querySelectorAll('#mini-browser-enabled-toggle').forEach(toggle => {
+                toggle.addEventListener('change', () => {
+                    try { ProfileManager.setItem('mini_browser_enabled', toggle.checked ? '1' : '0'); } catch { }
+                    applyMiniBrowserFeatureState();
+                });
+            });
+            applyMiniBrowserFeatureState();
+        }
+
+        function initGoogleAiModeDrawer() {
+            const tab = document.getElementById('google-ai-side-tab');
+            const drawer = document.getElementById('google-ai-drawer');
+            const backdrop = document.getElementById('google-ai-drawer-backdrop');
+            const closeBtn = document.getElementById('google-ai-drawer-close');
+            const reloadBtn = document.getElementById('google-ai-drawer-reload');
+            const setDefaultBtn = document.getElementById('mini-browser-set-default');
+            const form = document.getElementById('mini-browser-form');
+            const input = document.getElementById('mini-browser-url');
+            const frame = document.getElementById('google-ai-drawer-frame');
+            const noAccountToggle = document.getElementById('google-ai-no-account-toggle');
+            const fallbackRetryBtn = document.getElementById('google-ai-fallback-retry');
+            const fallbackDefaultBtn = document.getElementById('mini-browser-default-load');
+            if (!tab || !drawer || !backdrop) return;
+
+            if (noAccountToggle) {
+                const stored = (() => {
+                    try { return ProfileManager.getItem('mini_browser_no_account'); } catch { return null; }
+                })();
+                noAccountToggle.checked = stored !== '0';
+                noAccountToggle.addEventListener('change', () => {
+                    try { ProfileManager.setItem('mini_browser_no_account', noAccountToggle.checked ? '1' : '0'); } catch { }
+                    loadMiniBrowserUrl(input?.value || miniBrowserCurrentUrl || getMiniBrowserDefaultUrl());
+                });
+            }
+
+            const openDrawer = () => {
+                if (!isMiniBrowserEnabled()) return;
+                const customizePanel = document.getElementById('customize-panel');
+                if (customizePanel?.classList.contains('open')) {
+                    customizePanel.classList.remove('open');
+                    document.body.classList.remove('panel-open');
+                }
+                drawer.classList.add('open');
+                backdrop.classList.add('open');
+                drawer.setAttribute('aria-hidden', 'false');
+                tab.setAttribute('aria-expanded', 'true');
+                document.body.classList.add('google-ai-panel-open');
+                loadMiniBrowserUrl(miniBrowserCurrentUrl || getMiniBrowserDefaultUrl());
+            };
+
+            const closeDrawer = () => {
+                drawer.classList.remove('open');
+                backdrop.classList.remove('open');
+                drawer.setAttribute('aria-hidden', 'true');
+                tab.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('google-ai-panel-open');
+            };
+
+            tab.addEventListener('click', e => {
+                e.stopPropagation();
+                if (drawer.classList.contains('open')) {
+                    closeDrawer();
+                } else {
+                    openDrawer();
+                }
+            });
+            backdrop.addEventListener('click', closeDrawer);
+            closeBtn?.addEventListener('click', closeDrawer);
+            reloadBtn?.addEventListener('click', reloadMiniBrowserPanel);
+            setDefaultBtn?.addEventListener('click', setCurrentMiniBrowserAsDefault);
+            form?.addEventListener('submit', e => {
+                e.preventDefault();
+                loadMiniBrowserUrl(input?.value || '');
+            });
+            fallbackRetryBtn?.addEventListener('click', reloadMiniBrowserPanel);
+            fallbackDefaultBtn?.addEventListener('click', () => loadMiniBrowserUrl(getMiniBrowserDefaultUrl()));
+            frame?.addEventListener('error', () => setGoogleAiFallbackVisible(true));
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+            });
+        }
+
         function initCustomSearchEngineControl() {
             const nameInput = document.getElementById('custom-search-name');
             const urlInput = document.getElementById('custom-search-url');
@@ -10703,7 +11878,7 @@
                 fileInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
-                    
+
                     const reader = new FileReader();
                     reader.onload = (evt) => {
                         const base64 = evt.target.result;
@@ -10713,7 +11888,7 @@
                         if (getStoredSearchEngine() === 'custom') {
                             updateCenterLogo();
                         }
-                        
+
                         const label = fileInput.closest('.file-upload-btn');
                         if (label) {
                             label.firstChild.textContent = file.name;
@@ -10750,6 +11925,8 @@
             updateFavicon();
 
             initLensSearch();
+            initGoogleAiModeDrawer();
+            initMiniBrowserFeatureToggle();
 
             document.getElementById('ai-btn').addEventListener('click', e => {
                 e.stopPropagation();
@@ -11119,17 +12296,17 @@
         }
 
                 const LENS_POSITIONS = {
-            '1': { 
-                label: 'Left Corner', 
-                type: 'fixed', 
-                alignSelf: 'flex-start', 
-                order: 'unset', 
-                marginTop: '0', 
-                marginBottom: '0', 
-                top: 'auto', 
-                bottom: '24px', 
-                left: '24px', 
-                right: 'auto', 
+            '1': {
+                label: 'Left Corner',
+                type: 'fixed',
+                alignSelf: 'flex-start',
+                order: 'unset',
+                marginTop: '0',
+                marginBottom: '0',
+                top: 'auto',
+                bottom: '24px',
+                left: '24px',
+                right: 'auto',
                 zIndex: '99',
                 sugTop: 'auto',
                 sugBottom: 'calc(100% + 6px)',
@@ -11137,17 +12314,17 @@
                 sugDisplay: 'flex',
                 transform: 'none'
             },
-            '2': { 
-                label: 'Top', 
-                type: 'fixed', 
-                alignSelf: 'center', 
-                order: 'unset', 
-                marginTop: '0', 
-                marginBottom: '0', 
-                top: '24px', 
-                bottom: 'auto', 
-                left: '50%', 
-                right: 'auto', 
+            '2': {
+                label: 'Top',
+                type: 'fixed',
+                alignSelf: 'center',
+                order: 'unset',
+                marginTop: '0',
+                marginBottom: '0',
+                top: '24px',
+                bottom: 'auto',
+                left: '50%',
+                right: 'auto',
                 zIndex: '99',
                 sugTop: 'calc(100% + 6px)',
                 sugBottom: 'auto',
@@ -11155,17 +12332,17 @@
                 sugDisplay: 'block',
                 transform: 'translateX(-50%)'
             },
-            '3': { 
-                label: 'Middle', 
-                type: 'relative', 
-                alignSelf: 'center', 
-                order: 'unset', 
-                marginTop: '0', 
-                marginBottom: '0', 
-                top: 'auto', 
-                bottom: 'auto', 
-                left: 'auto', 
-                right: 'auto', 
+            '3': {
+                label: 'Middle',
+                type: 'relative',
+                alignSelf: 'center',
+                order: 'unset',
+                marginTop: '0',
+                marginBottom: '0',
+                top: 'auto',
+                bottom: 'auto',
+                left: 'auto',
+                right: 'auto',
                 zIndex: 'auto',
                 sugTop: 'calc(100% + 6px)',
                 sugBottom: 'auto',
@@ -11173,17 +12350,17 @@
                 sugDisplay: 'block',
                 transform: 'none'
             },
-            '4': { 
-                label: 'Bottom', 
-                type: 'fixed', 
-                alignSelf: 'center', 
-                order: 'unset', 
-                marginTop: '0', 
-                marginBottom: '0', 
-                top: 'auto', 
-                bottom: '24px', 
-                left: '50%', 
-                right: 'auto', 
+            '4': {
+                label: 'Bottom',
+                type: 'fixed',
+                alignSelf: 'center',
+                order: 'unset',
+                marginTop: '0',
+                marginBottom: '0',
+                top: 'auto',
+                bottom: '24px',
+                left: '50%',
+                right: 'auto',
                 zIndex: '99',
                 sugTop: 'auto',
                 sugBottom: 'calc(100% + 6px)',
@@ -11191,17 +12368,17 @@
                 sugDisplay: 'flex',
                 transform: 'translateX(-50%)'
             },
-            '5': { 
-                label: 'Right Corner', 
-                type: 'fixed', 
-                alignSelf: 'flex-end', 
-                order: 'unset', 
-                marginTop: '0', 
-                marginBottom: '0', 
-                top: 'auto', 
-                bottom: '24px', 
-                left: 'auto', 
-                right: '24px', 
+            '5': {
+                label: 'Right Corner',
+                type: 'fixed',
+                alignSelf: 'flex-end',
+                order: 'unset',
+                marginTop: '0',
+                marginBottom: '0',
+                top: 'auto',
+                bottom: '24px',
+                left: 'auto',
+                right: '24px',
                 zIndex: '99',
                 sugTop: 'auto',
                 sugBottom: 'calc(100% + 6px)',
@@ -11236,7 +12413,7 @@
             const wpAttr = document.getElementById('wallpaper-attribution');
             const bottomControls = document.getElementById('bottom-controls-container');
             const speedtestBtn = document.getElementById('speedtest-btn');
-            
+
             const isNarrow = window.innerWidth < 1050;
 
             if (isNarrow && (val === '1' || val === '4' || val === '5')) {
@@ -11367,7 +12544,7 @@
             } else {
                 area.classList.remove('docked');
                 area.style.position = 'relative';
-                
+
                 // Clear css variables
                 area.style.removeProperty('--dock-top');
                 area.style.removeProperty('--dock-bottom');
@@ -11533,10 +12710,10 @@
                     if (!animationsOn) {
                         return;
                     }
-                    
+
                     e.preventDefault();
                     if (el.dataset.animating === 'true') return;
-                    
+
                     el.dataset.animating = 'true';
                     if (el.hasAttribute('open')) {
                         el.style.overflow = 'hidden';
@@ -11603,14 +12780,14 @@
         function applyLogoOffset(offsetX = parseInt(ProfileManager.getItem('logo_offset_x') || '0', 10), offsetY = parseInt(ProfileManager.getItem('logo_offset_y') || '0', 10)) {
             document.documentElement.style.setProperty('--logo-offset-x', `${offsetX}px`);
             document.documentElement.style.setProperty('--logo-offset-y', `${offsetY}px`);
-            
+
             const xRange = document.getElementById('logo-offset-x-range');
             const xVal = document.getElementById('logo-offset-x-val');
             if (xRange && xVal) {
                 xRange.value = offsetX;
                 xVal.textContent = `${offsetX}px`;
             }
-            
+
             const yRange = document.getElementById('logo-offset-y-range');
             const yVal = document.getElementById('logo-offset-y-val');
             if (yRange && yVal) {
@@ -11621,7 +12798,7 @@
 
         function initLogoOffsetControl() {
             applyLogoOffset();
-            
+
             const xRange = document.getElementById('logo-offset-x-range');
             const xReset = document.getElementById('logo-offset-x-reset');
             if (xRange) {
@@ -11637,7 +12814,7 @@
                     applyLogoOffset(0, parseInt(ProfileManager.getItem('logo_offset_y') || '0', 10));
                 });
             }
-            
+
             const yRange = document.getElementById('logo-offset-y-range');
             const yReset = document.getElementById('logo-offset-y-reset');
             if (yRange) {
@@ -11876,7 +13053,7 @@
                     if (confirm('Are you sure you want to reset this profile? This will restore the default theme, search engine, custom websites, and search history for the active profile only. Other profiles and settings will not be affected.')) {
                         const activeId = ProfileManager.getActiveProfileId();
                         const keysToDelete = [];
-                        
+
                         // Collect localStorage keys to delete
                         for (let i = 0; i < localStorage.length; i++) {
                             const key = localStorage.key(i);
@@ -11886,29 +13063,29 @@
                                 keysToDelete.push(key);
                             }
                         }
-                        
+
                         // Delete localStorage keys
                         keysToDelete.forEach(k => localStorage.removeItem(k));
-                        
+
                         // Collect and delete cookies
                         const cookies = document.cookie.split(';');
                         for (let i = 0; i < cookies.length; i++) {
                             const cookie = cookies[i];
                             const eqPos = cookie.indexOf('=');
                             const name = (eqPos > -1 ? cookie.substr(0, eqPos) : cookie).trim();
-                            
+
                             let shouldDelete = false;
                             if (name.startsWith(`profile_${activeId}_`) || name.startsWith(`browser_session_bg_loaded_${activeId}`)) {
                                 shouldDelete = true;
                             } else if (activeId === 'default' && !name.startsWith('profile_') && !name.startsWith('search_')) {
                                 shouldDelete = true;
                             }
-                            
+
                             if (shouldDelete) {
                                 document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`;
                             }
                         }
-                        
+
                         window.location.reload();
                     }
                 };
@@ -11918,18 +13095,18 @@
         function initRandomBgControl() {
             const select = document.getElementById('random-bg-category');
             const refreshBtn = document.getElementById('refresh-random-bg-btn');
-            
+
             if (select) {
                 const activeCategory = ProfileManager.getItem('bg_category') || 'random,picsum';
                 select.value = activeCategory;
-                
+
                 select.addEventListener('change', e => {
                     ProfileManager.setItem('bg_category', e.target.value);
                     ProfileManager.removeItem('bg_random_url');
                     applyWallpaper();
                 });
             }
-            
+
             if (refreshBtn) {
                 refreshBtn.addEventListener('click', () => {
                     ProfileManager.removeItem('bg_random_url');
@@ -11950,7 +13127,7 @@
                 keepWallpaperBtn.textContent = isAlways ? 'Keeping this wallpaper always' : 'Keep this wallpaper always';
                 keepWallpaperBtn.setAttribute('aria-pressed', String(isAlways));
             }
-            
+
             refreshRadios.forEach(r => {
                 if (r.value === activeMode) r.checked = true;
                 r.addEventListener('change', e => {
@@ -12663,26 +13840,26 @@
             try {
                 const searchHistory = JSON.parse(ProfileManager.getItem('rq') || '[]');
                 if (!Array.isArray(searchHistory)) return;
-                
+
                 const store = loadMostVisitedSitesStore();
                 let updated = false;
-                
+
                 searchHistory.forEach(item => {
                     const q = (item.query || '').trim();
                     if (!q) return;
-                    
+
                     let url = '';
                     if (/^https?:\/\//.test(q)) {
                         url = q;
                     } else if (q.includes('.') && !q.includes(' ') && q.length > 3) {
                         url = 'https://' + q;
                     }
-                    
+
                     if (url) {
                         const cleanUrl = normalizeSiteUrl(url);
                         if (!cleanUrl) return;
                         const name = getSiteName(cleanUrl);
-                        
+
                         if (!store[cleanUrl]) {
                             store[cleanUrl] = { url: cleanUrl, name: name, visitCount: 0, lastVisited: item.timestamp || Date.now() };
                         }
@@ -12691,7 +13868,7 @@
                         updated = true;
                     }
                 });
-                
+
                 if (updated) {
                     saveMostVisitedSitesStore(store);
                 }
@@ -12709,18 +13886,18 @@
         function aggregateHistoryByDomain(historyItems) {
             const domainGroups = {};
             const blocklist = loadMostVisitedBlocklist();
-            
+
             for (const item of historyItems) {
                 if (!item || !item.url) continue;
                 const cleanUrl = normalizeSiteUrl(item.url);
                 if (!cleanUrl) continue;
-                
+
                 // Filter out blocked sites
                 const isBlocked = blocklist.some(b => {
                     return normalizeSiteUrl(b).toLowerCase() === cleanUrl.toLowerCase();
                 });
                 if (isBlocked) continue;
-                
+
                 if (!domainGroups[cleanUrl]) {
                     domainGroups[cleanUrl] = {
                         url: cleanUrl,
@@ -12729,20 +13906,20 @@
                         lastVisited: 0
                     };
                 }
-                
+
                 domainGroups[cleanUrl].visitCount += (item.visitCount || 1);
                 if (item.lastVisitTime && item.lastVisitTime > domainGroups[cleanUrl].lastVisited) {
                     domainGroups[cleanUrl].lastVisited = item.lastVisitTime;
                 }
             }
-            
+
             let list = Object.values(domainGroups);
             list.sort((a, b) => {
                 const countDiff = b.visitCount - a.visitCount;
                 if (countDiff) return countDiff;
                 return b.lastVisited - a.lastVisited;
             });
-            
+
             return list;
         }
 
@@ -12751,21 +13928,21 @@
                 if (ProfileManager.getItem('browser_history_enabled') === '1' && window.__extensionBrowserHistory) {
                     let list = aggregateHistoryByDomain(window.__extensionBrowserHistory);
                     list = list.slice(0, 30);
-                    
+
                     if (list.length < 4) {
                         const defaults = JSON.parse(JSON.stringify(DEFAULT_SC));
                         const blocklist = loadMostVisitedBlocklist();
                         defaults.forEach(def => {
                             const cleanDef = normalizeSiteUrl(def.url);
-                            
+
                             const isBlocked = blocklist.some(b => {
                                 return normalizeSiteUrl(b).toLowerCase() === cleanDef.toLowerCase();
                             });
-                            
+
                             const alreadyExists = list.some(item => {
                                 return normalizeSiteUrl(item.url).toLowerCase() === cleanDef.toLowerCase();
                             });
-                            
+
                             if (!isBlocked && !alreadyExists && list.length < 30) {
                                 list.push({ url: cleanDef || def.url, name: def.name, visitCount: 1, lastVisited: 0 });
                             }
@@ -12777,9 +13954,9 @@
                 hydrateMostVisitedFromHistoryOnce();
                 const store = loadMostVisitedSitesStore();
                 const blocklist = loadMostVisitedBlocklist();
-                
+
                 let list = Object.values(store);
-                
+
                 list = list.filter(item => {
                     if (!item || !item.url) return false;
                     const cleanUrl = normalizeSiteUrl(item.url);
@@ -12787,33 +13964,33 @@
                         return normalizeSiteUrl(b).toLowerCase() === cleanUrl.toLowerCase();
                     });
                 });
-                
+
                 list.sort((a, b) => {
                     const countDiff = (b.visitCount || 0) - (a.visitCount || 0);
                     if (countDiff) return countDiff;
                     return (b.lastVisited || 0) - (a.lastVisited || 0);
                 });
                 list = list.slice(0, 30);
-                
+
                 if (list.length < 4) {
                     const defaults = JSON.parse(JSON.stringify(DEFAULT_SC));
                     defaults.forEach(def => {
                         const cleanDef = normalizeSiteUrl(def.url);
-                        
+
                         const isBlocked = blocklist.some(b => {
                             return normalizeSiteUrl(b).toLowerCase() === cleanDef.toLowerCase();
                         });
-                        
+
                         const alreadyExists = list.some(item => {
                             return normalizeSiteUrl(item.url).toLowerCase() === cleanDef.toLowerCase();
                         });
-                        
+
                         if (!isBlocked && !alreadyExists && list.length < 30) {
                             list.push({ url: cleanDef || def.url, name: def.name, visitCount: 1, lastVisited: 0 });
                         }
                     });
                 }
-                
+
                 return list;
             } catch (e) {
                 console.error("Error loading most visited sites:", e);
@@ -12830,13 +14007,13 @@
                     const blocklist = loadMostVisitedBlocklist();
                     blocklist.push(item.url);
                     saveMostVisitedBlocklist(blocklist);
-                    
+
                     window.lastRemovedSc = {
                         index: index,
                         data: item,
                         type: 'most_visited'
                     };
-                    
+
                     renderShortcuts();
                     showToast('Most-visited site removed');
                 }
@@ -13252,7 +14429,7 @@
             const urlInp = document.getElementById('modal-icon-url');
             const btnRemove = document.getElementById('btn-remove-icon');
             const removeRow = document.getElementById('modal-remove-icon-row');
-            
+
             if (window.customIconBase64) {
                 const isUpload = window.customIconBase64.startsWith('data:');
                 document.querySelectorAll('input[name="modal_icon_type"]').forEach(r => {
@@ -13287,11 +14464,11 @@
             const modalOverlay = document.getElementById('modal-overlay');
             modalOverlay.classList.add('open');
             runOpenAnimation(modalOverlay, 360);
-            
+
             // Show custom icon row
             const customIconRow = document.getElementById('modal-custom-icon-row');
             if (customIconRow) customIconRow.style.display = 'flex';
-            
+
             // Reset file input
             const fileInp = document.getElementById('modal-icon-upload');
             if (fileInp) fileInp.value = '';
@@ -13299,14 +14476,14 @@
             document.querySelector('.modal h3').textContent = scData ? 'Edit shortcut' : 'Add shortcut';
             document.getElementById('modal-name').value = scData ? scData.name : '';
             document.getElementById('modal-url').value = scData ? scData.url : '';
-            
+
             window.customIconBase64 = scData ? (scData.customIcon || null) : null;
             setupModalCustomIconFields();
-            
+
             if (scData) {
                 const ic = document.getElementById('preview-icon');
                 if (ic) {
-                    ic.src = window.customIconBase64 || fav(scData.url); 
+                    ic.src = window.customIconBase64 || fav(scData.url);
                     ic.style.display = 'inline';
                 }
                 let host = '';
@@ -13334,7 +14511,7 @@
             const modalOverlay = document.getElementById('modal-overlay');
             modalOverlay.classList.add('open');
             runOpenAnimation(modalOverlay, 360);
-            
+
             // Show custom icon row
             const customIconRow = document.getElementById('modal-custom-icon-row');
             if (customIconRow) customIconRow.style.display = 'flex';
@@ -13346,14 +14523,14 @@
             document.querySelector('.modal h3').textContent = appData ? 'Edit website' : 'Add website';
             document.getElementById('modal-name').value = appData ? appData.name : '';
             document.getElementById('modal-url').value = appData ? appData.url : '';
-            
+
             window.customIconBase64 = appData ? (appData.customIcon || null) : null;
             setupModalCustomIconFields();
 
             if (appData) {
                 const ic = document.getElementById('preview-icon');
                 if (ic) {
-                    ic.src = window.customIconBase64 || fav(appData.url); 
+                    ic.src = window.customIconBase64 || fav(appData.url);
                     ic.style.display = 'inline';
                 }
                 let host = '';
@@ -13397,13 +14574,13 @@
                         canvas.width = 64;
                         canvas.height = 64;
                         const ctx = canvas.getContext('2d');
-                        
+
                         // Center crop to 64x64
                         const size = Math.min(img.width, img.height);
                         const sx = (img.width - size) / 2;
                         const sy = (img.height - size) / 2;
                         ctx.drawImage(img, sx, sy, size, size, 0, 0, 64, 64);
-                        
+
                         const dataUrl = canvas.toDataURL('image/png');
                         window.customIconBase64 = dataUrl;
 
@@ -13432,7 +14609,7 @@
                 if (modalIconUpload) modalIconUpload.value = '';
                 const urlInp = document.getElementById('modal-icon-url');
                 if (urlInp) urlInp.value = '';
-                
+
                 btnRemoveIcon.style.display = 'none';
                 const removeRow = document.getElementById('modal-remove-icon-row');
                 if (removeRow) removeRow.style.display = 'none';
@@ -13492,7 +14669,7 @@
                     const urlInp = document.getElementById('modal-icon-url');
                     const val = urlInp ? urlInp.value.trim() : '';
                     window.customIconBase64 = val || null;
-                    
+
                     const ic = document.getElementById('preview-icon');
                     const btnRemove = document.getElementById('btn-remove-icon');
                     const removeRow = document.getElementById('modal-remove-icon-row');
@@ -13533,7 +14710,7 @@
                 const ic = document.getElementById('preview-icon');
                 const btnRemove = document.getElementById('btn-remove-icon');
                 const removeRow = document.getElementById('modal-remove-icon-row');
-                
+
                 if (ic) {
                     if (val) {
                         ic.src = val;
@@ -13673,7 +14850,7 @@
             const nm = document.getElementById('modal-name').value.trim();
             if (!u) return;
             if (!u.startsWith('http')) u = 'https://' + u;
-            
+
             let host = '';
             try {
                 host = new URL(u).hostname;
@@ -13705,12 +14882,12 @@
 
             btnDone.textContent = origText;
             btnDone.disabled = false;
-            
+
             if (window.modalMode === 'app') {
                 const engine = window.editingAppEngine || getStoredSearchEngine();
                 const apps = loadDrawerApps(engine);
-                const nextApp = { 
-                    name: nm || host.replace('www.', ''), 
+                const nextApp = {
+                    name: nm || host.replace('www.', ''),
                     url: u,
                     customIcon: finalIcon || null
                 };
@@ -13734,16 +14911,16 @@
             const s = loadSC();
             if (window.editingScIndex !== null && window.editingScIndex !== undefined) {
                 const existingShortcut = s[window.editingScIndex] || {};
-                s[window.editingScIndex] = { 
-                    ...existingShortcut, 
-                    name: nm || host.replace('www.', ''), 
+                s[window.editingScIndex] = {
+                    ...existingShortcut,
+                    name: nm || host.replace('www.', ''),
                     url: u,
                     customIcon: finalIcon || null
                 };
                 if (typeof showToast === 'function') showToast('Shortcut edited');
             } else {
-                s.push({ 
-                    name: nm || host.replace('www.', ''), 
+                s.push({
+                    name: nm || host.replace('www.', ''),
                     url: u,
                     customIcon: finalIcon || null
                 });
@@ -13762,7 +14939,6 @@
         const ghostTextEl = document.getElementById('search-ghost-text');
         const clearSearchBtn = document.getElementById('clear-search-btn');
         const lensBtn = document.getElementById('lens-btn');
-        const searchPlaceholder = inp.getAttribute('placeholder') || '';
         const sanitizeQuery = q => {
             if (typeof q !== 'string') return '';
             // Limit query length to 500 characters
@@ -13785,7 +14961,7 @@
 
             if (ProfileManager.getItem('browser_history_enabled') === '1' && window.__extensionBrowserHistory) {
                 const queryMap = new Map();
-                
+
                 // Add local history first
                 localHist.forEach(item => {
                     if (item && item.query) {
@@ -13807,7 +14983,7 @@
                             const queryKey = query.toLowerCase();
                             const engine = detectSearchEngineFromUrl(item.url);
                             const lastVisit = Number(item.lastVisitTime) || 0;
-                            
+
                             const existing = queryMap.get(queryKey);
                             if (!existing || existing.timestamp < lastVisit) {
                                 queryMap.set(queryKey, {
@@ -13833,7 +15009,7 @@
             const hist = getHistory();
             const queries = [];
             const previewLength = parseInt(ProfileManager.getItem('history_preview_length') || '8', 10);
-            
+
             // Filter by duration
             const duration = ProfileManager.getItem('history_duration') || 'forever';
             const now = Date.now();
@@ -13919,7 +15095,7 @@
                     urlsToDelete.forEach(url => {
                         window.postMessage({ type: 'THINKPAGE_DELETE_URL', url: url }, '*');
                     });
-                    
+
                     // Filter out from in-memory cache
                     window.__extensionBrowserHistory = window.__extensionBrowserHistory.filter(
                         item => !urlsToDelete.includes(item.url)
@@ -13949,7 +15125,7 @@
             if (!canShowInlineCompletion(suggestion)) {
                 ghostTextEl.replaceChildren();
                 inp.classList.remove('has-ghost');
-                if (searchPlaceholder) inp.setAttribute('placeholder', searchPlaceholder);
+                updateSearchPlaceholder();
                 return;
             }
             const prefix = document.createElement('span');
@@ -14101,7 +15277,7 @@
             inp.value = '';
             typedQuery = '';
             inp.classList.remove('has-ghost');
-            if (searchPlaceholder) inp.setAttribute('placeholder', searchPlaceholder);
+            updateSearchPlaceholder();
             if (ghostTextEl) ghostTextEl.replaceChildren();
             closeSugDropdown();
             syncClearSearchButton();
@@ -14123,33 +15299,33 @@
             const fn = '_g' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
             let done = false;
             const s = document.createElement('script');
-            
+
             const finish = items => {
                 if (done) return;
                 done = true;
                 clearTimeout(timer);
-                
+
                 try {
                     delete window[fn];
                 } catch (e) {
                     window[fn] = undefined;
                 }
-                
+
                 if (s && s.parentNode) {
                     s.parentNode.removeChild(s);
                 }
-                
+
                 cb(uniqSuggestions(items));
             };
-            
+
             const timer = setTimeout(() => {
                 finish([]);
             }, 2500);
-            
+
             window[fn] = d => {
                 finish(parse(d));
             };
-            
+
             s.src = url(fn);
             s.onerror = () => {
                 finish([]);
@@ -14182,9 +15358,9 @@
             const wasOpen = sugEl.classList.contains('open');
             sugEl.innerHTML = '';
             resetSugSelection();
-            if (!items.length) { 
+            if (!items.length) {
                 closeSugDropdown();
-                return; 
+                return;
             }
             const animEnabled = isAnimEnabled();
             if (animEnabled && !wasOpen) {
@@ -14192,6 +15368,16 @@
             } else if (!animEnabled || wasOpen) {
                 sugEl.classList.remove('animate');
             }
+
+            // Render trending searches header if trending items are present
+            const hasTrending = items.some(i => i.type === 'trending');
+            if (hasTrending) {
+                const header = document.createElement('div');
+                header.className = 'sug-header';
+                header.textContent = 'Trending searches';
+                sugEl.appendChild(header);
+            }
+
             // Detect mixed view: history + online suggestions shown together
             const hasRecent = items.some(i => i.type === 'recent');
             const hasSuggest = items.some(i => i.type === 'suggest');
@@ -14200,21 +15386,23 @@
             items.forEach(item => {
                 const s = item.query;
                 const type = item.type;
-                const d = document.createElement('div'); 
+                const d = document.createElement('div');
                 d.className = 'sug-item';
                 d.dataset.type = type;
                 if (type === 'recent' || type === 'history_url') d.classList.add('has-remove');
                 d.dataset.query = s;
-                
+
                 // Inject the secure, predefined static SVG icon via innerHTML
                 if (type === 'history_url') {
                     d.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="si"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke="currentColor" stroke-width="1.6"/><path d="M2 12h20" stroke="currentColor" stroke-width="1.6"/></svg>`;
                 } else if (type === 'recent') {
                     d.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="si"><path d="M12 8v4l2 2m6-2a8 8 0 11-16 0 8 8 0 0116 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+                } else if (type === 'trending') {
+                    d.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="si"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>`;
                 } else {
                     d.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="si"><path d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1 0 6.15 6.15a7.5 7.5 0 0 0 10.5 10.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
                 }
-                
+
                 // Safeguard against HTML injection by assigning to textContent
                 if (type === 'history_url') {
                     const container = document.createElement('div');
@@ -14223,19 +15411,19 @@
                     container.style.display = 'flex';
                     container.style.flexDirection = 'column';
                     container.style.justifyContent = 'center';
-                    
+
                     const titleSpan = document.createElement('span');
                     titleSpan.textContent = item.title || getSiteName(s) || s;
                     titleSpan.style.fontWeight = '500';
                     titleSpan.style.color = 'var(--text-main)';
-                    
+
                     const urlSpan = document.createElement('span');
                     urlSpan.textContent = s;
                     urlSpan.style.fontSize = '11px';
                     urlSpan.style.color = 'var(--text-muted)';
                     urlSpan.style.opacity = '0.8';
                     urlSpan.style.marginTop = '2px';
-                    
+
                     container.appendChild(titleSpan);
                     container.appendChild(urlSpan);
                     d.appendChild(container);
@@ -14254,13 +15442,13 @@
                     btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
                     d.appendChild(btn);
                 }
-                
+
                 d.addEventListener('mouseenter', () => {
                     const sugItems = [...sugEl.querySelectorAll('.sug-item')];
                     setActiveSuggestion(sugItems.indexOf(d));
                 });
-                
-                d.onclick = (e) => { 
+
+                d.onclick = (e) => {
                     if (e.target.classList.contains('remove-sug') || e.target.closest('.remove-sug')) {
                         e.stopPropagation();
                         removeRecent(s);
@@ -14275,9 +15463,9 @@
                             }
                             resetSearchBarToHome();
                         } else {
-                            inp.value = s; 
-                            sugEl.classList.remove('open', 'animate'); 
-                            doSearch(s); 
+                            inp.value = s;
+                            sugEl.classList.remove('open', 'animate');
+                            doSearch(s);
                         }
                     }
                 };
@@ -14290,10 +15478,24 @@
             clearTimeout(sgt);
             if (!q.trim()) {
                 const recentQueries = getRecent().map(item => ({ query: item, type: 'recent' }));
-                renderCombinedSug(recentQueries);
+                if (recentQueries.length > 0) {
+                    renderCombinedSug(recentQueries);
+                } else {
+                    const trendingSearches = [
+                        { query: 'upsc capf ac admit card 2026', type: 'trending' },
+                        { query: 'sbi funds management ipo', type: 'trending' },
+                        { query: 'nothing ear 3a earbuds', type: 'trending' },
+                        { query: 'england women cricket test match', type: 'trending' },
+                        { query: 'minerva academy helsinki cup final', type: 'trending' },
+                        { query: 'final answer key aibe 21', type: 'trending' },
+                        { query: 'volkswagen tayron life', type: 'trending' },
+                        { query: 'big bash league chennai', type: 'trending' }
+                    ];
+                    renderCombinedSug(trendingSearches);
+                }
                 return;
             }
-            
+
             // Search across ALL history items, filtered by duration
             const duration = ProfileManager.getItem('history_duration') || 'forever';
             const now = Date.now();
@@ -14320,20 +15522,20 @@
                 }
                 if (matchedHistory.length >= limit) break;
             }
-                
+
             const initialList = matchedHistory.map(item => ({ query: item, type: 'recent' }));
-            
+
             if (initialList.length) {
                 renderCombinedSug(initialList);
             }
-            
-            sgt = setTimeout(() => fetchSug(q, res => { 
+
+            sgt = setTimeout(() => fetchSug(q, res => {
                 const combinedList = [...initialList];
                 const historySet = new Set(matchedHistory.map(h => h.toLowerCase()));
-                
+
                 const maxSuggestions = 8;
                 const onlineCountNeeded = maxSuggestions - combinedList.length;
-                
+
                 let added = 0;
                 for (const s of res) {
                     if (added >= onlineCountNeeded) break;
@@ -14342,7 +15544,7 @@
                         added++;
                     }
                 }
-                
+
                 if (combinedList.length) {
                     renderCombinedSug(combinedList);
                 } else {
@@ -14381,7 +15583,7 @@
                 acceptActiveSuggestion();
                 return;
             }
-            if (e.key === 'Enter') { 
+            if (e.key === 'Enter') {
                 if (runAiSearchShortcut()) return;
                 if (chooseActiveSuggestion()) return;
                 closeSugDropdown();
@@ -14407,7 +15609,7 @@
                 inp.blur();
             }
         });
-        document.addEventListener('click', e => { 
+        document.addEventListener('click', e => {
             if (!e.target.closest('.search-wrap')) {
                 closeSugDropdown();
             }
@@ -14457,7 +15659,7 @@
             const addProfileBtn = document.getElementById('pd-add-profile-btn');
             const manageProfilesBtn = document.getElementById('pd-manage-profiles-btn');
             const editActiveBtn = document.getElementById('pd-edit-active-btn');
-            
+
             const profileModal = document.getElementById('profile-modal-overlay');
             const pModalCancel = document.getElementById('p-modal-cancel');
             const pModalDone = document.getElementById('p-modal-done');
@@ -14468,7 +15670,7 @@
             const pModalResetBtn = document.getElementById('p-modal-reset-btn');
             const pModalAvatarPreview = document.getElementById('p-modal-avatar-preview');
             const pModalTitle = document.getElementById('p-modal-title');
-            
+
             const manageModal = document.getElementById('manage-profiles-modal-overlay');
             const mpCloseBtn = document.getElementById('mp-close-btn');
             const mpList = document.getElementById('mp-list');
@@ -14685,7 +15887,7 @@
                 const secondUnderscore = scopedKey.indexOf('_', firstUnderscore + 1);
                 if (secondUnderscore === -1) return 'settings';
                 const key = scopedKey.slice(secondUnderscore + 1);
-                
+
                 if (key.startsWith('bg_')) {
                     return 'wallpaper';
                 }
@@ -14728,7 +15930,7 @@
 
                     let totalWrites = 0;
                     const sentUrls = new Set();
-                    
+
                     const sendToBrowser = (url, title) => {
                         if (window.__extensionConnected && url && !sentUrls.has(url)) {
                             sentUrls.add(url);
@@ -14754,7 +15956,7 @@
                                     localList = JSON.parse(v);
                                 } catch (e) {}
                                 if (!Array.isArray(localList)) localList = [];
-                                
+
                                 // Migrate strings to objects if present
                                 localList = localList.map(x => typeof x === 'string' ? { query: x, timestamp: Date.now() } : x);
 
@@ -14855,13 +16057,13 @@
             const pModalEmoji = document.getElementById('p-modal-emoji-input');
             const pModalAvatarPreview = document.getElementById('p-modal-avatar-preview');
             const pModalTitle = document.getElementById('p-modal-title');
-            
+
             const pModalImageUpload = document.getElementById('p-modal-image-upload');
             if (pModalImageUpload) pModalImageUpload.value = '';
-            
+
             editingProfileId = profileId;
             pModalEmoji.value = '';
-            
+
             if (profileId) {
                 pModalTitle.textContent = 'Edit Profile';
                 const profile = ProfileManager.getProfiles().find(p => p.id === profileId);
@@ -14907,7 +16109,7 @@
                         renderManageProfilesList();
                     });
                 }
-                
+
                 const avatarCol = document.createElement('div');
                 avatarCol.className = 'mp-profile-avatar';
                 setAvatarContent(avatarCol, p.avatar);
@@ -15006,12 +16208,12 @@
                 return;
             }
             ProfileManager.setActiveProfileId(id);
-            
+
             const activeProfile = ProfileManager.getActiveProfile();
             if (activeProfile?.avatar) saveProfileChoice(activeProfile.avatar);
-            
+
             closeProfileDropdown();
-            
+
             applyProfileButton();
             applyTheme();
             applyWallpaper();
@@ -15024,8 +16226,9 @@
             renderApps();
             renderShortcuts();
             applyGlassMode(ProfileManager.getItem('glass') !== '0');
+            applyMiniBrowserFeatureState();
             applyCloseButtonPosition();
-            
+
             // Recolor page customization indicators
             syncCustomizationPanel();
             renderProfileDropdown();
@@ -15075,6 +16278,7 @@
             syncAiCustomize();
             // AI button visibility radios
             applyAiButtonVisibility();
+            applyMiniBrowserFeatureState();
             // Search Target radios
             const isCurrent = ProfileManager.getItem('search_target', 'current') !== 'new';
             document.querySelectorAll('input[name="search_target"]').forEach(r => {
@@ -15139,7 +16343,7 @@
             if (histDurationSelect) {
                 histDurationSelect.value = savedHistDuration;
             }
- 
+
             // Search width range slider
             const savedWidthStep = ProfileManager.getItem('search_width_step') || '2';
             const widthInput = document.getElementById('search-width-range');
@@ -15209,13 +16413,13 @@
             if (urlInput) urlInput.value = ProfileManager.getItem('custom_search_engine_url') || 'https://www.google.com/search?q=';
             if (iconUrlInput) iconUrlInput.value = ProfileManager.getItem('custom_search_engine_icon_url') || '';
             if (fontSelect) fontSelect.value = ProfileManager.getItem('custom_search_engine_font') || 'system-ui';
-            
+
             const type = ProfileManager.getItem('custom_search_engine_icon_type') || 'url';
             if (iconTypeSegment) {
                 const radio = iconTypeSegment.querySelector(`input[name="custom_icon_type"][value="${type}"]`);
                 if (radio) radio.checked = true;
             }
-            
+
             const urlRow = document.getElementById('custom-icon-url-row');
             const uploadRow = document.getElementById('custom-icon-upload-row');
             if (urlRow && uploadRow) {
@@ -15233,23 +16437,23 @@
             const pickerIcon = document.getElementById('custom-engine-picker-icon');
             if (pickerLabel) pickerLabel.textContent = ProfileManager.getItem('custom_search_engine_name') || 'Custom';
             if (pickerIcon) pickerIcon.innerHTML = getSearchEngineIcon('custom');
-            
+
             syncSearchEngineCustomize();
         }
 
         function renderProfileDropdown() {
             const list = document.getElementById('pd-profiles-list');
             list.innerHTML = '';
-            
+
             const activeProfile = ProfileManager.getActiveProfile();
             document.getElementById('pd-active-name').textContent = activeProfile.name;
             setAvatarContent(document.getElementById('pd-active-avatar'), activeProfile.avatar);
 
             const profiles = ProfileManager.getProfiles();
             const activeId = ProfileManager.getActiveProfileId();
-            
+
             const secondaryProfiles = profiles.filter(p => p.id !== activeId);
-            
+
             // Dynamically show/hide Account Portals based on the active search engine
             const engine = getStoredSearchEngine();
             const portalGoogle = document.getElementById('pd-portal-google');
@@ -15258,7 +16462,7 @@
             const portalTitle = document.getElementById('pd-portal-title-sec');
             const portalDivider = document.getElementById('pd-portal-divider-sec');
             const portalBottomDivider = document.getElementById('pd-portal-divider-bottom-sec');
-            
+
             if (portalGoogle && portalMicrosoft && portalDuckDuckGo && portalTitle && portalDivider && portalBottomDivider) {
                 portalGoogle.style.display = 'none';
                 portalMicrosoft.style.display = 'none';
@@ -15266,7 +16470,7 @@
                 portalTitle.style.display = 'none';
                 portalDivider.style.display = 'none';
                 portalBottomDivider.style.display = 'none';
-                
+
                 if (engine === 'google') {
                     portalGoogle.style.display = 'flex';
                     portalTitle.style.display = 'block';
@@ -15334,7 +16538,7 @@
             const historyClear = document.getElementById('history-clear-btn');
             const historySearchInput = document.getElementById('history-search-input');
             const historySaveToggle = document.getElementById('history-save-toggle');
-            
+
             historyBtn.addEventListener('click', () => {
                 closeProfileDropdown();
                 openHistoryModal();
@@ -15376,7 +16580,7 @@
             const tabBtnSync = document.getElementById('tab-btn-sync');
             const paneView = document.getElementById('history-view-pane');
             const paneSync = document.getElementById('history-sync-pane');
-            
+
             if (tabBtnView && tabBtnSync) {
                 tabBtnView.onclick = () => {
                     tabBtnView.classList.add('active');
@@ -15389,7 +16593,7 @@
                     tabBtnView.classList.remove('active');
                     paneView.style.display = 'none';
                     paneSync.style.display = 'block';
-                    
+
                     // Update active engine display
                     const engineName = getStoredSearchEngine() || 'google';
                     document.getElementById('sync-engine-name').textContent = engineName;
@@ -15399,16 +16603,16 @@
             // File Importer logic
             const filePicker = document.getElementById('history-file-picker');
             const dropZone = document.getElementById('history-drop-zone');
-            
+
             function handleHistoryFile(file) {
                 if (!file) return;
-                
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     try {
                         const parsed = JSON.parse(e.target.result);
                         let importedCount = 0;
-                        
+
                         let hist = [];
                         try {
                             const raw = ProfileManager.getItem('rq') || '[]';
@@ -15440,12 +16644,12 @@
                                     engine: engine || getStoredSearchEngine()
                                 });
                                 importedCount++;
-                                
+
                                 const url = getSearchUrlForQuery(cleanedQ);
                                 sendToBrowser(url, cleanedQ);
                             }
                         };
-                        
+
                         // Case 1: Dashboard Backup JSON
                         if (parsed.profiles && Array.isArray(parsed.profiles)) {
                             if (parsed.settings && typeof parsed.settings === 'object') {
@@ -15462,7 +16666,7 @@
                                     }
                                 });
                             }
-                        } 
+                        }
                         // Case 2: Direct history array (e.g. key rq or Takeout array)
                         else if (parsed.rq && Array.isArray(parsed.rq)) {
                             parsed.rq.forEach(item => {
@@ -15495,7 +16699,7 @@
                                     }
                                 }
                             });
-                            
+
                             // Merge new browser history items into in-memory cache
                             if (window.__extensionBrowserHistory) {
                                 const existingUrls = new Set(window.__extensionBrowserHistory.map(i => i.url));
@@ -15512,16 +16716,16 @@
                             }
                             browserHistoryImported = true;
                         }
-                        
+
                         if (importedCount > 0 || browserHistoryImported) {
                             if (importedCount > 0) {
                                 // Sort by timestamp descending
                                 hist.sort((a, b) => (Number(b.timestamp) || 0) - (Number(a.timestamp) || 0));
-                                hist = hist.slice(0, 500); 
+                                hist = hist.slice(0, 500);
                                 ProfileManager.setItem('rq', JSON.stringify(hist));
                                 renderHistoryList();
                             }
-                            
+
                             if (browserHistoryImported) {
                                 if (ProfileManager.getItem('browser_history_enabled') === '1') {
                                     if (typeof renderShortcuts === 'function') renderShortcuts();
@@ -15535,7 +16739,7 @@
                             const histCountText = browserHistoryImported ? `${parsed.browserHistory.length} browser history items` : '';
                             const mergeMsg = [searchCountText, histCountText].filter(Boolean).join(' and ');
                             showToast(`Successfully imported and merged ${mergeMsg}!`);
-                            
+
                             // Reset back to View History Tab
                             if (tabBtnView) tabBtnView.click();
                         } else {
@@ -15547,25 +16751,25 @@
                 };
                 reader.readAsText(file);
             }
-            
+
             if (filePicker) {
                 filePicker.addEventListener('change', (e) => {
                     handleHistoryFile(e.target.files[0]);
                 });
             }
-            
+
             if (dropZone) {
                 dropZone.addEventListener('dragover', (e) => {
                     e.preventDefault();
                     dropZone.style.borderColor = 'var(--accent)';
                     dropZone.style.background = 'var(--surface-4)';
                 });
-                
+
                 dropZone.addEventListener('dragleave', () => {
                     dropZone.style.borderColor = 'var(--panel-border)';
                     dropZone.style.background = 'var(--surface-3)';
                 });
-                
+
                 dropZone.addEventListener('drop', (e) => {
                     e.preventDefault();
                     dropZone.style.borderColor = 'var(--panel-border)';
@@ -15584,7 +16788,7 @@
 
             historySearchInput.value = '';
             historySaveToggle.checked = ProfileManager.getItem('save_history') !== '0';
-            
+
             renderHistoryList();
             historyModal.classList.add('open');
             runOpenAnimation(historyModal, 380);
@@ -15593,13 +16797,13 @@
         function getRelativeDateLabel(timestamp) {
             const now = new Date();
             const date = new Date(timestamp);
-            
+
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const yesterday = new Date(today);
             yesterday.setDate(yesterday.getDate() - 1);
-            
+
             const compareDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            
+
             if (compareDate.getTime() === today.getTime()) {
                 return 'Today';
             } else if (compareDate.getTime() === yesterday.getTime()) {
@@ -15633,7 +16837,7 @@
             const container = document.getElementById('history-items-container');
             const emptyState = document.getElementById('history-empty-state');
             const historyCount = document.getElementById('history-count');
-            
+
             container.innerHTML = '';
 
             // Build a tagged list: each item knows its source ('local' or 'browser')
@@ -15853,7 +17057,7 @@
                             window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
                             return;
                         }
-                        
+
                         let hist = getHistory();
                         const now = Date.now();
                         let importedCount = 0;
@@ -15871,11 +17075,11 @@
                             ProfileManager.setItem('rq', JSON.stringify(hist));
                             showToast(`Successfully auto-imported ${importedCount} searches!`);
                         }
-                        
+
                         // Clean up URL parameter to maintain a pristine history state
                         const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
                         window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
-                        
+
                         const historyModal = document.getElementById('history-modal-overlay');
                         if (historyModal && historyModal.classList.contains('open')) {
                             renderHistoryList();
@@ -15948,7 +17152,7 @@
                 // Handle Escape key to close the active modal
                 if (e.key === 'Escape') {
                     openOverlay.classList.remove('open');
-                    
+
                     // Specific cleanup if the profile modal cancels
                     if (openOverlay.id === 'profile-modal-overlay') {
                         const cancelBtn = document.getElementById('p-modal-cancel');
@@ -16100,7 +17304,7 @@
                     for (const c of commits) {
                         const rawMsg = c.commit.message || '';
                         const msgLower = rawMsg.toLowerCase();
-                        
+
                         if (msgLower.startsWith('merge branch') ||
                             msgLower.startsWith('docs:') ||
                             msgLower.includes('update readme') ||
@@ -16109,7 +17313,7 @@
                             msgLower.trim().length < 4) {
                             continue;
                         }
-                        
+
                         const lines = rawMsg.split('\n');
                         const rawTitle = lines[0].trim();
                         const typeMatch = rawTitle.match(/^(feat|fix|chore|refactor|style|docs|test|ci|improve|perf)\b/i);
@@ -16119,7 +17323,7 @@
                         title = title.charAt(0).toUpperCase() + title.slice(1);
 
                         const desc = lines.slice(1).join('\n').trim();
-                        
+
                         cleanCommits.push({
                             sha: c.sha,
                             type: type,
@@ -16132,17 +17336,17 @@
                             }),
                             url: c.html_url
                         });
-                        
+
                         if (cleanCommits.length >= limit) break;
                     }
-                    
+
                     ProfileManager.setItem('whats_new_commits', JSON.stringify(cleanCommits));
                     return cleanCommits;
                 }
             } catch (e) {
                 console.warn("Failed to fetch commits from GitHub:", e);
             }
-            
+
             try {
                 const cached = ProfileManager.getItem('whats_new_commits');
                 if (cached) return JSON.parse(cached);
@@ -16406,7 +17610,7 @@
                             <span class="un-title">New update available</span>
                             <span class="un-subtitle">Click <button style="background:none;border:none;color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;" id="update-notify-inline-btn">refresh</button> to update features</span>
                         `;
-                        
+
                         const meta = document.createElement('span');
                         meta.className = 'un-version';
                         meta.textContent = ` (${dateLabel}, ${timeLabel} Simulated)`;
@@ -16576,7 +17780,7 @@
                     pillDisplay.style.display = '';
                 }
             }
-            
+
             const configContainer = document.getElementById('speedtest-config-container');
             if (configContainer) {
                 configContainer.style.display = visible ? 'flex' : 'none';
@@ -16616,11 +17820,11 @@
                 r.addEventListener('change', e => {
                     const provider = e.target.value;
                     ProfileManager.setItem('speedtest_provider', provider);
-                    
+
                     const pillStyleRadio = document.querySelector('input[name="speedtest_style"][value="pill"]');
                     const cardStyleRadio = document.querySelector('input[name="speedtest_style"][value="card"]');
                     const pillOptions = document.getElementById('speedtest-pill-options');
-                    
+
                     if (provider === 'fast') {
                         if (pillStyleRadio) {
                             pillStyleRadio.disabled = true;
@@ -16826,7 +18030,7 @@
                 changeFunc();
                 return;
             }
-            
+
             // If already running and the target state is running, keep width locked
             // to prevent constant width transitions / sizing jitters on every speed update
             const wasRunning = btn.classList.contains('running');
@@ -16834,7 +18038,7 @@
                 changeFunc();
                 return;
             }
-            
+
             if (btn.stTimeout) clearTimeout(btn.stTimeout);
             if (btn.stFadeTimeout) clearTimeout(btn.stFadeTimeout);
 
@@ -16843,18 +18047,18 @@
             const runWidthTransition = () => {
                 // 1. Get first width
                 const firstWidth = btn.getBoundingClientRect().width;
-                
+
                 // Temporarily disable transition for accurate auto-width measurement
                 const originalTransition = btn.style.transition;
                 btn.style.transition = 'none';
-                
+
                 // 2. Perform the DOM change (update classes and text)
                 changeFunc();
-                
+
                 // 3. Temporarily set width to auto to measure target width
                 btn.style.width = 'auto';
                 let lastWidth;
-                
+
                 if (state === 'running') {
                     const metricsConfig = ProfileManager.getItem('speedtest_metrics') || 'both';
                     const mockText = (metricsConfig === 'down') ? '↓ 88.8' : (metricsConfig === 'mixed' ? '⇅ 88.8' : (metricsConfig === 'up' ? '↑ 88.8' : '↓ 88.8 | ↑ 88.8'));
@@ -16865,22 +18069,22 @@
                 } else {
                     lastWidth = btn.getBoundingClientRect().width;
                 }
-                
+
                 // 4. Set width back to first width
                 btn.style.width = `${firstWidth}px`;
-                
+
                 // 5. Force reflow
-                btn.offsetHeight; 
-                
+                btn.offsetHeight;
+
                 // 6. Restore transition and set to target width (starts the width slide)
                 btn.style.transition = originalTransition;
                 btn.style.width = `${lastWidth}px`;
-                
+
                 // 7. Fade the text label back in (only if not collapsing to idle)
                 if (label) {
                     label.style.opacity = state === 'idle' ? '' : '1';
                 }
-                
+
                 // 8. Clear the inline width after transition completes ONLY if not running
                 if (state !== 'running') {
                     btn.stTimeout = setTimeout(() => {
@@ -16901,7 +18105,7 @@
         function setSpeedtestButtonState(state = 'idle', text = null) {
             const btn = document.getElementById('speedtest-btn');
             if (!btn) return;
-            
+
             // Clear any pending auto-minimise timeout
             if (btn.stMinimiseTimeout) {
                 clearTimeout(btn.stMinimiseTimeout);
@@ -16911,7 +18115,7 @@
             // Track previous state to know if icon will change
             const wasRunning = btn.classList.contains('running');
             const iconWillChange = (state === 'running') !== wasRunning;
-            
+
             transitionButtonWidth(btn, () => {
                 const label = document.getElementById('speedtest-btn-label');
                 const icon = document.getElementById('speedtest-btn-icon');
@@ -16945,7 +18149,7 @@
                     }
                 }
             }, state);
-            
+
             updateSpeedtestPillOffset();
 
             // Auto-minimise 'done' state back to 'idle' after 2 seconds
@@ -17139,7 +18343,7 @@
                 }
                 const statusText = document.getElementById('st-status-text');
                 if (statusText) statusText.textContent = 'Connecting...';
-                
+
                 const pingVal = document.getElementById('st-metric-ping');
                 if (pingVal) pingVal.textContent = '- ms';
                 const jitterVal = document.getElementById('st-metric-jitter');
@@ -17222,7 +18426,7 @@
                             speedNum.textContent = dlValue;
                             speedNum.classList.remove('running');
                         }
-                        
+
                         setSpeedtestText('st-status-text', 'Completed');
                         setSpeedtestText('st-metric-ping', latency !== undefined ? `${Math.round(latency)} ms` : '- ms');
                         setSpeedtestText('st-metric-jitter', jitter !== undefined ? `${Math.round(jitter)} ms` : '- ms');
@@ -17274,7 +18478,7 @@
                 stopSpeedtestEngine(activeSpeedTest);
                 activeSpeedTest = null;
             }
-            
+
             const pill = document.getElementById('speedtest-pill-display');
             if (pill) {
                 pill.style.display = 'none';
@@ -17287,11 +18491,11 @@
             const closeBtn = document.getElementById('speedtest-modal-close');
             const btn = document.getElementById('speedtest-btn');
             const wrap = document.getElementById('speedtest-iframe-wrap');
-            
+
             const customWrap = document.getElementById('speedtest-custom-wrap');
             const startBtn = document.getElementById('st-start-btn');
             const stopBtn = document.getElementById('st-stop-btn');
-            
+
             const footerAttribution = document.getElementById('st-footer-attribution');
             const footerLink = document.getElementById('st-footer-link');
 
