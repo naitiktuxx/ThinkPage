@@ -15,15 +15,15 @@ A personalized new-tab dashboard inspired by modern “new tab” experiences.
 
 ---
 
-## Firefox setup (recommended)
+## Firefox Extension (Bridge)
 
-1. In Firefox, install recommended extensions for best experience (visual + navigation):
-   - **New Tab Override** (to load this page as your new tab)
-   - **Adaptive Tab Colour** (browser color theming)
-   - **Gesturify** (navigation gestures)
-2. Set **this page URL** as your default homepage/new tab.
-3. In Firefox “New Tab” settings, ensure:
-   - **Focus** behavior is enabled so this page can receive focus when opened.
+For the best experience, install the **ThinkPage Bridge** Firefox extension — it gives ThinkPage access to your native browser history and handles new-tab focus automatically.
+
+👉 **[ThinkPage-Bridge-Extension](https://github.com/naitiktuxx/ThinkPage-Bridge-Extension)** — standalone repo
+
+Additional recommended extensions:
+- **Adaptive Tab Colour** (browser color theming)
+- **Gesturify** (navigation gestures)
 
 > Note: The PWA/service-worker offline behavior requires a site origin (not `file://`).
 
@@ -130,16 +130,12 @@ Navigation behavior:
 
 ## Project structure
 
+- `index.html` — All UI markup + styling + logic (large single-file app)
+- `sw.js` — Offline caching + runtime image caching
+- `manifest.webmanifest` — PWA metadata
+- `app-icon.svg` — Icon used by the PWA
 
-- `index.html`
-  - All UI markup + styling (large single-file app)
-  - App logic is also embedded in the page (in later parts of the file)
-- `sw.js`
-  - Offline caching + runtime image caching
-- `manifest.webmanifest`
-  - PWA metadata
-- `app-icon.svg`
-  - Icon used by the PWA
+> The Firefox bridge extension lives in its own repo: [ThinkPage-Bridge-Extension](https://github.com/naitiktuxx/ThinkPage-Bridge-Extension)
 
 ---
 
