@@ -91,7 +91,7 @@
             --ease-out-fast: cubic-bezier(0.16, 1, 0.3, 1);
             --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
             /* Customize panel width — used for the page-push effect */
-            --cp-width: 340px;
+            --cp-width: 390px;
         }
 
         body.light-mode {
@@ -956,7 +956,9 @@
             right: 0;
             width: var(--cp-width);
             height: 100%;
-            background: var(--surface-1);
+            background:
+                linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, var(--surface-1)) 0%, var(--surface-1) 180px),
+                var(--surface-1);
             border-left: 1px solid var(--border-light);
             z-index: 500;
             transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1040,18 +1042,24 @@
         }
 
         .cp-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-light);
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--panel-border);
+            background: color-mix(in srgb, var(--surface-1) 88%, transparent);
+            backdrop-filter: blur(18px) saturate(140%);
+            -webkit-backdrop-filter: blur(18px) saturate(140%);
         }
 
         .cp-header h3 {
             margin: 0;
-            font-size: 16px;
+            font-size: 18px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 700;
         }
 
         .cp-close {
@@ -1115,17 +1123,95 @@
         }
 
         .cp-section {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border-light);
+            padding: 16px;
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            background: color-mix(in srgb, var(--surface-2) 58%, transparent);
+            box-shadow: 0 1px 0 color-mix(in srgb, white 5%, transparent) inset;
         }
 
         .cp-section h4 {
             margin: 0 0 16px 0;
             font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 500;
+            color: var(--text-secondary);
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.04em;
+        }
+
+        .cp-content {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            padding: 16px;
+        }
+
+        .cp-intro {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        .cp-category {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .cp-category-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 0 2px;
+        }
+
+        .cp-category-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            color: var(--accent);
+            background: var(--accent-soft);
+            border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+        }
+
+        .cp-category-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .cp-category-title {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .cp-category-desc {
+            margin: 3px 0 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .cp-category-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        body.glass-mode .cp-section {
+            background: var(--glass-bg);
+            border-color: var(--glass-border);
+            border-top-color: var(--glass-border-top);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: inset 0 1px 0 var(--glass-inset);
         }
 
         .bg-options {
@@ -3031,10 +3117,10 @@
         }
 
         .shortcuts-config-card {
-            background: var(--btn-bg);
-            border: 1px solid var(--panel-border);
-            border-radius: 12px;
-            padding: 14px 16px;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -3703,6 +3789,8 @@
         .add-sc-label {
             font-size: 12px;
             color: var(--text-secondary);
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         /* MODAL */
@@ -4674,6 +4762,15 @@
 
             .cp-section {
                 padding: 16px 18px;
+            }
+
+            .cp-content {
+                padding: 14px;
+                gap: 16px;
+            }
+
+            .cp-category-header {
+                padding: 0;
             }
 
             .segment-opt span {
@@ -6422,10 +6519,10 @@
 
         /* CUSTOMIZATION PANEL SPEED TEST SECTION */
         .speedtest-config-card {
-            background: var(--btn-bg);
-            border: 1px solid var(--panel-border);
-            border-radius: 12px;
-            padding: 14px 16px;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -7697,6 +7794,22 @@
             </button>
         </div>
 
+        <div class="cp-content">
+            <p class="cp-intro">Tune the page by workflow instead of hunting through one long list.</p>
+
+            <section class="cp-category" aria-labelledby="cp-category-search-tools">
+                <div class="cp-category-header">
+                    <span class="cp-category-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <h4 class="cp-category-title" id="cp-category-search-tools">Search & tools</h4>
+                        <p class="cp-category-desc">Engines, suggestions, assistant buttons, image search, and speed test behavior.</p>
+                    </div>
+                </div>
+                <div class="cp-category-grid">
         <div class="cp-section">
             <h4>Search</h4>
             <p class="cp-hint">Where web searches open</p>
@@ -8044,6 +8157,22 @@
                 </div>
             </div>
         </div>
+                </div>
+            </section>
+
+            <section class="cp-category" aria-labelledby="cp-category-layout">
+                <div class="cp-category-header">
+                    <span class="cp-category-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 20V10"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <h4 class="cp-category-title" id="cp-category-layout">Page layout</h4>
+                        <p class="cp-category-desc">Shortcuts, theme, motion, wallpaper, and the controls that change the page surface.</p>
+                    </div>
+                </div>
+                <div class="cp-category-grid">
         <div class="cp-section">
             <h4>Shortcuts</h4>
             <p class="cp-hint">Configure quick access links on home page</p>
@@ -8158,10 +8287,10 @@
             </div>
             <!-- hidden radio inputs kept for legacy JS compatibility -->
             <div style="display:none;" id="theme-options">
-                <input type="radio" name="theme_type" value="dark">
+                <input type="radio" name="theme_type" value="dark" checked>
                 <input type="radio" name="theme_type" value="light">
                 <input type="radio" name="theme_type" value="catppuccin">
-                <input type="radio" name="theme_type" value="auto" checked>
+                <input type="radio" name="theme_type" value="auto">
             </div>
             <p class="cp-hint" style="margin-top:12px; margin-bottom:6px;">Liquid glass effect</p>
             <div class="segment-control" id="glass-segment">
@@ -8259,6 +8388,22 @@
                 </button>
             </div>
         </div>
+                </div>
+            </section>
+
+            <section class="cp-category" aria-labelledby="cp-category-account-system">
+                <div class="cp-category-header">
+                    <span class="cp-category-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <h4 class="cp-category-title" id="cp-category-account-system">Account & system</h4>
+                        <p class="cp-category-desc">Profile identity, offline install controls, updates, and reset actions.</p>
+                    </div>
+                </div>
+                <div class="cp-category-grid">
         <div class="cp-section">
             <h4>Profile</h4>
             <p class="cp-hint">Use an emoji or upload your own image</p>
@@ -8311,6 +8456,9 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 Test Update UI
             </button>
+        </div>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -10019,7 +10167,7 @@
         // ── Full theme application (page load / radio change) ─────────────────
 
         function applyTheme() {
-            let theme = ProfileManager.getItem('theme') || 'auto';
+            let theme = ProfileManager.getItem('theme') || 'dark';
 
             // Migrate: if someone had theme='catppuccin' stored, convert to dark + catppuccin swatch
             if (theme === 'catppuccin') {
@@ -16238,7 +16386,7 @@
 
         function syncCustomizationPanel() {
             // Theme radios
-            const theme = ProfileManager.getItem('theme') || 'auto';
+            const theme = ProfileManager.getItem('theme') || 'dark';
             themeRadios.forEach(r => { r.checked = r.value === theme; });
             // Background radios
             const bg = ProfileManager.getItem('bg_type') || 'default';
