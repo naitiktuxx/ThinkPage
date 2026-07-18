@@ -956,9 +956,9 @@
             right: 0;
             width: var(--cp-width);
             height: 100%;
-            background:
-                linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, var(--surface-1)) 0%, var(--surface-1) 180px),
-                var(--surface-1);
+            background: var(--panel-bg);
+            backdrop-filter: blur(28px) saturate(160%);
+            -webkit-backdrop-filter: blur(28px) saturate(160%);
             border-left: 1px solid var(--border-light);
             z-index: 500;
             transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
@@ -3449,6 +3449,8 @@
 
         .shortcuts-area.docked .shortcuts-box.has-bg {
             background: var(--dock-bg);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
             border: 1px solid var(--panel-border);
             box-shadow: var(--shadow-soft);
             padding: 8px 16px;
@@ -3457,6 +3459,8 @@
 
         .shortcuts-area:not(.docked) .shortcuts-box.has-bg {
             background: var(--dock-bg);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
             border: 1px solid var(--panel-border);
             box-shadow: var(--shadow-soft);
             padding: 8px 16px;
@@ -10083,6 +10087,17 @@
 
         // ── Helpers ───────────────────────────────────────────────────────────
 
+        function hexToRgba(hex, alpha) {
+            if (!hex || typeof hex !== 'string') return `rgba(32, 33, 36, ${alpha})`;
+            let c = hex.replace('#', '').trim();
+            if (c.length === 3) c = c.split('').map(x => x + x).join('');
+            if (c.length !== 6) return `rgba(32, 33, 36, ${alpha})`;
+            const r = parseInt(c.substring(0, 2), 16);
+            const g = parseInt(c.substring(2, 4), 16);
+            const b = parseInt(c.substring(4, 6), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
         function getSystemThemeMode() {
             if (!window.matchMedia) return 'dark';
             return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
@@ -10140,9 +10155,6 @@
                         : `linear-gradient(165deg, color-mix(in srgb, ${accentVal} 12%, ${bgVal}) 0%, ${bgVal} 45%, color-mix(in srgb, black 25%, ${bgVal}) 100%)`;
                 }
                 document.body.style.backgroundAttachment = 'fixed';
-            } else {
-                document.body.style.backgroundImage = '';
-                document.body.style.backgroundAttachment = '';
             }
 
             // Set elevated surface and component CSS variables so the whole page transforms for all swatches
@@ -10150,18 +10162,20 @@
                 // Catppuccin Macchiato explicit CSS variable values
                 root.style.setProperty('--bg-elevated', '#363a4f');
                 root.style.setProperty('--bg-muted', '#494d64');
-                root.style.setProperty('--panel-bg', 'rgba(48, 52, 70, 0.98)');
-                root.style.setProperty('--dock-bg', 'rgba(30, 32, 48, 0.98)');
-                root.style.setProperty('--search-bg', '#363a4f');
-                root.style.setProperty('--search-hover', '#494d64');
-                root.style.setProperty('--search-focus', '#363a4f');
+                root.style.setProperty('--panel-bg', 'rgba(48, 52, 70, 0.70)');
+                root.style.setProperty('--dock-bg', 'rgba(30, 32, 48, 0.68)');
+                root.style.setProperty('--search-bg', 'rgba(54, 58, 79, 0.58)');
+                root.style.setProperty('--search-hover', 'rgba(73, 77, 100, 0.68)');
+                root.style.setProperty('--search-focus', 'rgba(54, 58, 79, 0.65)');
                 root.style.setProperty('--search-border', 'rgba(183, 189, 248, 0.18)');
                 root.style.setProperty('--surface-1', '#303241');
                 root.style.setProperty('--surface-2', '#494d64');
                 root.style.setProperty('--surface-3', '#1e2030');
                 root.style.setProperty('--glass-bg', 'rgba(54, 58, 79, 0.58)');
+                root.style.setProperty('--glass-bg-hover', 'rgba(73, 77, 100, 0.65)');
+                root.style.setProperty('--glass-bg-focus', 'rgba(91, 96, 120, 0.72)');
                 root.style.setProperty('--glass-border', 'rgba(183, 189, 248, 0.14)');
-                root.style.setProperty('--modal-bg', '#363a4f');
+                root.style.setProperty('--modal-bg', 'rgba(54, 58, 79, 0.82)');
                 root.style.setProperty('--border-light', 'rgba(183, 189, 248, 0.12)');
                 root.style.setProperty('--border-lighter', 'rgba(183, 189, 248, 0.2)');
             } else {
@@ -10173,17 +10187,17 @@
                     ? `color-mix(in srgb, ${accentVal} 10%, ${bgVal})`
                     : `color-mix(in srgb, white 14%, ${bgVal})`;
                 const panelBg = isLight
-                    ? `color-mix(in srgb, ${accentVal} 4%, ${bgElevated})`
-                    : `color-mix(in srgb, ${accentVal} 8%, ${bgElevated})`;
+                    ? `color-mix(in srgb, ${accentVal} 6%, rgba(255, 255, 255, 0.78))`
+                    : `color-mix(in srgb, ${accentVal} 10%, ${hexToRgba(bgVal, 0.65)})`;
                 const dockBg = isLight
-                    ? `color-mix(in srgb, ${accentVal} 6%, ${bgMuted})`
-                    : `color-mix(in srgb, ${accentVal} 10%, ${bgVal})`;
+                    ? `color-mix(in srgb, ${accentVal} 8%, rgba(255, 255, 255, 0.75))`
+                    : `color-mix(in srgb, ${accentVal} 12%, ${hexToRgba(bgVal, 0.58)})`;
                 const searchBg = isLight
-                    ? '#ffffff'
-                    : `color-mix(in srgb, white 7%, ${bgVal})`;
+                    ? `color-mix(in srgb, ${accentVal} 4%, rgba(255, 255, 255, 0.72))`
+                    : `color-mix(in srgb, ${accentVal} 10%, ${hexToRgba(bgVal, 0.52)})`;
                 const searchHover = isLight
-                    ? `color-mix(in srgb, ${accentVal} 6%, #ffffff)`
-                    : `color-mix(in srgb, white 14%, ${bgVal})`;
+                    ? `color-mix(in srgb, ${accentVal} 8%, rgba(255, 255, 255, 0.82))`
+                    : `color-mix(in srgb, ${accentVal} 15%, ${hexToRgba(bgVal, 0.62)})`;
                 const searchFocus = searchBg;
                 const searchBorder = isLight
                     ? `color-mix(in srgb, ${accentVal} 20%, #dadce0)`
@@ -10202,9 +10216,21 @@
                 root.style.setProperty('--surface-2', isLight ? `color-mix(in srgb, ${accentVal} 7%, ${bgMuted})` : `color-mix(in srgb, white 10%, ${bgVal})`);
                 root.style.setProperty('--surface-3', isLight ? `color-mix(in srgb, ${accentVal} 2%, ${bgElevated})` : `color-mix(in srgb, black 20%, ${bgVal})`);
 
-                root.style.setProperty('--glass-bg', isLight ? `color-mix(in srgb, ${accentVal} 6%, rgba(255, 255, 255, 0.72))` : `color-mix(in srgb, ${accentVal} 10%, ${bgElevated})`);
+                const glassBg = isLight
+                    ? `color-mix(in srgb, ${accentVal} 8%, rgba(255, 255, 255, 0.68))`
+                    : `color-mix(in srgb, ${accentVal} 12%, ${hexToRgba(bgVal, 0.50)})`;
+                const glassBgHover = isLight
+                    ? `color-mix(in srgb, ${accentVal} 12%, rgba(255, 255, 255, 0.78))`
+                    : `color-mix(in srgb, ${accentVal} 16%, ${hexToRgba(bgVal, 0.60)})`;
+                const glassBgFocus = isLight
+                    ? `color-mix(in srgb, ${accentVal} 15%, rgba(255, 255, 255, 0.85))`
+                    : `color-mix(in srgb, ${accentVal} 20%, ${hexToRgba(bgVal, 0.68)})`;
+
+                root.style.setProperty('--glass-bg', glassBg);
+                root.style.setProperty('--glass-bg-hover', glassBgHover);
+                root.style.setProperty('--glass-bg-focus', glassBgFocus);
                 root.style.setProperty('--glass-border', isLight ? `color-mix(in srgb, ${accentVal} 10%, rgba(0, 0, 0, 0.08))` : `color-mix(in srgb, ${accentVal} 18%, rgba(255, 255, 255, 0.12))`);
-                root.style.setProperty('--modal-bg', isLight ? `color-mix(in srgb, ${accentVal} 6%, ${bgMuted})` : `color-mix(in srgb, white 8%, ${bgMuted})`);
+                root.style.setProperty('--modal-bg', isLight ? `color-mix(in srgb, ${accentVal} 6%, ${bgMuted})` : `color-mix(in srgb, ${accentVal} 10%, ${hexToRgba(bgVal, 0.75)})`);
 
                 root.style.setProperty('--border-light', isLight ? `color-mix(in srgb, ${accentVal} 10%, #e8eaed)` : `color-mix(in srgb, ${accentVal} 16%, rgba(255, 255, 255, 0.1))`);
                 root.style.setProperty('--border-lighter', isLight ? `color-mix(in srgb, ${accentVal} 15%, #dadce0)` : `color-mix(in srgb, ${accentVal} 22%, rgba(255, 255, 255, 0.15))`);
@@ -10220,9 +10246,7 @@
             return migrateSwatchId(ProfileManager.getItem('accent_color') || 'catppuccin') === 'catppuccin';
         }
         function shouldUseWallpaperAccent() {
-            if (isCatppuccinActive()) return false;
-            const bg = ProfileManager.getItem('bg_type') || 'default';
-            return bg === 'random' || bg === 'custom';
+            return false;
         }
         function syncThemeAccent() {
             const id = migrateSwatchId(ProfileManager.getItem('accent_color') || 'catppuccin');
@@ -10305,6 +10329,7 @@
             // Rebuild swatches so their bottom halves update if color mode changes
             buildColorSwatches();
             updateBrowserChrome();
+            applyWallpaper(false);
         }
 
         // ── Mode toggle button handlers ───────────────────────────────────────
@@ -10342,6 +10367,7 @@
 
             syncThemeAccent();
             buildColorSwatches();
+            applyWallpaper(false);
         }
 
         // Legacy hidden-radio support
@@ -10793,7 +10819,7 @@
             }
         }
 
-        async function applyWallpaper() {
+        async function applyWallpaper(forceRefresh = false) {
             const type = ProfileManager.getItem('bg_type') || 'default';
             bgRadios.forEach(r => { if(r.value === type) r.checked = true; });
             customUploadArea.style.display = type === 'custom' ? 'block' : 'none';
@@ -10807,44 +10833,37 @@
                 let imgSrc;
                 if (type === 'random') {
                     const category = ProfileManager.getItem('bg_category') || 'random,picsum';
-                    const refreshMode = ProfileManager.getItem('bg_refresh_mode') || 'reload';
                     const activeSessionId = getWallpaperBrowserSessionId();
-                    const cachedSessionId = ProfileManager.getItem('bg_random_session_id');
                     const cachedCategory = ProfileManager.getItem('bg_random_category');
-                    const isNewSession = refreshMode === 'session' && cachedSessionId !== activeSessionId;
-                    const isDifferentCategory = cachedCategory !== category;
 
-                    if (refreshMode === 'reload') {
-                        ProfileManager.removeItem('bg_random_url');
-                        ProfileManager.removeItem('bg_random_session_id');
-                    } else if (isNewSession || isDifferentCategory) {
+                    const categoryChanged = cachedCategory && cachedCategory !== category;
+
+                    if (forceRefresh || categoryChanged) {
                         ProfileManager.removeItem('bg_random_url');
                     }
 
                     let cachedUrl = ProfileManager.getItem('bg_random_url');
-                    if (
-                        cachedUrl &&
-                        !isDifferentCategory &&
-                        (
-                            refreshMode === 'always' ||
-                            refreshMode !== 'session' ||
-                            cachedSessionId === activeSessionId
-                        )
-                    ) {
+                    if (cachedUrl && !forceRefresh && !categoryChanged) {
                         imgSrc = cachedUrl;
                     } else {
                         const resolveToken = ++wallpaperResolveToken;
                         imgSrc = await resolveRandomWallpaperUrl(category);
                         if (resolveToken !== wallpaperResolveToken) return;
-                        ProfileManager.setItem('bg_random_url', imgSrc);
-                        ProfileManager.setItem('bg_random_category', category);
-                        ProfileManager.setItem('bg_random_session_id', activeSessionId);
+                        if (imgSrc) {
+                            ProfileManager.setItem('bg_random_url', imgSrc);
+                            ProfileManager.setItem('bg_random_category', category);
+                            ProfileManager.setItem('bg_random_session_id', activeSessionId);
+                        }
                     }
                 } else {
                     imgSrc = ProfileManager.getItem('bg_data');
                 }
 
-                applyWallpaperImage(imgSrc);
+                if (imgSrc) {
+                    applyWallpaperImage(imgSrc);
+                } else {
+                    resetBg();
+                }
             } else {
                 resetBg();
             }
@@ -13404,14 +13423,14 @@
                 select.addEventListener('change', e => {
                     ProfileManager.setItem('bg_category', e.target.value);
                     ProfileManager.removeItem('bg_random_url');
-                    applyWallpaper();
+                    applyWallpaper(true);
                 });
             }
 
             if (refreshBtn) {
                 refreshBtn.addEventListener('click', () => {
                     ProfileManager.removeItem('bg_random_url');
-                    applyWallpaper();
+                    applyWallpaper(true);
                 });
             }
         }
