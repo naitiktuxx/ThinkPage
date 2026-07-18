@@ -3983,14 +3983,14 @@
                 inset 0 0 0.8px 0 var(--icon-rim-mix, rgba(255, 255, 255, 0.4));
         }
 
-        /* Icon Normalization Filters (Luminance & Contrast Balancing) */
+        /* Icon Normalization Filters (Dimmed & Softened Matte Colors) */
         .appstore-squircle-wrap.normalize-icon img {
-            filter: brightness(var(--norm-brightness, 1.06)) contrast(var(--norm-contrast, 1.08)) saturate(var(--norm-saturate, 1.05)) !important;
+            filter: brightness(var(--norm-brightness, 0.92)) contrast(var(--norm-contrast, 0.96)) saturate(var(--norm-saturate, 0.88)) !important;
         }
 
         .appstore-squircle-wrap.normalize-icon::after {
-            opacity: var(--norm-border-opacity, 1) !important;
-            filter: brightness(var(--norm-border-brightness, 1.05)) contrast(var(--norm-border-contrast, 1.1)) !important;
+            opacity: var(--norm-border-opacity, 0.85) !important;
+            filter: brightness(var(--norm-border-brightness, 0.95)) contrast(var(--norm-border-contrast, 0.98)) !important;
         }
 
         .appstore-squircle-wrap img {
@@ -15218,32 +15218,34 @@
 
                     const avgLum = count > 0 ? (totalLum / count) : 128;
 
-                    let normB = 1.06;
-                    let normC = 1.08;
-                    let borderB = 1.05;
-                    let borderC = 1.10;
+                    let normB = 0.92;
+                    let normC = 0.96;
+                    let normS = 0.88;
+                    let borderOp = 0.85;
 
-                    if (avgLum < 90) {
-                        normB = 1.15;
-                        normC = 1.12;
-                        borderB = 0.95;
-                        borderC = 1.0;
-                    } else if (avgLum > 180) {
-                        normB = 0.98;
-                        normC = 1.10;
-                        borderB = 1.15;
-                        borderC = 1.25;
+                    if (avgLum > 170) {
+                        // Extremely bright icon: dim down further to balance with dashboard
+                        normB = 0.86;
+                        normC = 0.94;
+                        normS = 0.82;
+                        borderOp = 0.80;
+                    } else if (avgLum < 80) {
+                        // Very dark icon: keep dimming subtle
+                        normB = 0.95;
+                        normC = 0.98;
+                        normS = 0.90;
+                        borderOp = 0.88;
                     }
 
                     wrap.style.setProperty('--norm-brightness', normB);
                     wrap.style.setProperty('--norm-contrast', normC);
-                    wrap.style.setProperty('--norm-border-brightness', borderB);
-                    wrap.style.setProperty('--norm-border-contrast', borderC);
+                    wrap.style.setProperty('--norm-saturate', normS);
+                    wrap.style.setProperty('--norm-border-opacity', borderOp);
                 } catch (e) {
-                    wrap.style.setProperty('--norm-brightness', '1.06');
-                    wrap.style.setProperty('--norm-contrast', '1.08');
-                    wrap.style.setProperty('--norm-border-brightness', '1.05');
-                    wrap.style.setProperty('--norm-border-contrast', '1.10');
+                    wrap.style.setProperty('--norm-brightness', '0.92');
+                    wrap.style.setProperty('--norm-contrast', '0.96');
+                    wrap.style.setProperty('--norm-saturate', '0.88');
+                    wrap.style.setProperty('--norm-border-opacity', '0.85');
                 }
             };
 
