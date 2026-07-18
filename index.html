@@ -988,14 +988,14 @@
             background-position: calc(50% - (var(--cp-width) / 2)) center;
         }
 
-        /* Slide catppuccin gradient background when side panel opens */
-        body.catppuccin-mode {
+        /* Slide gradient background when side panel opens */
+        body {
             background-size: 115% 100%;
             background-position: center center;
             transition: padding-right 0.32s cubic-bezier(0.4, 0, 0.2, 1), padding-left 0.32s cubic-bezier(0.4, 0, 0.2, 1), background-position 0.32s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        body.catppuccin-mode.panel-open {
+        body.panel-open {
             background-position: calc(50% - (var(--cp-width) / 2)) center;
         }
 
@@ -3934,6 +3934,96 @@
             display: none;
         }
 
+        /* ── APP STORE ICON WRAPPER ── */
+        /* mzstatic.com images already have Apple squircle baked in.
+           We just size them correctly and add Apple's border highlight overlay. */
+        svg#appstore-squircle-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+        .appstore-squircle-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 26%;
+            /* Soft 3D elevation drop shadow */
+            box-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.18),
+                0 1px 2px rgba(0, 0, 0, 0.10);
+        }
+
+        /* Apple-style Ultra-Thin Corner Bevel Overlay (Smooth & Anti-Aliased) */
+        .appstore-squircle-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 26%;
+            /* Razor-thin 0.15px crisp white border ring with 0.5px subpixel anti-alias blur */
+            box-shadow: inset 0 0 0.5px 0.15px rgba(255, 255, 255, 0.85);
+            /* Smooth feathered radial mask: Solid at corners -> smooth gradient taper along sides */
+            -webkit-mask-image:
+                radial-gradient(circle at 0% 0%, #000 0%, #000 18%, rgba(0, 0, 0, 0.6) 35%, rgba(0, 0, 0, 0.2) 48%, transparent 62%),
+                radial-gradient(circle at 100% 100%, #000 0%, #000 18%, rgba(0, 0, 0, 0.6) 35%, rgba(0, 0, 0, 0.2) 48%, transparent 62%);
+            mask-image:
+                radial-gradient(circle at 0% 0%, #000 0%, #000 18%, rgba(0, 0, 0, 0.6) 35%, rgba(0, 0, 0, 0.2) 48%, transparent 62%),
+                radial-gradient(circle at 100% 100%, #000 0%, #000 18%, rgba(0, 0, 0, 0.6) 35%, rgba(0, 0, 0, 0.2) 48%, transparent 62%);
+            pointer-events: none;
+            z-index: 3;
+            transform: translateZ(0);
+        }
+
+        /* Glowing Gradient Border mode (Apple Music 3D Glass Rim Sheen - Smooth Mixed Colors) */
+        .appstore-squircle-wrap.glowing-border::after {
+            box-shadow:
+                /* Top-left mixed specular rim sheen */
+                inset 0.15px 0.15px 0.5px 0 var(--icon-rim-light, rgba(255, 255, 255, 0.9)),
+                /* Bottom-right mixed specular rim sheen */
+                inset -0.15px -0.15px 0.5px 0 var(--icon-rim-br, rgba(255, 255, 255, 0.9)),
+                /* Soft mixed ambient sheen overlay */
+                inset 0 0 0.8px 0 var(--icon-rim-mix, rgba(255, 255, 255, 0.4));
+        }
+
+        .appstore-squircle-wrap img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 26% !important;
+            display: block !important;
+        }
+
+        /* Size inside shortcut circle */
+        .sc-icon .appstore-squircle-wrap {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Size inside app-drawer box */
+        .app-icon-box .appstore-squircle-wrap {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Modal preview */
+        #preview-icon.appstore-squircle-img {
+            width: 32px !important;
+            height: 32px !important;
+            object-fit: cover !important;
+            border-radius: 26% !important;
+            aspect-ratio: 1 !important;
+            border: none !important;
+        }
+
+        #modal-preview .appstore-squircle-wrap {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Hide ONLY the 3D border highlight & glass sheen when border is disabled */
+        .appstore-squircle-wrap.no-appstore-border::before,
+        .appstore-squircle-wrap.no-appstore-border::after {
+            display: none !important;
+        }
+
         #preview-text {
             font-size: 13px;
             color: var(--text-muted);
@@ -5836,25 +5926,25 @@
             transition: background 0.18s var(--ease-standard), border-color 0.18s var(--ease-standard), box-shadow 0.18s var(--ease-standard);
         }
 
-        /* ── DEFAULT DARK THEME (no modifier class = default) ── */
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-btn,
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .customize-btn,
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .google-ai-side-tab,
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .shortcuts-expand-btn,
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-pill-display {
-            background: #3c3d41;
-            border-color: rgba(255, 255, 255, 0.12);
-            color: #e8eaed;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        /* ── DARK THEMES (Uses CSS variables to adapt to active color swatch) ── */
+        body:not(.glass-mode):not(.light-mode) .speedtest-btn,
+        body:not(.glass-mode):not(.light-mode) .customize-btn,
+        body:not(.glass-mode):not(.light-mode) .google-ai-side-tab,
+        body:not(.glass-mode):not(.light-mode) .shortcuts-expand-btn,
+        body:not(.glass-mode):not(.light-mode) .speedtest-pill-display {
+            background: var(--search-bg);
+            border-color: var(--search-border);
+            color: var(--text-main);
+            box-shadow: var(--shadow-search);
         }
 
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .speedtest-btn:hover,
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .customize-btn:hover,
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .google-ai-side-tab:hover,
-        body:not(.glass-mode):not(.light-mode):not(.catppuccin-mode) .shortcuts-expand-btn:hover {
-            background: #4a4b50;
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+        body:not(.glass-mode):not(.light-mode) .speedtest-btn:hover,
+        body:not(.glass-mode):not(.light-mode) .customize-btn:hover,
+        body:not(.glass-mode):not(.light-mode) .google-ai-side-tab:hover,
+        body:not(.glass-mode):not(.light-mode) .shortcuts-expand-btn:hover {
+            background: var(--search-hover);
+            border-color: var(--border-lighter);
+            box-shadow: var(--shadow-search-focus);
         }
 
         /* ── LIGHT THEME ── */
@@ -5863,9 +5953,9 @@
         body.light-mode:not(.glass-mode) .google-ai-side-tab,
         body.light-mode:not(.glass-mode) .shortcuts-expand-btn,
         body.light-mode:not(.glass-mode) .speedtest-pill-display {
-            background: #ffffff;
-            border-color: #dadce0;
-            color: #3c4043;
+            background: var(--search-bg, #ffffff);
+            border-color: var(--search-border, #dadce0);
+            color: var(--text-main, #3c4043);
             box-shadow: 0 1px 6px rgba(60, 64, 67, 0.14), 0 1px 2px rgba(60, 64, 67, 0.08);
         }
 
@@ -5873,30 +5963,9 @@
         body.light-mode:not(.glass-mode) .customize-btn:hover,
         body.light-mode:not(.glass-mode) .google-ai-side-tab:hover,
         body.light-mode:not(.glass-mode) .shortcuts-expand-btn:hover {
-            background: #f1f3f4;
-            border-color: #bdc1c6;
+            background: var(--search-hover, #f1f3f4);
+            border-color: var(--border-lighter, #bdc1c6);
             box-shadow: 0 2px 12px rgba(60, 64, 67, 0.2), 0 1px 4px rgba(60, 64, 67, 0.12);
-        }
-
-        /* ── CATPPUCCIN MACCHIATO THEME ── */
-        body.catppuccin-mode:not(.glass-mode) .speedtest-btn,
-        body.catppuccin-mode:not(.glass-mode) .customize-btn,
-        body.catppuccin-mode:not(.glass-mode) .google-ai-side-tab,
-        body.catppuccin-mode:not(.glass-mode) .shortcuts-expand-btn,
-        body.catppuccin-mode:not(.glass-mode) .speedtest-pill-display {
-            background: #363a4f;
-            border-color: rgba(183, 189, 248, 0.18);
-            color: #cad3f5;
-            box-shadow: 0 2px 10px rgba(24, 25, 38, 0.45);
-        }
-
-        body.catppuccin-mode:not(.glass-mode) .speedtest-btn:hover,
-        body.catppuccin-mode:not(.glass-mode) .customize-btn:hover,
-        body.catppuccin-mode:not(.glass-mode) .google-ai-side-tab:hover,
-        body.catppuccin-mode:not(.glass-mode) .shortcuts-expand-btn:hover {
-            background: #494d64;
-            border-color: rgba(183, 189, 248, 0.3);
-            box-shadow: 0 4px 18px rgba(24, 25, 38, 0.55);
         }
 
 
@@ -7135,6 +7204,15 @@
 
 <body>
 
+    <!-- Hidden SVG defs for App Store icon squircle clip-path -->
+    <svg id="appstore-squircle-defs" aria-hidden="true">
+        <defs>
+            <clipPath id="appstoreSquircle" clipPathUnits="objectBoundingBox">
+                <path d="M0.5,0 C0.14,0 0,0.14 0,0.5 C0,0.86 0.14,1 0.5,1 C0.86,1 1,0.86 1,0.5 C1,0.14 0.86,0 0.5,0 Z"/>
+            </clipPath>
+        </defs>
+    </svg>
+
     <a id="wallpaper-attribution" class="wallpaper-attribution" target="_blank" rel="noopener noreferrer" style="display: none;"></a>
 
     <button type="button" class="google-ai-side-tab" id="google-ai-side-tab" title="Mini browser" aria-controls="google-ai-drawer" aria-expanded="false">
@@ -7534,7 +7612,13 @@
                 <!-- Link input -->
                 <div id="modal-icon-url-row" style="display: flex; align-items: center; gap: 8px; width: 100%;">
                     <input type="text" id="modal-icon-url" placeholder="Paste icon URL (e.g. https://...)" style="flex: 1; margin: 0; padding: 8px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; background: var(--surface-3); color: var(--text-main);" />
+                    <button type="button" id="modal-icon-appstore-btn" title="Search App Store for official icon" style="flex-shrink: 0; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--panel-border); border-radius: 8px; background: var(--surface-3); color: var(--text-main); cursor: pointer;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
                 </div>
+
+                <!-- App Store icon search results -->
+                <div id="modal-icon-appstore-results" style="display: none; flex-direction: column; gap: 4px; max-height: 220px; overflow-y: auto; border: 1px solid var(--panel-border); border-radius: 8px; padding: 6px; background: var(--surface-3); margin-top: 4px;"></div>
 
                 <!-- Upload row -->
                 <div id="modal-icon-upload-row" style="display: none; align-items: center; gap: 8px; width: 100%;">
@@ -7544,6 +7628,29 @@
 
                 <div id="modal-remove-icon-row" style="display: none; width: 100%; margin-top: 4px;">
                     <button type="button" class="btn-cancel" id="btn-remove-icon" style="flex: 1; padding: 8px 12px; font-size: 13px; border: 1px solid var(--panel-border); border-radius: 8px; color: #ef596f; cursor: pointer; background: var(--surface-3); font-weight: 500;">Remove Custom Icon</button>
+                </div>
+
+                <div id="modal-border-toggle-row" style="display: flex; flex-direction: column; width: 100%; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--panel-border); gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <span style="font-size: 13px; color: var(--text-main); font-weight: 500;">Border highlight</span>
+                        <label class="switch-toggle">
+                            <input type="checkbox" id="modal-border-toggle" checked />
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <div id="modal-border-style-row" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <span style="font-size: 12px; color: var(--text-muted);">Border style</span>
+                        <div class="segment-control" id="modal-border-style-segment" style="width: 140px; height: 26px; box-sizing: border-box;">
+                            <label class="segment-opt" style="font-size: 11px; padding: 2px 6px;">
+                                <input type="radio" name="modal_border_style" value="white" checked>
+                                <span style="padding: 2px 6px; font-size: 11px;">White</span>
+                            </label>
+                            <label class="segment-opt" style="font-size: 11px; padding: 2px 6px;">
+                                <input type="radio" name="modal_border_style" value="glowing">
+                                <span style="padding: 2px 6px; font-size: 11px;">Glowing</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="modal-preview">
@@ -9118,12 +9225,14 @@
             const iconBox = document.createElement('div');
             iconBox.className = 'app-icon-box';
             const img = document.createElement('img');
-            img.src = app.customIcon || fav(app.url);
+            const iconUrl = app.customIcon || fav(app.url);
+            img.src = iconUrl;
             img.alt = app.name;
             img.onerror = () => {
                 iconBox.innerHTML = '';
             };
-            iconBox.appendChild(img);
+            iconBox.appendChild(img);  // append first so parentElement is available
+            applyIconMasking(img, iconUrl, iconBox, app);
             el.appendChild(iconBox);
 
             const span = document.createElement('span');
@@ -9928,6 +10037,7 @@
 
         // ── Chrome-style color swatches ──────────────────────────────────────
         const COLOR_SWATCHES = [
+            { id: 'catppuccin', label: 'Catppuccin', accent: '#b7bdf8', lightAccent: '#1e66f5', top: '#b7bdf8', bottom: '#24273a', darkBg: '#24273a', lightBg: '#eff1f5', special: 'catppuccin' },
             { id: 'blue',       label: 'Blue',       accent: '#8ab4f8', lightAccent: '#1a73e8', top: '#8ab4f8', bottom: '#1c2038', darkBg: '#1c2038', lightBg: '#eef2ff' },
             { id: 'slate',      label: 'Slate',      accent: '#aecbfa', lightAccent: '#1558d4', top: '#aecbfa', bottom: '#1c2034', darkBg: '#1c2034', lightBg: '#f0f3ff' },
             { id: 'sky',        label: 'Sky',        accent: '#78c8f8', lightAccent: '#0b6ea8', top: '#78c8f8', bottom: '#142030', darkBg: '#142030', lightBg: '#eef7ff' },
@@ -9942,7 +10052,6 @@
             { id: 'rose',       label: 'Rose',       accent: '#f28b82', lightAccent: '#c0392b', top: '#f28b82', bottom: '#201416', darkBg: '#201416', lightBg: '#fff3f2' },
             { id: 'mauve',      label: 'Mauve',      accent: '#d4a0e8', lightAccent: '#8e44ad', top: '#d4a0e8', bottom: '#1c1820', darkBg: '#1c1820', lightBg: '#faf4fd' },
             { id: 'purple',     label: 'Purple',     accent: '#b39ddb', lightAccent: '#5c35c5', top: '#b39ddb', bottom: '#18162a', darkBg: '#18162a', lightBg: '#f6f2fc' },
-            { id: 'catppuccin', label: 'Catppuccin', accent: '#b7bdf8', lightAccent: '#1e66f5', top: '#b7bdf8', bottom: '#24273a', darkBg: '#24273a', lightBg: '#eff1f5', special: 'catppuccin' },
             { id: 'pink',       label: 'Pink',       accent: '#f4a7c3', lightAccent: '#d63384', top: '#f4a7c3', bottom: '#201418', darkBg: '#201418', lightBg: '#fff3f7' }
         ];
 
@@ -9976,85 +10085,112 @@
 
         // ── Swatch colour application ─────────────────────────────────────────
         //   Applies every CSS variable defined in the swatch's dark/light palette.
-        //   Catppuccin also gets its signature gradient background-image.
+        //   All swatches receive signature ambient background gradients & surface colors.
 
         function applySwatchColors(sw) {
             const root = document.documentElement;
-
-            // Remove any inline variable overrides so that default CSS variables
-            // or body.catppuccin-mode CSS variables can take effect.
-            root.style.removeProperty('--accent');
-            root.style.removeProperty('--accent-soft');
-            root.style.removeProperty('--accent-contrast');
-            root.style.removeProperty('--theme-color');
-            root.style.removeProperty('--bg-main');
-            root.style.removeProperty('--bg-elevated');
-            root.style.removeProperty('--bg-muted');
-            root.style.removeProperty('--surface-1');
-            root.style.removeProperty('--surface-2');
-            root.style.removeProperty('--surface-3');
-            root.style.removeProperty('--search-bg');
-            root.style.removeProperty('--search-hover');
-            root.style.removeProperty('--search-focus');
-            root.style.removeProperty('--search-border');
-            root.style.removeProperty('--panel-bg');
-            root.style.removeProperty('--dock-bg');
-            root.style.removeProperty('--modal-bg');
-            root.style.removeProperty('--border-light');
-            root.style.removeProperty('--border-lighter');
-            root.style.removeProperty('--divider-color');
-            root.style.removeProperty('--panel-border');
-            root.style.removeProperty('--glass-bg');
-            root.style.removeProperty('--glass-border');
-            root.style.removeProperty('--glass-border-top');
-            root.style.removeProperty('--glass-inset');
-            root.style.removeProperty('--glass-divider');
-            root.style.removeProperty('--glass-icon-hover');
-
             const isLight = document.body.classList.contains('light-mode');
 
             if (sw.special === 'catppuccin') {
                 document.body.classList.add('catppuccin-mode');
-
-                const catBg = isLight ? '#eff1f5' : '#24273a';
-                const catAccent = isLight ? '#1e66f5' : '#b7bdf8';
-                const catAccentSoft = isLight ? 'rgba(30,102,245,.12)' : 'rgba(183,189,248,.14)';
-
-                root.style.setProperty('--bg-main', catBg);
-                root.style.setProperty('--accent', catAccent);
-                root.style.setProperty('--accent-soft', catAccentSoft);
-                root.style.setProperty('--accent-contrast', isLight ? '#ffffff' : '#24273a');
-                root.style.setProperty('--theme-color', isLight ? '#eff1f5' : '#24273a');
-
-                const hasWallpaper = document.body.classList.contains('has-bg');
-                if (!hasWallpaper) {
-                    document.body.style.backgroundImage = isLight
-                        ? 'linear-gradient(165deg,#e0e3ef 0%,#eff1f5 45%,#d8dce8 100%)'
-                        : 'linear-gradient(165deg,#1e2030 0%,#24273a 45%,#181926 100%)';
-                    document.body.style.backgroundAttachment = 'fixed';
-                }
             } else {
                 document.body.classList.remove('catppuccin-mode');
+            }
 
-                const hasWallpaper = document.body.classList.contains('has-bg');
-                if (!hasWallpaper) {
-                    document.body.style.backgroundImage = '';
-                    document.body.style.backgroundAttachment = '';
+            const bgVal = isLight ? sw.lightBg : sw.darkBg;
+            const accentVal = isLight ? (sw.lightAccent || sw.accent) : sw.accent;
+            const accentSoftVal = isLight
+                ? `color-mix(in srgb, ${accentVal} 12%, transparent)`
+                : `color-mix(in srgb, ${accentVal} 14%, transparent)`;
+            const accentContrastVal = isLight ? '#ffffff' : (sw.special === 'catppuccin' ? '#24273a' : bgVal);
+
+            root.style.setProperty('--bg-main', bgVal);
+            root.style.setProperty('--accent', accentVal);
+            root.style.setProperty('--accent-soft', accentSoftVal);
+            root.style.setProperty('--accent-contrast', accentContrastVal);
+            root.style.setProperty('--theme-color', bgVal);
+
+            // Compute ambient background gradient for ALL swatches when no custom image wallpaper is active
+            const hasWallpaper = document.body.classList.contains('has-bg');
+            if (!hasWallpaper) {
+                if (sw.special === 'catppuccin') {
+                    document.body.style.backgroundImage = isLight
+                        ? 'linear-gradient(165deg, #e0e3ef 0%, #eff1f5 45%, #d8dce8 100%)'
+                        : 'linear-gradient(165deg, #1e2030 0%, #24273a 45%, #181926 100%)';
+                } else {
+                    document.body.style.backgroundImage = isLight
+                        ? `linear-gradient(165deg, color-mix(in srgb, ${accentVal} 12%, ${bgVal}) 0%, ${bgVal} 45%, color-mix(in srgb, black 8%, ${bgVal}) 100%)`
+                        : `linear-gradient(165deg, color-mix(in srgb, ${accentVal} 12%, ${bgVal}) 0%, ${bgVal} 45%, color-mix(in srgb, black 25%, ${bgVal}) 100%)`;
                 }
+                document.body.style.backgroundAttachment = 'fixed';
+            } else {
+                document.body.style.backgroundImage = '';
+                document.body.style.backgroundAttachment = '';
+            }
 
-                if (!shouldUseWallpaperAccent()) {
-                    const bgVal = isLight ? sw.lightBg : sw.darkBg;
-                    const accentVal = isLight ? sw.lightAccent : sw.accent;
-                    const accentSoftVal = isLight
-                        ? `color-mix(in srgb, ${accentVal} 8%, transparent)`
-                        : `color-mix(in srgb, ${accentVal} 12%, transparent)`;
+            // Set elevated surface and component CSS variables so the whole page transforms for all swatches
+            if (sw.special === 'catppuccin' && !isLight) {
+                // Catppuccin Macchiato explicit CSS variable values
+                root.style.setProperty('--bg-elevated', '#363a4f');
+                root.style.setProperty('--bg-muted', '#494d64');
+                root.style.setProperty('--panel-bg', 'rgba(48, 52, 70, 0.98)');
+                root.style.setProperty('--dock-bg', 'rgba(30, 32, 48, 0.98)');
+                root.style.setProperty('--search-bg', '#363a4f');
+                root.style.setProperty('--search-hover', '#494d64');
+                root.style.setProperty('--search-focus', '#363a4f');
+                root.style.setProperty('--search-border', 'rgba(183, 189, 248, 0.18)');
+                root.style.setProperty('--surface-1', '#303241');
+                root.style.setProperty('--surface-2', '#494d64');
+                root.style.setProperty('--surface-3', '#1e2030');
+                root.style.setProperty('--glass-bg', 'rgba(54, 58, 79, 0.58)');
+                root.style.setProperty('--glass-border', 'rgba(183, 189, 248, 0.14)');
+                root.style.setProperty('--modal-bg', '#363a4f');
+                root.style.setProperty('--border-light', 'rgba(183, 189, 248, 0.12)');
+                root.style.setProperty('--border-lighter', 'rgba(183, 189, 248, 0.2)');
+            } else {
+                // Dynamic theme palette variables calculated for all other swatches & light modes
+                const bgElevated = isLight
+                    ? `color-mix(in srgb, ${accentVal} 5%, ${bgVal})`
+                    : `color-mix(in srgb, white 7%, ${bgVal})`;
+                const bgMuted = isLight
+                    ? `color-mix(in srgb, ${accentVal} 10%, ${bgVal})`
+                    : `color-mix(in srgb, white 14%, ${bgVal})`;
+                const panelBg = isLight
+                    ? `color-mix(in srgb, ${accentVal} 4%, ${bgElevated})`
+                    : `color-mix(in srgb, ${accentVal} 8%, ${bgElevated})`;
+                const dockBg = isLight
+                    ? `color-mix(in srgb, ${accentVal} 6%, ${bgMuted})`
+                    : `color-mix(in srgb, ${accentVal} 10%, ${bgVal})`;
+                const searchBg = isLight
+                    ? '#ffffff'
+                    : `color-mix(in srgb, white 7%, ${bgVal})`;
+                const searchHover = isLight
+                    ? `color-mix(in srgb, ${accentVal} 6%, #ffffff)`
+                    : `color-mix(in srgb, white 14%, ${bgVal})`;
+                const searchFocus = searchBg;
+                const searchBorder = isLight
+                    ? `color-mix(in srgb, ${accentVal} 20%, #dadce0)`
+                    : `color-mix(in srgb, ${accentVal} 22%, rgba(255, 255, 255, 0.12))`;
 
-                    root.style.setProperty('--bg-main', bgVal);
-                    root.style.setProperty('--accent', accentVal);
-                    root.style.setProperty('--accent-soft', accentSoftVal);
-                    root.style.setProperty('--accent-contrast', isLight ? '#ffffff' : '#202124');
-                    root.style.setProperty('--theme-color', bgVal);
-                }
+                root.style.setProperty('--bg-elevated', bgElevated);
+                root.style.setProperty('--bg-muted', bgMuted);
+                root.style.setProperty('--panel-bg', panelBg);
+                root.style.setProperty('--dock-bg', dockBg);
+                root.style.setProperty('--search-bg', searchBg);
+                root.style.setProperty('--search-hover', searchHover);
+                root.style.setProperty('--search-focus', searchFocus);
+                root.style.setProperty('--search-border', searchBorder);
+
+                root.style.setProperty('--surface-1', isLight ? `color-mix(in srgb, ${accentVal} 4%, ${bgElevated})` : `color-mix(in srgb, white 5%, ${bgVal})`);
+                root.style.setProperty('--surface-2', isLight ? `color-mix(in srgb, ${accentVal} 7%, ${bgMuted})` : `color-mix(in srgb, white 10%, ${bgVal})`);
+                root.style.setProperty('--surface-3', isLight ? `color-mix(in srgb, ${accentVal} 2%, ${bgElevated})` : `color-mix(in srgb, black 20%, ${bgVal})`);
+
+                root.style.setProperty('--glass-bg', isLight ? `color-mix(in srgb, ${accentVal} 6%, rgba(255, 255, 255, 0.72))` : `color-mix(in srgb, ${accentVal} 10%, ${bgElevated})`);
+                root.style.setProperty('--glass-border', isLight ? `color-mix(in srgb, ${accentVal} 10%, rgba(0, 0, 0, 0.08))` : `color-mix(in srgb, ${accentVal} 18%, rgba(255, 255, 255, 0.12))`);
+                root.style.setProperty('--modal-bg', isLight ? `color-mix(in srgb, ${accentVal} 6%, ${bgMuted})` : `color-mix(in srgb, white 8%, ${bgMuted})`);
+
+                root.style.setProperty('--border-light', isLight ? `color-mix(in srgb, ${accentVal} 10%, #e8eaed)` : `color-mix(in srgb, ${accentVal} 16%, rgba(255, 255, 255, 0.1))`);
+                root.style.setProperty('--border-lighter', isLight ? `color-mix(in srgb, ${accentVal} 15%, #dadce0)` : `color-mix(in srgb, ${accentVal} 22%, rgba(255, 255, 255, 0.15))`);
             }
         }
 
@@ -10064,7 +10200,7 @@
                 document.documentElement.style.removeProperty(v));
         }
         function isCatppuccinActive() {
-            return migrateSwatchId(ProfileManager.getItem('accent_color') || 'blue') === 'catppuccin';
+            return migrateSwatchId(ProfileManager.getItem('accent_color') || 'catppuccin') === 'catppuccin';
         }
         function shouldUseWallpaperAccent() {
             if (isCatppuccinActive()) return false;
@@ -10072,7 +10208,7 @@
             return bg === 'random' || bg === 'custom';
         }
         function syncThemeAccent() {
-            const id = migrateSwatchId(ProfileManager.getItem('accent_color') || 'blue');
+            const id = migrateSwatchId(ProfileManager.getItem('accent_color') || 'catppuccin');
             const sw = COLOR_SWATCHES.find(s => s.id === id) || COLOR_SWATCHES[0];
             applySwatchColors(sw);
             updateBrowserChrome();
@@ -10095,7 +10231,7 @@
             if (!grid) return;
             grid.innerHTML = '';
 
-            const rawId  = ProfileManager.getItem('accent_color') || 'blue';
+            const rawId  = ProfileManager.getItem('accent_color') || 'catppuccin';
             const activeId = migrateSwatchId(rawId);
             const isLight = document.body.classList.contains('light-mode');
 
@@ -10111,7 +10247,7 @@
                 let bottomBg = sw.bottom;
                 if (isLight) {
                     topBg = sw.lightAccent || sw.accent;
-                    bottomBg = sw.special === 'catppuccin' ? '#eff1f5' : '#ffffff';
+                    bottomBg = sw.lightBg || '#ffffff';
                 }
 
                 btn.innerHTML = `
@@ -14335,13 +14471,15 @@
                 const iconBox = document.createElement('div');
                 iconBox.className = 'sc-icon';
                 const img = document.createElement('img');
-                img.src = sc.customIcon || fav(sc.url);
+                const iconUrl = sc.customIcon || fav(sc.url);
+                img.src = iconUrl;
                 img.alt = sc.name;
                 img.draggable = false;
                 img.onerror = () => {
                     img.style.display = 'none';
                 };
-                iconBox.appendChild(img);
+                iconBox.appendChild(img);  // append first so parentElement is available
+                applyIconMasking(img, iconUrl, iconBox, sc);
                 link.appendChild(iconBox);
 
                 const span = document.createElement('span');
@@ -14628,11 +14766,24 @@
             window.customIconBase64 = scData ? (scData.customIcon || null) : null;
             setupModalCustomIconFields();
 
+            const borderToggle = document.getElementById('modal-border-toggle');
+            const hideBorder = scData ? (scData.hideBorder === true) : false;
+            const borderStyle = scData ? (scData.borderStyle || 'white') : 'white';
+            if (borderToggle) borderToggle.checked = !hideBorder;
+
+            document.querySelectorAll('input[name="modal_border_style"]').forEach(r => {
+                r.checked = (r.value === borderStyle);
+            });
+            const styleRow = document.getElementById('modal-border-style-row');
+            if (styleRow) styleRow.style.display = hideBorder ? 'none' : 'flex';
+
             if (scData) {
                 const ic = document.getElementById('preview-icon');
                 if (ic) {
-                    ic.src = window.customIconBase64 || fav(scData.url);
+                    const iconUrl = window.customIconBase64 || fav(scData.url);
+                    ic.src = iconUrl;
                     ic.style.display = 'inline';
+                    applyIconMasking(ic, iconUrl, null, scData);
                 }
                 let host = '';
                 try { host = new URL(scData.url).hostname; } catch(e) { host = scData.url; }
@@ -14640,7 +14791,10 @@
                 if (previewText) previewText.textContent = host;
             } else {
                 const previewIcon = document.getElementById('preview-icon');
-                if (previewIcon) previewIcon.style.display = 'none';
+                if (previewIcon) {
+                    previewIcon.style.display = 'none';
+                    applyIconMasking(previewIcon, '', null, { hideBorder, borderStyle });
+                }
                 const previewText = document.getElementById('preview-text');
                 if (previewText) previewText.textContent = 'Enter a URL to preview icon';
             }
@@ -14675,11 +14829,24 @@
             window.customIconBase64 = appData ? (appData.customIcon || null) : null;
             setupModalCustomIconFields();
 
+            const borderToggle = document.getElementById('modal-border-toggle');
+            const hideBorder = appData ? (appData.hideBorder === true) : false;
+            const borderStyle = appData ? (appData.borderStyle || 'white') : 'white';
+            if (borderToggle) borderToggle.checked = !hideBorder;
+
+            document.querySelectorAll('input[name="modal_border_style"]').forEach(r => {
+                r.checked = (r.value === borderStyle);
+            });
+            const styleRow = document.getElementById('modal-border-style-row');
+            if (styleRow) styleRow.style.display = hideBorder ? 'none' : 'flex';
+
             if (appData) {
                 const ic = document.getElementById('preview-icon');
                 if (ic) {
-                    ic.src = window.customIconBase64 || fav(appData.url);
+                    const iconUrl = window.customIconBase64 || fav(appData.url);
+                    ic.src = iconUrl;
                     ic.style.display = 'inline';
+                    applyIconMasking(ic, iconUrl, null, appData);
                 }
                 let host = '';
                 try { host = new URL(appData.url).hostname; } catch(e) { host = appData.url; }
@@ -14687,7 +14854,10 @@
                 if (previewText) previewText.textContent = host;
             } else {
                 const previewIcon = document.getElementById('preview-icon');
-                if (previewIcon) previewIcon.style.display = 'none';
+                if (previewIcon) {
+                    previewIcon.style.display = 'none';
+                    applyIconMasking(previewIcon, '', null, { hideBorder, borderStyle });
+                }
                 const previewText = document.getElementById('preview-text');
                 if (previewText) previewText.textContent = 'Enter a URL to preview icon';
             }
@@ -14769,13 +14939,17 @@
                         let u = urlVal;
                         if (!u.startsWith('http')) u = 'https://' + u;
                         try {
-                            ic.src = fav(u);
+                            const iconUrl = fav(u);
+                            ic.src = iconUrl;
                             ic.style.display = 'inline';
+                            applyIconMasking(ic, iconUrl);
                         } catch(err) {
                             ic.style.display = 'none';
+                            applyIconMasking(ic, '');
                         }
                     } else {
                         ic.style.display = 'none';
+                        applyIconMasking(ic, '');
                     }
                 }
             };
@@ -14790,6 +14964,7 @@
                 if (isUpload) {
                     if (urlRow) urlRow.style.display = 'none';
                     if (uploadRow) uploadRow.style.display = 'flex';
+                    hideAppStoreResults();
                     if (window.customIconBase64 && !window.customIconBase64.startsWith('data:')) {
                         window.customIconBase64 = null;
                         const removeRow = document.getElementById('modal-remove-icon-row');
@@ -14801,13 +14976,17 @@
                                 let u = urlVal;
                                 if (!u.startsWith('http')) u = 'https://' + u;
                                 try {
-                                    ic.src = fav(u);
+                                    const iconUrl = fav(u);
+                                    ic.src = iconUrl;
                                     ic.style.display = 'inline';
+                                    applyIconMasking(ic, iconUrl);
                                 } catch(err) {
                                     ic.style.display = 'none';
+                                    applyIconMasking(ic, '');
                                 }
                             } else {
                                 ic.style.display = 'none';
+                                applyIconMasking(ic, '');
                             }
                         }
                     }
@@ -14825,6 +15004,7 @@
                         if (val) {
                             ic.src = val;
                             ic.style.display = 'inline';
+                            applyIconMasking(ic, val);
                             if (btnRemove) btnRemove.style.display = 'inline-block';
                             if (removeRow) removeRow.style.display = 'flex';
                         } else {
@@ -14833,13 +15013,17 @@
                                 let u = urlVal;
                                 if (!u.startsWith('http')) u = 'https://' + u;
                                 try {
-                                    ic.src = fav(u);
+                                    const iconUrl = fav(u);
+                                    ic.src = iconUrl;
                                     ic.style.display = 'inline';
+                                    applyIconMasking(ic, iconUrl);
                                 } catch(err) {
                                     ic.style.display = 'none';
+                                    applyIconMasking(ic, '');
                                 }
                             } else {
                                 ic.style.display = 'none';
+                                applyIconMasking(ic, '');
                             }
                             if (btnRemove) btnRemove.style.display = 'none';
                             if (removeRow) removeRow.style.display = 'none';
@@ -14863,6 +15047,7 @@
                     if (val) {
                         ic.src = val;
                         ic.style.display = 'inline';
+                        applyIconMasking(ic, val);
                         if (btnRemove) btnRemove.style.display = 'inline-block';
                         if (removeRow) removeRow.style.display = 'flex';
                     } else {
@@ -14871,13 +15056,17 @@
                             let u = urlVal;
                             if (!u.startsWith('http')) u = 'https://' + u;
                             try {
-                                ic.src = fav(u);
+                                const iconUrl = fav(u);
+                                ic.src = iconUrl;
                                 ic.style.display = 'inline';
+                                applyIconMasking(ic, iconUrl);
                             } catch(err) {
                                 ic.style.display = 'none';
+                                applyIconMasking(ic, '');
                             }
                         } else {
                             ic.style.display = 'none';
+                            applyIconMasking(ic, '');
                         }
                         if (btnRemove) btnRemove.style.display = 'none';
                         if (removeRow) removeRow.style.display = 'none';
@@ -14886,15 +15075,263 @@
             });
         }
 
+        function updateModalIconPreview() {
+            const ic = document.getElementById('preview-icon');
+            if (!ic) return;
+            const hideBorder = !document.getElementById('modal-border-toggle')?.checked;
+            const selectedStyleRadio = document.querySelector('input[name="modal_border_style"]:checked');
+            const borderStyle = selectedStyleRadio ? selectedStyleRadio.value : 'white';
+            const styleRow = document.getElementById('modal-border-style-row');
+            if (styleRow) styleRow.style.display = hideBorder ? 'none' : 'flex';
+
+            const url = window.customIconBase64 || ic.src;
+            const currentItem = { hideBorder, borderStyle, isAppStore: isAppStoreIcon(url) };
+            applyIconMasking(ic, url, null, currentItem);
+        }
+
+        const modalBorderToggle = document.getElementById('modal-border-toggle');
+        if (modalBorderToggle) {
+            modalBorderToggle.addEventListener('change', updateModalIconPreview);
+        }
+        document.querySelectorAll('input[name="modal_border_style"]').forEach(r => {
+            r.addEventListener('change', updateModalIconPreview);
+        });
+
+        // ── APP STORE ICON SEARCH & MASKING HELPERS ──────────────────────
+        function hideAppStoreResults() {
+            const box = document.getElementById('modal-icon-appstore-results');
+            if (box) {
+                box.style.display = 'none';
+                box.innerHTML = '';
+            }
+        }
+
+        function isAppStoreIcon(url, item = null) {
+            if (item && item.isAppStore) return true;
+            if (!url) return false;
+            return url.includes('mzstatic.com') || url.includes('apple.com') || url.includes('itunes.apple.com');
+        }
+
+        function applyDynamicIconGlow(img, wrap) {
+            if (!img || !wrap) return;
+            const extractColors = () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 16;
+                    canvas.height = 16;
+                    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                    ctx.drawImage(img, 0, 0, 16, 16);
+
+                    // Sample 4 corner regions
+                    const tl = ctx.getImageData(3, 3, 1, 1).data;
+                    const tr = ctx.getImageData(12, 3, 1, 1).data;
+                    const bl = ctx.getImageData(3, 12, 1, 1).data;
+                    const br = ctx.getImageData(12, 12, 1, 1).data;
+
+                    // Mix adjacent corner colors with 40% specular white light
+                    const mixWithWhite = (c1, c2, whiteRatio = 0.4) => {
+                        const avgR = (c1[0] + c2[0]) / 2;
+                        const avgG = (c1[1] + c2[1]) / 2;
+                        const avgB = (c1[2] + c2[2]) / 2;
+
+                        const r = Math.min(255, Math.round(avgR * (1 - whiteRatio) + 255 * whiteRatio));
+                        const g = Math.min(255, Math.round(avgG * (1 - whiteRatio) + 255 * whiteRatio));
+                        const b = Math.min(255, Math.round(avgB * (1 - whiteRatio) + 255 * whiteRatio));
+                        return { r, g, b };
+                    };
+
+                    const lightTL = mixWithWhite(tl, tr, 0.4);
+                    const lightBR = mixWithWhite(br, bl, 0.4);
+
+                    // Overall mixed average color of all 4 corners
+                    const mixAllR = Math.min(255, Math.round((tl[0] + tr[0] + bl[0] + br[0]) / 4 * 0.55 + 255 * 0.45));
+                    const mixAllG = Math.min(255, Math.round((tl[1] + tr[1] + bl[1] + br[1]) / 4 * 0.55 + 255 * 0.45));
+                    const mixAllB = Math.min(255, Math.round((tl[2] + tr[2] + bl[2] + br[2]) / 4 * 0.55 + 255 * 0.45));
+
+                    wrap.style.setProperty('--icon-rim-light', `rgba(${lightTL.r}, ${lightTL.g}, ${lightTL.b}, 0.9)`);
+                    wrap.style.setProperty('--icon-rim-br', `rgba(${lightBR.r}, ${lightBR.g}, ${lightBR.b}, 0.9)`);
+                    wrap.style.setProperty('--icon-rim-mix', `rgba(${mixAllR}, ${mixAllG}, ${mixAllB}, 0.45)`);
+                } catch (e) {
+                    wrap.style.setProperty('--icon-rim-light', 'rgba(255, 255, 255, 0.85)');
+                    wrap.style.setProperty('--icon-rim-br', 'rgba(255, 255, 255, 0.85)');
+                    wrap.style.setProperty('--icon-rim-mix', 'rgba(255, 255, 255, 0.35)');
+                }
+            };
+
+            if (img.complete && img.naturalWidth !== 0) {
+                extractColors();
+            } else {
+                img.addEventListener('load', extractColors, { once: true });
+            }
+        }
+
+        function applyIconMasking(img, url, container = null, item = null) {
+            if (!img) return;
+            if (isAppStoreIcon(url, item)) {
+                const hideBorder = item ? (item.hideBorder === true) : false;
+                const isGlowing = item ? (item.borderStyle === 'glowing') : false;
+
+                // If img is already inside a squircle wrapper, update border classes
+                if (img.parentElement && img.parentElement.classList.contains('appstore-squircle-wrap')) {
+                    const wrap = img.parentElement;
+                    if (hideBorder) {
+                        wrap.classList.add('no-appstore-border');
+                        wrap.classList.remove('glowing-border');
+                    } else {
+                        wrap.classList.remove('no-appstore-border');
+                        wrap.classList.toggle('glowing-border', isGlowing);
+                        if (isGlowing) applyDynamicIconGlow(img, wrap);
+                    }
+                    return;
+                }
+
+                // Wrap the img in a squircle highlight div
+                const wrap = document.createElement('div');
+                let wrapClass = 'appstore-squircle-wrap';
+                if (hideBorder) wrapClass += ' no-appstore-border';
+                else if (isGlowing) wrapClass += ' glowing-border';
+                wrap.className = wrapClass;
+                const parent = img.parentElement;
+                if (parent) {
+                    parent.insertBefore(wrap, img);
+                    wrap.appendChild(img);
+                    if (isGlowing && !hideBorder) applyDynamicIconGlow(img, wrap);
+                }
+            } else {
+                img.classList.remove('appstore-squircle-img');
+                img.style.borderRadius = '';
+                img.style.objectFit = '';
+                img.style.border = '';
+                // Unwrap if inside a squircle wrapper
+                if (img.parentElement && img.parentElement.classList.contains('appstore-squircle-wrap')) {
+                    const wrap = img.parentElement;
+                    const grandParent = wrap.parentElement;
+                    if (grandParent) {
+                        grandParent.insertBefore(img, wrap);
+                        wrap.remove();
+                    }
+                }
+            }
+        }
+
+        function searchAppStoreIcon(term) {
+            return new Promise((resolve) => {
+                const callbackName = 'appStoreIconCb_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+                const script = document.createElement('script');
+                let settled = false;
+
+                const cleanup = () => {
+                    delete window[callbackName];
+                    script.remove();
+                };
+
+                window[callbackName] = (data) => {
+                    settled = true;
+                    cleanup();
+                    resolve((data && data.results) || []);
+                };
+
+                script.src = `https://itunes.apple.com/search?media=software&entity=software&limit=8&term=${encodeURIComponent(term)}&callback=${callbackName}`;
+                script.onerror = () => {
+                    if (!settled) { settled = true; cleanup(); resolve(null); }
+                };
+                document.body.appendChild(script);
+
+                setTimeout(() => {
+                    if (!settled) { settled = true; cleanup(); resolve(null); }
+                }, 8000);
+            });
+        }
+
+        function renderAppStoreResults(results) {
+            const box = document.getElementById('modal-icon-appstore-results');
+            if (!box) return;
+
+            if (results === null) {
+                box.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;text-align:center;">Search failed — check your connection and try again.</div>';
+                box.style.display = 'flex';
+                return;
+            }
+            if (results.length === 0) {
+                box.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;text-align:center;">No matching apps found. Try a different name.</div>';
+                box.style.display = 'flex';
+                return;
+            }
+
+            box.innerHTML = '';
+            results.forEach(r => {
+                const row = document.createElement('div');
+                row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:6px;cursor:pointer;transition:background 0.12s;';
+                row.onmouseenter = () => row.style.background = 'var(--surface-2)';
+                row.onmouseleave = () => row.style.background = 'transparent';
+
+                const img = document.createElement('img');
+                const artUrl = r.artworkUrl100 || r.artworkUrl60;
+                img.src = artUrl;
+                img.style.cssText = 'width:32px;height:32px;flex-shrink:0;';
+                img.classList.add('appstore-icon-mask');
+                img.alt = '';
+
+                const label = document.createElement('span');
+                label.style.cssText = 'font-size:13px;color:var(--text-main);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+                label.textContent = r.trackName || '';
+
+                row.appendChild(img);
+                row.appendChild(label);
+
+                row.addEventListener('click', () => {
+                    const urlInp = document.getElementById('modal-icon-url');
+                    const selectedArt = r.artworkUrl512 || r.artworkUrl100 || r.artworkUrl60;
+                    if (urlInp) {
+                        urlInp.value = selectedArt;
+                        urlInp.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                    hideAppStoreResults();
+                });
+
+                box.appendChild(row);
+            });
+            box.style.display = 'flex';
+        }
+
+        const btnAppStoreSearch = document.getElementById('modal-icon-appstore-btn');
+        if (btnAppStoreSearch) {
+            btnAppStoreSearch.addEventListener('click', async () => {
+                const nameVal = document.getElementById('modal-name').value.trim();
+                let fallback = '';
+                try {
+                    fallback = new URL(document.getElementById('modal-url').value.trim().startsWith('http')
+                        ? document.getElementById('modal-url').value.trim()
+                        : 'https://' + document.getElementById('modal-url').value.trim()
+                    ).hostname.replace(/^www\./, '').split('.')[0];
+                } catch (e) { }
+                const term = nameVal || fallback;
+                if (!term) return;
+
+                const box = document.getElementById('modal-icon-appstore-results');
+                if (box) {
+                    box.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;text-align:center;">Searching App Store...</div>';
+                    box.style.display = 'flex';
+                }
+
+                btnAppStoreSearch.disabled = true;
+                const results = await searchAppStoreIcon(term);
+                btnAppStoreSearch.disabled = false;
+                renderAppStoreResults(results);
+            });
+        }
+
         document.getElementById('modal-cancel').onclick = () => {
             window.keepAppsTrayOpen = false;
             document.getElementById('modal-overlay').classList.remove('open');
             document.getElementById('modal-tip-popover')?.classList.remove('open');
+            hideAppStoreResults();
         };
         document.getElementById('modal-overlay').onclick = e => {
             if (e.target === e.currentTarget) {
                 e.currentTarget.classList.remove('open');
                 document.getElementById('modal-tip-popover')?.classList.remove('open');
+                hideAppStoreResults();
             }
         };
 
@@ -15013,9 +15450,15 @@
             btnDone.disabled = true;
 
             let finalIcon = window.customIconBase64 || null;
+            const isAppStore = isAppStoreIcon(finalIcon) || isAppStoreIcon(u);
+            const borderToggle = document.getElementById('modal-border-toggle');
+            const hideBorder = borderToggle ? !borderToggle.checked : false;
+            const selectedStyleRadio = document.querySelector('input[name="modal_border_style"]:checked');
+            const borderStyle = selectedStyleRadio ? selectedStyleRadio.value : 'white';
+
             try {
                 if (finalIcon) {
-                    if (!finalIcon.startsWith('data:')) {
+                    if (!finalIcon.startsWith('data:') && !isAppStore) {
                         const b64 = await fetchImageAsBase64(finalIcon);
                         if (b64) finalIcon = b64;
                     }
@@ -15037,7 +15480,10 @@
                 const nextApp = {
                     name: nm || host.replace('www.', ''),
                     url: u,
-                    customIcon: finalIcon || null
+                    customIcon: finalIcon || null,
+                    isAppStore: isAppStore,
+                    hideBorder: hideBorder,
+                    borderStyle: borderStyle
                 };
                 if (window.editingAppIndex !== null && window.editingAppIndex !== undefined) {
                     apps[window.editingAppIndex] = nextApp;
@@ -15063,14 +15509,20 @@
                     ...existingShortcut,
                     name: nm || host.replace('www.', ''),
                     url: u,
-                    customIcon: finalIcon || null
+                    customIcon: finalIcon || null,
+                    isAppStore: isAppStore,
+                    hideBorder: hideBorder,
+                    borderStyle: borderStyle
                 };
                 if (typeof showToast === 'function') showToast('Shortcut edited');
             } else {
                 s.push({
                     name: nm || host.replace('www.', ''),
                     url: u,
-                    customIcon: finalIcon || null
+                    customIcon: finalIcon || null,
+                    isAppStore: isAppStore,
+                    hideBorder: hideBorder,
+                    borderStyle: borderStyle
                 });
                 if (typeof showToast === 'function') showToast('Shortcut added');
             }
